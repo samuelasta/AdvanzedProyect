@@ -23,7 +23,7 @@ bin/
 /.gradle/
 /*/bin/
 /*/build/
-/build/
+/buil
 *.iws
 *.iml
 *.ipr
