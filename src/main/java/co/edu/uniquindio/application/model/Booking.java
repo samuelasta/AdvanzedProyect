@@ -15,7 +15,7 @@ public class Booking {
     private String id;
     private String checkIn;
     private String checkOut;
-    private int guestNumber;
+    private int guest_number;
     private BookingState bookingState;
     private Accommodation accommodation; //preguntar si sería mejor una relación con la clase
     private User user;  //preguntar si sería mejor una relación con la clase

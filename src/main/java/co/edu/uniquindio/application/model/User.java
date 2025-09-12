@@ -1,13 +1,13 @@
 package co.edu.uniquindio.application.model;
 
 import co.edu.uniquindio.application.model.enums.State;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import co.edu.uniquindio.application.model.enums.Role;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

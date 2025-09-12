@@ -17,7 +17,7 @@ public class Accommodation {
     private String id;
     private Location location;
     private double price;
-    private List<String> picsUrl;
+    private List<String> pics_url;
     private String description;
     private List<Amenities> amenities;
     private String title;
@@ -27,5 +27,6 @@ public class Accommodation {
     private double averageRatings;
     private AccommodationType accommodationType;
     private User user;
+    private String postal_code;
 
 }
