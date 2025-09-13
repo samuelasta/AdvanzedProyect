@@ -9,12 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comments")
 public class CommentController {
 
     //  Responder a un comentario (host)
     @PostMapping("/{commentId}")
-    public ResponseEntity<ResponseDTO<String>> reply(@PathVariable String id, @Valid @RequestBody ReplyDTO replyDTO) throws Exception{
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "respuest a comentario exitosa"));
+    public ResponseEntity<ResponseDTO<String>> reply(@PathVariable String commentId, @Valid @RequestBody ReplyDTO replyDTO) throws Exception{
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "respuesta a comentario exitosa"));
     }
 }

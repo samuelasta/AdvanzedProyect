@@ -38,13 +38,13 @@ public class UserController {
     }
 
     //cambiar contraseña
-    @PatchMapping("/{id}/password")
+    @PatchMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> update_password(@PathVariable String id, @Valid @RequestBody UpdatePasswordDTO updateUserDto) throws Exception {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "contraseña actualizada :)"));
     }
 
     //ver listado de reservas del cliente
-    @GetMapping("/{id}/booking")
+    @GetMapping("/{id}/bookings")
     public ResponseEntity<ResponseDTO<List<UserBookingsListDTO>>> booking_list(@PathVariable String id, @Valid @RequestBody UserBookingsListDTO userBookingsListDTO) throws Exception {
 
         List<UserBookingsListDTO> list = new ArrayList<>();
@@ -61,7 +61,7 @@ public class UserController {
     }
 
     //lista de alojamientos del host
-    @GetMapping("/{id}/host")
+    @GetMapping("/{id}/accommodations/host")
     public ResponseEntity<ResponseDTO<List<Accommodation>>> listAccommodationHost(@PathVariable String id) throws Exception {
         List<Accommodation> list = new ArrayList<>();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false,list));

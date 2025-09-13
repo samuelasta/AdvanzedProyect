@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/booking")
+@RequestMapping("/api/bookings")
 public class BookingController {
 
     //crear una reserva
