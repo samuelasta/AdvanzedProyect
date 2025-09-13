@@ -3,6 +3,7 @@ package co.edu.uniquindio.application.controller;
 import co.edu.uniquindio.application.dto.*;
 import co.edu.uniquindio.application.dto.hostDTO.HostDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.*;
+import co.edu.uniquindio.application.model.Accommodation;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -44,17 +45,26 @@ public class UserController {
 
     //ver listado de reservas del cliente
     @GetMapping("/{id}/booking")
-    public ResponseEntity<ResponseDTO<String>> booking_list(@PathVariable String id, @Valid @RequestBody UserBookingsListDTO userBookingsListDTO) throws Exception {
+    public ResponseEntity<ResponseDTO<List<UserBookingsListDTO>>> booking_list(@PathVariable String id, @Valid @RequestBody UserBookingsListDTO userBookingsListDTO) throws Exception {
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "bookings con exito "));
+        List<UserBookingsListDTO> list = new ArrayList<>();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
 
+    //devuelve lista de todos los usuarios
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<List<UserDTO>>> listAll(@PathVariable String id) throws Exception {
         //Lógica para consultar todos los usuarios
         List<UserDTO> list = new ArrayList<>();
-        return ResponseEntity.ok(new ResponseDTO<>(false, list));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
+    }
+
+    //lista de alojamientos del host
+    @GetMapping("/{id}/host")
+    public ResponseEntity<ResponseDTO<List<Accommodation>>> listAccommodationHost(@PathVariable String id) throws Exception {
+        List<Accommodation> list = new ArrayList<>();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false,list));
     }
 
 }

@@ -3,17 +3,18 @@ package co.edu.uniquindio.application.dto.accommodationDTO;
 import co.edu.uniquindio.application.model.enums.AccommodationType;
 import co.edu.uniquindio.application.model.enums.Amenities;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
 public record CreateAccommodationDTO(@NotBlank(message = "El título no puede estar vacío")
-                                     @Size(min = 5, max = 40, message = "El título debe tener entre 5 y 100 caracteres")
+                                     @Size(min = 5, max = 25, message = "El título debe tener entre 5 y 25 caracteres")
                                      String title,
                                      @NotBlank(message = "La descripción no puede estar vacía")
-                                     @Size(min = 20, max = 2000, message = "La descripción debe tener entre 20 y 2000 caracteres")
+                                     @Size(min = 20, max = 500, message = "La descripción debe tener entre 20 y 500 caracteres")
                                      String description,
                                      @Positive double price,
-                                     @NotEmpty List<String> picsUrl,
+                                     @NotEmpty @Size(min = 1, max = 10) List<String> picsUrl,
                                      @NotNull AccommodationType accommodationType,
                                      @Min(1) @Max(60) int capacity,
                                      @NotBlank String country,
