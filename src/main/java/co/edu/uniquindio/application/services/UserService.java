@@ -9,9 +9,10 @@ import java.util.List;
 public interface UserService {
 
 
-     void create(CreateUserDTO userDTO);
-     void edit(UpdateUserDto userDTO);
-     void delete(String id);
+     void create(CreateUserDTO userDTO) throws Exception;
+     void edit(String id, UpdateUserDto userDTO) throws Exception;
+     void delete(String id) throws Exception;
+     UserDTO get(String id) throws Exception;
      List<UserDTO> listAll();
 
 }

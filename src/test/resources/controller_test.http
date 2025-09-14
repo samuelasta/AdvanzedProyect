@@ -54,12 +54,16 @@ Content-Type: application/json
 
 {
   "name": "samuel",
-  "email": "samuel@gmail.com",
+  "email": "samuelo@gmail.com",
   "phone": "31934232",
-  "birthDate": "23/05/2005",
+  "birthDate": "2005-02-23",
   "password": "perroGato123",
-  "Role": "admin"
+  "role": "USER"
 }
+
+###
+GET http://localhost:8080/api/users/list
+//devuelve una lista de todos los usuarios
 
 ###
 PUT http://localhost:8080/api/users/12
@@ -69,7 +73,7 @@ Content-Type: application/json
 {
   "name": "samuel",
   "phone": "31932404",
-  "profilePicture": "/mnt/data/ff6a4b1e-5eda-40ec-8903-aeaaa1ae0b83.png"
+  "photoUrl": "/mnt/data/ff6a4b1e-5eda-40ec-8903-aeaaa1ae0b83.png"
 }
 
 ###

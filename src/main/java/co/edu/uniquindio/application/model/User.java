@@ -5,10 +5,10 @@ import lombok.*;
 import co.edu.uniquindio.application.model.enums.Role;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -18,12 +18,12 @@ public class User {
     private String name;
     private String email;
     private String phone;
-    private LocalDate birthday;
+    private LocalDate birthDate;
     private String country;
     private Role role;
     private String password;
-    private String profileUrl;
+    private String photoUrl;
     private State state;
-    private String createdAt;
+    private LocalDateTime createdAt;
 
 }
