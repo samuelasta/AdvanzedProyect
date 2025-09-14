@@ -1,6 +1,5 @@
 package co.edu.uniquindio.application.controller;
 
-import co.edu.uniquindio.application.dto.CreateCommentDTO;
 import co.edu.uniquindio.application.dto.ReplyDTO;
 import co.edu.uniquindio.application.dto.ResponseDTO;
 import jakarta.validation.Valid;

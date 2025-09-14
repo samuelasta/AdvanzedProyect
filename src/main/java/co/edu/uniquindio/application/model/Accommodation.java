@@ -28,5 +28,6 @@ public class Accommodation {
     private AccommodationType accommodationType;
     private User user;
     private String postal_code;
+    private List<Booking> bookings;
 
 }
