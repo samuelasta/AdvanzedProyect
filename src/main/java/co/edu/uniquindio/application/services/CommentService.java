@@ -1,0 +1,13 @@
+package co.edu.uniquindio.application.services;
+
+import co.edu.uniquindio.application.dto.commentDTO.CommentDTO;
+import co.edu.uniquindio.application.dto.commentDTO.CreateCommentDTO;
+
+import java.util.List;
+
+public interface CommentService {
+
+    List<CommentDTO> listComments(String id) throws Exception;
+    void createComment(String id, CreateCommentDTO createCommentDTO) throws Exception;
+
+}

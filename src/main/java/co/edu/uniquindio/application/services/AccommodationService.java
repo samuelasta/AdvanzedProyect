@@ -20,8 +20,6 @@ public interface AccommodationService {
     List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception;
     List<Accommodation> search(ListAccommodationDTO listAccommodationDTO) throws Exception;
     List<Amenities> listAllAmenities(String id) throws Exception;
-    List<CommentDTO> listComments(String id) throws Exception;
-    void createComment(String id, CreateCommentDTO createCommentDTO) throws Exception;
     AccommodationStatsDTO stats(String id) throws Exception;
 
 }

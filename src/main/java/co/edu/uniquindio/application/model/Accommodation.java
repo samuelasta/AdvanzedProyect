@@ -3,13 +3,13 @@ package co.edu.uniquindio.application.model;
 import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.model.enums.AccommodationType;
 import co.edu.uniquindio.application.model.enums.Amenities;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Accommodation {
@@ -29,5 +29,6 @@ public class Accommodation {
     private User user;
     private String postal_code;
     private List<Booking> bookings;
-
+    private LocalDateTime createdAt;
+    private List<Comment> comments;
 }

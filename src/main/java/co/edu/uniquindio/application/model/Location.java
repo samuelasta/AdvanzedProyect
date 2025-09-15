@@ -1,8 +1,11 @@
 package co.edu.uniquindio.application.model;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Location {
 
     private String country;

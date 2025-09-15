@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import java.util.List;
 
 public record CreateAccommodationDTO(@NotBlank(message = "El título no puede estar vacío")
-                                     @Size(min = 5, max = 25, message = "El título debe tener entre 5 y 25 caracteres")
+                                     @Length(min = 5, max = 25, message = "El título debe tener entre 5 y 25 caracteres")
                                      String title,
                                      @NotBlank(message = "La descripción no puede estar vacía")
                                      @Size(min = 20, max = 500, message = "La descripción debe tener entre 20 y 500 caracteres")
@@ -20,11 +20,12 @@ public record CreateAccommodationDTO(@NotBlank(message = "El título no puede es
                                      @NotBlank String country,
                                      @NotBlank String department,
                                      @NotBlank String city,
-                                     String neighborhood //puede ser opcional
+                                     @Length(max = 20) String neighborhood //puede ser opcional
                                      ,@NotBlank String street,
                                      @NotBlank @Pattern(regexp = "^[0-9A-Za-z]{4,10}$", message = "El código postal no es válido")
                                      String postalCode,
-                                     @NotEmpty(message = "debe tener al menos 1 amenidad") List<Amenities> amenities
+                                     @NotEmpty(message = "debe tener al menos 1 amenidad") List<Amenities> amenities,
+                                     @NotBlank float latitude, @NotBlank  float longitude
 
                                       ) {
 }

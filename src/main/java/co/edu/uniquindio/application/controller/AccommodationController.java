@@ -9,6 +9,7 @@ import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Comment;
 import co.edu.uniquindio.application.model.enums.Amenities;
 import co.edu.uniquindio.application.services.AccommodationService;
+import co.edu.uniquindio.application.services.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 public class AccommodationController {
 
     private final AccommodationService accommodationService;
+    private final CommentService commentService;
 
     // ver la lista de reservas del alojamiento (aplicando filtros)
     @GetMapping("/{id}/bookings")
@@ -72,14 +74,14 @@ public class AccommodationController {
     // listar los comentarios del alojamiento
     @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseDTO<List<CommentDTO>>> listComments(@PathVariable String id) throws Exception {
-        List<CommentDTO> list = accommodationService.listComments(id);
+        List<CommentDTO> list = commentService.listComments(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
     //crear un comentario, acá porque el comentario pertenece al alojamiento
     @PostMapping("/{id}/comments")
     public ResponseEntity<ResponseDTO<String>> createComment(@PathVariable String id, @Valid @RequestBody CreateCommentDTO createCommentDTO) throws Exception{
-        accommodationService.createComment(id, createCommentDTO);
+        commentService.createComment(id, createCommentDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "comentario creado exitosamente"));
     }
 

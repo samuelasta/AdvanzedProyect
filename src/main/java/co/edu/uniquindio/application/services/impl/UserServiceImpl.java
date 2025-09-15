@@ -3,6 +3,7 @@ package co.edu.uniquindio.application.services.impl;
 import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
 import co.edu.uniquindio.application.dto.usersDTOs.UserDTO;
+import co.edu.uniquindio.application.exceptions.ValueConflictException;
 import co.edu.uniquindio.application.mappers.UserMapper;
 import co.edu.uniquindio.application.model.User;
 import co.edu.uniquindio.application.services.UserService;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService{
     public void create(CreateUserDTO userDTO) throws Exception {
 
         if(isEmailDuplicated(userDTO.email())){
-            throw new Exception("El correo electrónico electronico ya está en uso.");
+            throw new ValueConflictException("El correo electrónico electronico ya está en uso.");
         }
 
         User newUser = userMapper.toEntity(userDTO);
