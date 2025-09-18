@@ -3,6 +3,7 @@ package co.edu.uniquindio.application.services.impl;
 import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
 import co.edu.uniquindio.application.dto.usersDTOs.UserDTO;
+import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
 import co.edu.uniquindio.application.mappers.UserMapper;
 import co.edu.uniquindio.application.model.User;
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService{
         User user = userStore.get(id);
 
         if(user == null){
-            throw new Exception("usuario no encontrado");
+            throw new ResourceNotFoundException("usuario no encontrado");
         }
         userStore.remove(id);
     }
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService{
 
         User user = userStore.get(id);
         if(user == null){
-            throw new Exception("El usuario no existe");
+            throw new ResourceNotFoundException("El usuario no existe");
         }
 
         return userMapper.toUserDTO(user);

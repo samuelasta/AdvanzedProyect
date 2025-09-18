@@ -4,6 +4,7 @@ import co.edu.uniquindio.application.dto.*;
 import co.edu.uniquindio.application.dto.hostDTO.HostDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.*;
 import co.edu.uniquindio.application.model.Accommodation;
+import co.edu.uniquindio.application.services.AccommodationService;
 import co.edu.uniquindio.application.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import co.edu.uniquindio.application.dto.accommodationDTO.*;
 
 import java.util.*;
 
@@ -20,6 +22,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
+    private final AccommodationService accommodationService;
 
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> create(@RequestBody CreateUserDTO RegisterUserDTO) throws Exception {
@@ -79,9 +82,9 @@ public class UserController {
 
     //lista de alojamientos del host
     @GetMapping("/{id}/accommodations/host")
-    public ResponseEntity<ResponseDTO<List<Accommodation>>> listAccommodationHost(@PathVariable String id) throws Exception {
-        List<Accommodation> list = new ArrayList<>();
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false,list));
+    public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> listAccommodationHost(@PathVariable String id) throws Exception {
+        List<AccommodationDTO> list = accommodationService.listAccommodationHost(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
 }

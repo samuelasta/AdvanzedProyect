@@ -1,5 +1,6 @@
 package co.edu.uniquindio.application.controller;
 
+import co.edu.uniquindio.application.dto.bookingDTO.SearchBookingDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CommentDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CreateCommentDTO;
 import co.edu.uniquindio.application.dto.ResponseDTO;
@@ -9,6 +10,7 @@ import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Comment;
 import co.edu.uniquindio.application.model.enums.Amenities;
 import co.edu.uniquindio.application.services.AccommodationService;
+import co.edu.uniquindio.application.services.BookingService;
 import co.edu.uniquindio.application.services.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class AccommodationController {
 
     private final AccommodationService accommodationService;
     private final CommentService commentService;
+    private final BookingService bookingService;
 
     // ver la lista de reservas del alojamiento (aplicando filtros)
     @GetMapping("/{id}/bookings")
@@ -84,6 +87,17 @@ public class AccommodationController {
         commentService.createComment(id, createCommentDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "comentario creado exitosamente"));
     }
+
+    //mostrar todas las reservas del alojamiento
+    @GetMapping("/{id}/bookings")
+    public ResponseEntity<ResponseDTO<List<BookingDTO>>> listBookings(@PathVariable String id, @Valid @RequestBody SearchBookingDTO searchBookingDTO) throws Exception {
+        List<BookingDTO> list = bookingService.listBookings(id, searchBookingDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
+    }
+
+
+
+
 
     // mostrar estadisticas del alojamiento
     @GetMapping("/{id}/stats")

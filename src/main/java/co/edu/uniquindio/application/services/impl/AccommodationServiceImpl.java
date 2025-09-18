@@ -8,6 +8,7 @@ import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
 import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
 import co.edu.uniquindio.application.mappers.AccommodationMapper;
+import co.edu.uniquindio.application.mappers.ShowAccommodationMapper;
 import co.edu.uniquindio.application.mappers.UserMapper;
 import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Booking;
@@ -19,9 +20,7 @@ import org.springframework.stereotype.Service;
 import co.edu.uniquindio.application.services.GeoUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -30,6 +29,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     private final AccommodationMapper accommodationMapper;
     private final Map<String, Accommodation> accommodationStore = new ConcurrentHashMap<>();
+    private final ShowAccommodationMapper showAccommodationMapper;
 
     @Override
     public void create(String id, CreateAccommodationDTO createAccommodationDTO) throws Exception {
@@ -126,14 +126,52 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception {
+
         return List.of();
     }
 
 
     @Override
-    public List<Accommodation> search(ListAccommodationDTO listAccommodationDTO) throws Exception {
-        return List.of();
+    public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception {
+
+        // Si no viene ningún filtro, devuelvo todos directamente
+        if ((listAccommodationDTO.city() == null || listAccommodationDTO.city().isBlank()) &&
+                listAccommodationDTO.checkIn() == null &&
+                listAccommodationDTO.checkOut() == null &&
+                listAccommodationDTO.guest_number() == null) {
+            return accommodationStore.values().stream()
+                    .map(showAccommodationMapper::toAccommodationDTO)
+                    .toList();
+        }
+
+        return accommodationStore.values().stream()
+                // Filtro por ciudad
+                .filter(acc -> listAccommodationDTO.city() == null ||
+                        acc.getLocation().getCity().equalsIgnoreCase(listAccommodationDTO.city()))
+
+                // Filtro por checkIn (todas las reservas)
+                .filter(acc -> listAccommodationDTO.checkIn() == null ||
+                        (!acc.getBookings().isEmpty() &&
+                                acc.getBookings().stream().allMatch(
+                                        b -> !b.getCheckIn().isBefore(listAccommodationDTO.checkIn())
+                                )))
+                // Filtro por checkOut (todas las reservas)
+                .filter(acc -> listAccommodationDTO.checkOut() == null ||
+                        (!acc.getBookings().isEmpty() &&
+                                acc.getBookings().stream().allMatch(
+                                        b -> !b.getCheckOut().isAfter(listAccommodationDTO.checkOut())
+                                )))
+                // Filtro por número de invitados (al menos una reserva que coincida)
+                .filter(acc -> listAccommodationDTO.guest_number() == null ||
+                        (!acc.getBookings().isEmpty() &&
+                                acc.getBookings().stream().anyMatch(
+                                        b -> Objects.equals(b.getGuest_number(), listAccommodationDTO.guest_number())
+                                )))
+                // Mapeo al DTO
+                .map(showAccommodationMapper::toAccommodationDTO)
+                .toList();
     }
+
 
     @Override
     public List<Amenities> listAllAmenities(String id) throws Exception {
