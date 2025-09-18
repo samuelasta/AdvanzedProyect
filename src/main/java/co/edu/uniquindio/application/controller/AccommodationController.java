@@ -29,19 +29,12 @@ public class AccommodationController {
     private final CommentService commentService;
     private final BookingService bookingService;
 
-    // ver la lista de reservas del alojamiento (aplicando filtros)
-    @GetMapping("/{id}/bookings")
-    public ResponseEntity<ResponseDTO<List<BookingDTO>>> booking_list(@PathVariable String id, @Valid @RequestBody ListBookingsDTO listBookingsDTO) throws Exception {
-
-        List<BookingDTO> list = accommodationService.listAll(listBookingsDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
-    }
 
     //ver la lista de alojamientos disponibles (aplicando filtros)
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<Accommodation>>> read(@Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
+    public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> read(@Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
 
-        List<Accommodation> list = accommodationService.search(listAccommodationDTO);
+        List<AccommodationDTO> list = accommodationService.search(listAccommodationDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
@@ -94,9 +87,6 @@ public class AccommodationController {
         List<BookingDTO> list = bookingService.listBookings(id, searchBookingDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
-
-
-
 
 
     // mostrar estadisticas del alojamiento

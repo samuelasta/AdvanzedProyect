@@ -59,6 +59,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    //update
     @Override
     public void edit(String id, UpdateDTO updateDTO) throws Exception {
         Accommodation accommodation = accommodationStore.get(id);
@@ -108,6 +109,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         accommodationStore.put(id, accommodation);
     }
 
+
     @Override
     public void delete(String id) throws Exception {
 
@@ -131,6 +133,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    // filtro de busqueda de los alojamientos
     @Override
     public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception {
 
@@ -189,5 +192,10 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public AccommodationStatsDTO stats(String id) throws Exception {
         return null;
+    }
+
+    @Override
+    public List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception {
+        return List.of();
     }
 }

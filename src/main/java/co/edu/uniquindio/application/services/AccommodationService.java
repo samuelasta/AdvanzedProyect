@@ -21,5 +21,5 @@ public interface AccommodationService {
     List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception;
     List<Amenities> listAllAmenities(String id) throws Exception;
     AccommodationStatsDTO stats(String id) throws Exception;
-
+    List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception;
 }
