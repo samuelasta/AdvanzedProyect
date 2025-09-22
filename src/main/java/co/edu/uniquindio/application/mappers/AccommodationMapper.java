@@ -23,7 +23,6 @@ public interface AccommodationMapper {
     @Mapping(target = "state", constant = "ACTIVE")
     @Mapping(target = "totalRatings", constant = "0")
     @Mapping(target = "averageRatings", constant = "0")
-    @Mapping(target = "bookings", expression = "java(new java.util.ArrayList<>())")
     @Mapping(target = "comments", expression = "java(new java.util.ArrayList<>())")
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
 

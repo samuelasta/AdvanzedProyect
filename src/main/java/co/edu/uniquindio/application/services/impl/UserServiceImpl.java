@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void create(CreateUserDTO userDTO) throws Exception {
 
+        /*
         if(isEmailDuplicated(userDTO.email())){
             throw new ValueConflictException("El correo electrónico electronico ya está en uso.");
         }
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService{
         // coframos la contraseña
         newUser.setPassword(encode(newUser.getPassword()));
 
-        userStore.put(newUser.getId(), newUser);
+        userStore.put(newUser.getId(), newUser);*/
     }
 
     @Override

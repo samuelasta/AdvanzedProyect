@@ -1,8 +1,12 @@
 package co.edu.uniquindio.application.model;
 
 import co.edu.uniquindio.application.model.enums.State;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 import co.edu.uniquindio.application.model.enums.Role;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,19 +15,40 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Entity
 public class User {
 
+    @Id
     private String id;
+
+    @Column(nullable = false, length = 50)
     private String name;
+
+    @Column(nullable = false, length = 100)
     private String email;
+
+    @Column(length = 15)
     private String phone;
+
+    @Column(nullable = false)
     private LocalDate birthDate;
+
+    @Column(nullable = false)
     private String country;
+
+    @Column(nullable = false)
     private Role role;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, length = 200)
     private String photoUrl;
+
+    @Column(nullable = false)
     private State state;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
 }

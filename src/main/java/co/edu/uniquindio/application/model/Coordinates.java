@@ -1,6 +1,14 @@
 package co.edu.uniquindio.application.model;
 
-import lombok.Data;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
-public record Coordinates(float latitude, float longitude) {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Embeddable
+public class Coordinates {
+    private float latitude;
+    private float longitude;
 }

@@ -44,6 +44,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     private boolean verifyExistence(CreateAccommodationDTO createAccommodationDTO) {
+        /*
         for (Accommodation accommodation : accommodationStore.values()) {
             double distancia = GeoUtils.calcularDistancia(
                     createAccommodationDTO.latitude(), createAccommodationDTO.longitude(),
@@ -51,10 +52,13 @@ public class AccommodationServiceImpl implements AccommodationService {
                     accommodation.getLocation().getCoordinates().longitude()
             );
 
-            if (distancia <= 10 ) { // 10 metros de umbral
+            if (distancia <= 5 && accommodation.getTitle().equals(createAccommodationDTO.title())) { // 10 metros de umbral
                 return true;
             }
         }
+        return false;
+
+         */
         return false;
     }
 
@@ -112,7 +116,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public void delete(String id) throws Exception {
-
+        /*
         Accommodation accommodation = accommodationStore.get(id);
         if(accommodation == null){
             throw new ResourceNotFoundException("No existe el alojamiento");
@@ -123,7 +127,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 throw new ValueConflictException("tienes reservas futuras, no puedes hacer esto");
             }
         }
-        accommodationStore.remove(id);
+        accommodationStore.remove(id);*/
     }
 
     @Override
@@ -137,6 +141,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception {
 
+        /*
         // Si no viene ningún filtro, devuelvo todos directamente
         if ((listAccommodationDTO.city() == null || listAccommodationDTO.city().isBlank()) &&
                 listAccommodationDTO.checkIn() == null &&
@@ -172,7 +177,8 @@ public class AccommodationServiceImpl implements AccommodationService {
                                 )))
                 // Mapeo al DTO
                 .map(showAccommodationMapper::toAccommodationDTO)
-                .toList();
+                .toList();*/
+        return List.of();
     }
 
 
