@@ -53,7 +53,6 @@ public class RestExceptionHandler {
     }
 
     // http 401
-    // http 400
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ResponseDTO<String>> handleUnauthorizedException(UnauthorizedException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ResponseDTO<>(true, ex.getMessage()) );

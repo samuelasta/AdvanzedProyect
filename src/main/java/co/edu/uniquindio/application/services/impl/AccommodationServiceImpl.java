@@ -14,6 +14,7 @@ import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Booking;
 import co.edu.uniquindio.application.model.User;
 import co.edu.uniquindio.application.model.enums.Amenities;
+import co.edu.uniquindio.application.repositories.AccommodationRepository;
 import co.edu.uniquindio.application.services.AccommodationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,35 +31,32 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationMapper accommodationMapper;
     private final Map<String, Accommodation> accommodationStore = new ConcurrentHashMap<>();
     private final ShowAccommodationMapper showAccommodationMapper;
+    private final AccommodationRepository accommodationRepository;
 
     @Override
     public void create(String id, CreateAccommodationDTO createAccommodationDTO) throws Exception {
 
-        if(verifyExistence(createAccommodationDTO)){
-            throw new ValueConflictException("Ya existe este alojamiento");
-        }
-
-        Accommodation accommodation1 = accommodationMapper.toEntity(createAccommodationDTO);
-        accommodationStore.put(id, accommodation1);
+       if(verifyExistence(createAccommodationDTO)){
+           throw new ValueConflictException("este alojamiento ya existe");
+       }
+       Accommodation accommodation = accommodationMapper.toEntity(createAccommodationDTO);
+       accommodationRepository.save(accommodation);
 
     }
 
     private boolean verifyExistence(CreateAccommodationDTO createAccommodationDTO) {
-        /*
+
         for (Accommodation accommodation : accommodationStore.values()) {
             double distancia = GeoUtils.calcularDistancia(
                     createAccommodationDTO.latitude(), createAccommodationDTO.longitude(),
-                    accommodation.getLocation().getCoordinates().latitude(),
-                    accommodation.getLocation().getCoordinates().longitude()
+                    accommodation.getLocation().getCoordinates().getLatitude(),
+                    accommodation.getLocation().getCoordinates().getLongitude()
             );
 
             if (distancia <= 5 && accommodation.getTitle().equals(createAccommodationDTO.title())) { // 10 metros de umbral
                 return true;
             }
         }
-        return false;
-
-         */
         return false;
     }
 

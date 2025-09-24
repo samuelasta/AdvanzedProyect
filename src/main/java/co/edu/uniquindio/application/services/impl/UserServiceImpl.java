@@ -7,6 +7,7 @@ import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
 import co.edu.uniquindio.application.mappers.UserMapper;
 import co.edu.uniquindio.application.model.User;
+import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserMapper userMapper;
     private final Map<String, User> userStore = new ConcurrentHashMap<>();
+    private final UserRepository userRepository;
 
     @Override
     public void create(CreateUserDTO userDTO) throws Exception {
@@ -72,12 +75,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDTO get(String id) throws Exception {
 
-        User user = userStore.get(id);
-        if(user == null){
-            throw new ResourceNotFoundException("El usuario no existe");
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            return userMapper.toUserDTO(user.get());
         }
-
-        return userMapper.toUserDTO(user);
+        throw new ResourceNotFoundException("usuario no encontrado:)");
     }
 
     @Override

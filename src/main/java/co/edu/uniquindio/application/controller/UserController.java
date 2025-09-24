@@ -25,9 +25,8 @@ public class UserController {
     private final AccommodationService accommodationService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<String>> create(@RequestBody CreateUserDTO RegisterUserDTO) throws Exception {
-
-        userService.create(RegisterUserDTO);
+    public ResponseEntity<ResponseDTO<String>> create(@Valid @RequestBody CreateUserDTO createUserDTO) throws Exception {
+        userService.create(createUserDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(false, "registro exitoso :)"));
     }
 
