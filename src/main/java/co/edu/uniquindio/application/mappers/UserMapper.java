@@ -1,10 +1,12 @@
 package co.edu.uniquindio.application.mappers;
 import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
+import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
 import co.edu.uniquindio.application.dto.usersDTOs.UserDTO;
 import co.edu.uniquindio.application.model.User;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
@@ -17,4 +19,6 @@ public interface UserMapper {
     User toEntity(CreateUserDTO createUserDTO);
 
     UserDTO toUserDTO(User user);
+
+
 }

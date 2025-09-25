@@ -19,14 +19,19 @@ import co.edu.uniquindio.application.model.enums.BookingState;
 import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.AccommodationRepository;
 import co.edu.uniquindio.application.repositories.BookingRepository;
+import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.AccommodationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import co.edu.uniquindio.application.services.GeoUtils;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,28 +42,37 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final ShowAccommodationMapper showAccommodationMapper;
     private final AccommodationRepository accommodationRepository;
     private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public void create(String id, CreateAccommodationDTO createAccommodationDTO) throws Exception {
+
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isEmpty()){
+            throw new ResourceNotFoundException("User not found");
+        }
 
        if(verifyExistence(createAccommodationDTO)){
            throw new ValueConflictException("este alojamiento ya existe");
        }
        Accommodation accommodation = accommodationMapper.toEntity(createAccommodationDTO);
+       accommodation.setUser(optionalUser.get());
        accommodationRepository.save(accommodation);
 
     }
 
     private boolean verifyExistence(CreateAccommodationDTO createAccommodationDTO) {
 
-        for (Accommodation accommodation : accommodationStore.values()) {
+        for (Accommodation accommodation : accommodationRepository.findByState(State.ACTIVE)) {
             double distancia = GeoUtils.calcularDistancia(
                     createAccommodationDTO.latitude(), createAccommodationDTO.longitude(),
                     accommodation.getLocation().getCoordinates().getLatitude(),
                     accommodation.getLocation().getCoordinates().getLongitude()
             );
 
-            if (distancia <= 5 && accommodation.getTitle().equals(createAccommodationDTO.title())) { // 10 metros de umbral
+            if (distancia <= 5 && accommodation.getTitle().equalsIgnoreCase(createAccommodationDTO.title())) { // 10 metros de umbral
                 return true;
             }
         }
@@ -72,47 +86,10 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
         if(accommodation.isEmpty()){
-            throw new ResourceNotFoundException("No se encontró el alojamiento");
+            throw new ResourceNotFoundException("Accommodation not found");
         }
-        if(updateDTO.title() != null && !updateDTO.title().isBlank() ){
-            accommodation.get().setTitle(updateDTO.title());
-        }
-        if(updateDTO.description() != null){
-            accommodation.get().setDescription(updateDTO.description());
-        }
-        if(updateDTO.capacity() != 0){
-            accommodation.get().setCapacity(updateDTO.capacity());
-        }
-        if(updateDTO.price() != null && updateDTO.price() != 0){
-            accommodation.get().setPrice(updateDTO.price());
-        }
-        if(updateDTO.country() != null && !updateDTO.country().isBlank()){
-            accommodation.get().getLocation().setCountry(updateDTO.country());
-        }
-        if(updateDTO.department() != null && !updateDTO.department().isBlank()){
-            accommodation.get().getLocation().setDepartment(updateDTO.department());
-        }
-        if(updateDTO.city() != null && !updateDTO.city().isBlank()){
-            accommodation.get().getLocation().setCity(updateDTO.city());
-        }
-        if(updateDTO.neighborhood() != null && !updateDTO.neighborhood().isBlank()){
-            accommodation.get().getLocation().setNeighborhood(updateDTO.neighborhood());
-        }
-        if(updateDTO.street() != null && !updateDTO.street().isBlank()){
-            accommodation.get().getLocation().setStreet(updateDTO.street());
-        }
-        if(updateDTO.postalCode() != null && !updateDTO.postalCode().isBlank()){
-            accommodation.get().getLocation().setPostalCode(updateDTO.postalCode());
-        }
-        if(!updateDTO.pics_url().isEmpty()){
-            accommodation.get().setPics_url(updateDTO.pics_url());
-        }
-        if(!updateDTO.amenities().isEmpty()){
-            accommodation.get().setAmenities(updateDTO.amenities());
-        }
-        if(updateDTO.accommodationType() != null){
-            accommodation.get().setAccommodationType(updateDTO.accommodationType());
-        }
+        //llamar el mappers
+        accommodationMapper.updateAccommodationFromDto(updateDTO, accommodation.get());
 
         accommodationRepository.save(accommodation.get());
     }
@@ -224,6 +201,10 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception {
-        return List.of();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Accommodation> accommodations = accommodationRepository.findAll(pageable);
+
+
+        return accommodations.toList().stream().map(showAccommodationMapper::toAccommodationDTO).collect(Collectors.toList());
     }
 }

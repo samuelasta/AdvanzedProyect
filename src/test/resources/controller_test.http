@@ -140,33 +140,61 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/accommodations/12
+POST http://localhost:8080/api/accommodations/40cb145b-00c6-4fb5-8042-f79e42550d03
 Content-Type: application/json
 // Crear un alojamiento
 
 {
-  "title": "Cozy Apartment",
-  "description": "A modern apartment located in the city center, fully furnished and close to public transport.",
-  "price": 120.5,
+  "title": "Casa en la playa",
+  "description": "Hermosa casa frente al mar, equipada con todas las comodidades para unas vacaciones inolvidables. Incluye piscina, terraza y acceso directo a la playa.",
+  "price": 150.0,
   "picsUrl": [
-    "https://example.com/pic1.jpg",
-    "https://example.com/pic2.jpg"
+    "https://example.com/foto1.jpg",
+    "https://example.com/foto2.jpg"
   ],
-  "accommodationType": "APARTMENT",
-  "capacity": 4,
-  "country": "USA",
-  "department": "New York",
-  "city": "New York",
-  "neighborhood": "Manhattan",
-  "street": "5th Avenue",
-  "postalCode": "1234AB",
+  "accommodationType": "HOUSE",
+  "capacity": 6,
+  "country": "Colombia",
+  "department": "Atlántico",
+  "city": "Barranquilla",
+  "neighborhood": "Prado",
+  "street": "Calle 84 #45-32",
+  "postalCode": "AB12CD34",
   "amenities": [
     "WIFI"
-  ]
+  ],
+  "latitude": 10.9685,
+  "longitude": -74.7813
 }
 
 ###
-DELETE http://localhost:8080/api/accommodations/12
+PUT http://localhost:8080/api/accommodations/5a552401-8b34-4d25-90a6-ba939ebd74ff
+Content-Type: application/json
+//actualizar, editar alojamiento
+
+{
+  "title": "Casa Bonita",
+  "description": "Una hermosa casa ubicada cerca del centro de la ciudad, con amplios espacios y todas las comodidades necesarias para una estadía confortable.",
+  "capacity": 4,
+  "price": 120.5,
+  "country": "Colombia",
+  "department": "Cundinamarca",
+  "city": "Bogotá",
+  "neighborhood": "Chapinero",
+  "street": "Carrera 7 #45-67",
+  "postalCode": "AB1234",
+  "pics_url": [
+    "https://example.com/img1.jpg",
+    "https://example.com/img2.jpg"
+  ],
+  "amenities": [
+    "WIFI"
+  ],
+  "accommodationType": "HOUSE"
+}
+
+###
+DELETE http://localhost:8080/api/accommodations/8d02c6c0-58bb-49c4-92e0-76f16a584570
 // eliminar un alojamiento (cambiar su estado)
 
 ###

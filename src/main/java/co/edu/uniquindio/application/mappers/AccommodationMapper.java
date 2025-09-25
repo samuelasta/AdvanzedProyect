@@ -1,11 +1,15 @@
 package co.edu.uniquindio.application.mappers;
 
 import co.edu.uniquindio.application.dto.accommodationDTO.CreateAccommodationDTO;
+import co.edu.uniquindio.application.dto.accommodationDTO.UpdateDTO;
+import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
 import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Location;
+import co.edu.uniquindio.application.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AccommodationMapper {
@@ -25,9 +29,12 @@ public interface AccommodationMapper {
     @Mapping(target = "averageRatings", constant = "0")
     @Mapping(target = "comments", expression = "java(new java.util.ArrayList<>())")
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
+    //@Mapping(target = "user", source = "user")
 
     Accommodation toEntity(CreateAccommodationDTO createAccommodationDTO);
 
 
     CreateAccommodationDTO toCreateAccommodationDTO(Accommodation accommodation);
+
+    void updateAccommodationFromDto(UpdateDTO dto, @MappingTarget Accommodation accommodation);
 }

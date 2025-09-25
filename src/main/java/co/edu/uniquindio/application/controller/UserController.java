@@ -24,6 +24,8 @@ public class UserController {
     private final UserService userService;
     private final AccommodationService accommodationService;
 
+
+    // crear un usuario (hecho)
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> create(@Valid @RequestBody CreateUserDTO createUserDTO) throws Exception {
         userService.create(createUserDTO);
