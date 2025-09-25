@@ -58,6 +58,8 @@ Content-Type: application/json
   "phone": "31934232",
   "birthDate": "2005-02-23",
   "password": "perroGato123",
+  "photoUrl": "dfdsfdsfsdfsdfs",
+  "country": "colombia",
   "role": "USER"
 }
 
@@ -91,8 +93,8 @@ Content-Type: application/json
 //crear una reserva
 
 {
-  "check_in": "2025-09-14T14:00:00",
-  "check_out": "2025-09-15T11:30:00",
+  "check_in": "2025-09-30T14:00:00",
+  "check_out": "2025-10-15T11:30:00",
   "guest_number": 2
 }
 

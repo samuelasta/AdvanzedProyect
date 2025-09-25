@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Booking {
 
@@ -18,10 +19,10 @@ public class Booking {
     private String id;
 
     @Column(nullable = false)
-    private LocalDate checkIn;
+    private LocalDateTime checkIn;
 
     @Column(nullable = false)
-    private LocalDate checkOut;
+    private LocalDateTime checkOut;
 
     @Column(nullable = false)
     private int guest_number;

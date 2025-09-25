@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 
 public record ListAccommodationDTO(
                                     @Length String city,
-                                    @FutureOrPresent LocalDate checkIn,
-                                   @Future LocalDate checkOut,
+                                    @FutureOrPresent LocalDateTime checkIn,
+                                   @Future LocalDateTime checkOut,
                                    Integer guest_number
 ) {
 }

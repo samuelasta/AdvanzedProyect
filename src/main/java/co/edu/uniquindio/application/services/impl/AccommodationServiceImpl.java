@@ -14,7 +14,9 @@ import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Booking;
 import co.edu.uniquindio.application.model.User;
 import co.edu.uniquindio.application.model.enums.Amenities;
+import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.AccommodationRepository;
+import co.edu.uniquindio.application.repositories.BookingRepository;
 import co.edu.uniquindio.application.services.AccommodationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final Map<String, Accommodation> accommodationStore = new ConcurrentHashMap<>();
     private final ShowAccommodationMapper showAccommodationMapper;
     private final AccommodationRepository accommodationRepository;
+    private final BookingRepository bookingRepository;
 
     @Override
     public void create(String id, CreateAccommodationDTO createAccommodationDTO) throws Exception {
@@ -63,73 +66,70 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     //update
     @Override
-    public void edit(String id, UpdateDTO updateDTO) throws Exception {
-        Accommodation accommodation = accommodationStore.get(id);
-        if(accommodation == null){
+    public void update(String id, UpdateDTO updateDTO) throws Exception {
+
+        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+        if(accommodation.isEmpty()){
             throw new ResourceNotFoundException("No se encontró el alojamiento");
         }
         if(updateDTO.title() != null && !updateDTO.title().isBlank() ){
-            accommodation.setTitle(updateDTO.title());
+            accommodation.get().setTitle(updateDTO.title());
         }
         if(updateDTO.description() != null){
-            accommodation.setDescription(updateDTO.description());
+            accommodation.get().setDescription(updateDTO.description());
         }
         if(updateDTO.capacity() != 0){
-            accommodation.setCapacity(updateDTO.capacity());
+            accommodation.get().setCapacity(updateDTO.capacity());
         }
         if(updateDTO.price() != null && updateDTO.price() != 0){
-            accommodation.setPrice(updateDTO.price());
+            accommodation.get().setPrice(updateDTO.price());
         }
         if(updateDTO.country() != null && !updateDTO.country().isBlank()){
-            accommodation.getLocation().setCountry(updateDTO.country());
+            accommodation.get().getLocation().setCountry(updateDTO.country());
         }
         if(updateDTO.department() != null && !updateDTO.department().isBlank()){
-            accommodation.getLocation().setDepartment(updateDTO.department());
+            accommodation.get().getLocation().setDepartment(updateDTO.department());
         }
         if(updateDTO.city() != null && !updateDTO.city().isBlank()){
-            accommodation.getLocation().setCity(updateDTO.city());
+            accommodation.get().getLocation().setCity(updateDTO.city());
         }
         if(updateDTO.neighborhood() != null && !updateDTO.neighborhood().isBlank()){
-            accommodation.getLocation().setNeighborhood(updateDTO.neighborhood());
+            accommodation.get().getLocation().setNeighborhood(updateDTO.neighborhood());
         }
         if(updateDTO.street() != null && !updateDTO.street().isBlank()){
-            accommodation.getLocation().setStreet(updateDTO.street());
+            accommodation.get().getLocation().setStreet(updateDTO.street());
         }
         if(updateDTO.postalCode() != null && !updateDTO.postalCode().isBlank()){
-            accommodation.getLocation().setPostalCode(updateDTO.postalCode());
+            accommodation.get().getLocation().setPostalCode(updateDTO.postalCode());
         }
         if(!updateDTO.pics_url().isEmpty()){
-            accommodation.setPics_url(updateDTO.pics_url());
+            accommodation.get().setPics_url(updateDTO.pics_url());
         }
         if(!updateDTO.amenities().isEmpty()){
-            accommodation.setAmenities(updateDTO.amenities());
+            accommodation.get().setAmenities(updateDTO.amenities());
         }
         if(updateDTO.accommodationType() != null){
-            accommodation.setAccommodationType(updateDTO.accommodationType());
+            accommodation.get().setAccommodationType(updateDTO.accommodationType());
         }
 
-        accommodationStore.put(id, accommodation);
+        accommodationRepository.save(accommodation.get());
     }
 
 
     @Override
     public void delete(String id) throws Exception {
-        /*
-        Accommodation accommodation = accommodationStore.get(id);
-        if(accommodation == null){
-            throw new ResourceNotFoundException("No existe el alojamiento");
-        }
-        for(Booking booking : accommodation.getBookings()){
-            // preguntar al profesor si checkIn o checkOut
-            if(booking.getCheckIn().isAfter(LocalDate.now())){
-                throw new ValueConflictException("tienes reservas futuras, no puedes hacer esto");
-            }
-        }
-        accommodationStore.remove(id);*/
+      Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+      if(accommodation.isEmpty()){
+          throw new ResourceNotFoundException("No se encontró el alojamiento");
+      }
+      accommodation.get().setState(State.INACTIVE);
+      accommodationRepository.save(accommodation.get());
     }
+
 
     @Override
     public List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception {
+
 
         return List.of();
     }
@@ -139,44 +139,61 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception {
 
-        /*
         // Si no viene ningún filtro, devuelvo todos directamente
-        if ((listAccommodationDTO.city() == null || listAccommodationDTO.city().isBlank()) &&
+
+        List<Accommodation> list = accommodationRepository.findAll();
+        if ((listAccommodationDTO.city() == null &&
                 listAccommodationDTO.checkIn() == null &&
                 listAccommodationDTO.checkOut() == null &&
-                listAccommodationDTO.guest_number() == null) {
-            return accommodationStore.values().stream()
+                listAccommodationDTO.guest_number() == null)) {
+
+            return list.stream()
                     .map(showAccommodationMapper::toAccommodationDTO)
                     .toList();
         }
 
-        return accommodationStore.values().stream()
-                // Filtro por ciudad
-                .filter(acc -> listAccommodationDTO.city() == null ||
-                        acc.getLocation().getCity().equalsIgnoreCase(listAccommodationDTO.city()))
+        if(listAccommodationDTO.city() != null){
+           Iterator<Accommodation> iterator = list.iterator();
+           while (iterator.hasNext()){
+               Accommodation aux = iterator.next();
+               if(!aux.getLocation().getCity().equalsIgnoreCase(listAccommodationDTO.city())){
+                   iterator.remove();
+               }
+           }
+        }
+        if(listAccommodationDTO.checkIn() != null && listAccommodationDTO.checkOut() != null ){
+            Iterator<Accommodation> iterator = list.iterator();
+            while (iterator.hasNext()){
+                Accommodation aux = iterator.next();
+                List<Booking> booking = bookingRepository.findByAccommodationId(aux.getId());
+                if(booking.isEmpty()){
+                    iterator.remove();
+                }
+                for(Booking booking1: booking){
+                     if(booking1.getCheckIn().isBefore(listAccommodationDTO.checkOut()) &&
+                        booking1.getCheckOut().isAfter(listAccommodationDTO.checkIn())){
+                         iterator.remove();
+                     }
+                }
+            }
+        }
+        if(listAccommodationDTO.guest_number() != null){
+            Iterator<Accommodation> iterator = list.iterator();
+            while(iterator.hasNext()){
+                Accommodation accommodation = iterator.next();
+                if(accommodation.getCapacity() != listAccommodationDTO.guest_number()){
+                    iterator.remove();
+                }
+            }
+        }
+        if(list.isEmpty()){
+            throw new ResourceNotFoundException("No tenemos alojamientos que apliquen");
+        }
 
-                // Filtro por checkIn (todas las reservas)
-                .filter(acc -> listAccommodationDTO.checkIn() == null ||
-                        (!acc.getBookings().isEmpty() &&
-                                acc.getBookings().stream().allMatch(
-                                        b -> !b.getCheckIn().isBefore(listAccommodationDTO.checkIn())
-                                )))
-                // Filtro por checkOut (todas las reservas)
-                .filter(acc -> listAccommodationDTO.checkOut() == null ||
-                        (!acc.getBookings().isEmpty() &&
-                                acc.getBookings().stream().allMatch(
-                                        b -> !b.getCheckOut().isAfter(listAccommodationDTO.checkOut())
-                                )))
-                // Filtro por número de invitados (al menos una reserva que coincida)
-                .filter(acc -> listAccommodationDTO.guest_number() == null ||
-                        (!acc.getBookings().isEmpty() &&
-                                acc.getBookings().stream().anyMatch(
-                                        b -> Objects.equals(b.getGuest_number(), listAccommodationDTO.guest_number())
-                                )))
-                // Mapeo al DTO
+        return list.stream()
                 .map(showAccommodationMapper::toAccommodationDTO)
-                .toList();*/
-        return List.of();
+                .toList();
+
     }
 
 

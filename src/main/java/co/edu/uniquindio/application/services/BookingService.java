@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface BookingService {
 
-    void create(String id, CreateBookingDTO createBookingDTO);
+    void create(String id, CreateBookingDTO createBookingDTO) throws Exception;
     void delete(String id) throws Exception;
     List<BookingDTO> listBookings(String id, SearchBookingDTO searchBookingDTO) throws Exception;
 }

@@ -30,7 +30,7 @@ public class AccommodationController {
     private final BookingService bookingService;
 
 
-    //ver la lista de alojamientos disponibles (aplicando filtros)
+    //ver la lista de alojamientos disponibles (aplicando filtros), hecho
     @GetMapping
     public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> read(@Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
 
@@ -38,7 +38,7 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
-    //crear el alojamiento
+    //crear el alojamiento (hecho)
     @PostMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> create(@PathVariable String id, @Valid @RequestBody CreateAccommodationDTO createAccommodationDTO) throws Exception{
 
@@ -46,10 +46,10 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "alojamiento creado "));
     }
 
-    //actualizar alojamiento
+    //actualizar alojamiento (hecho)
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> update(@PathVariable String id, @Valid @RequestBody UpdateDTO updateDTO) throws Exception {
-        accommodationService.edit(id, updateDTO);
+        accommodationService.update(id, updateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "alojamiento actualizado "));
     }
 

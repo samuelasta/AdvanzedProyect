@@ -28,18 +28,14 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
     @Override
-    public void create(CreateUserDTO userDTO) throws Exception {
-
-        /*
-        if(isEmailDuplicated(userDTO.email())){
-            throw new ValueConflictException("El correo electrónico electronico ya está en uso.");
+    public void create(CreateUserDTO createUserDTO) throws Exception {
+        Optional<User> findUser = userRepository.findByEmail(createUserDTO.email());
+        if(findUser.isPresent()) {
+            throw new ValueConflictException("El email ya existe");
         }
+        User user = userMapper.toEntity(createUserDTO);
+        userRepository.save(user);
 
-        User newUser = userMapper.toEntity(userDTO);
-        // coframos la contraseña
-        newUser.setPassword(encode(newUser.getPassword()));
-
-        userStore.put(newUser.getId(), newUser);*/
     }
 
     @Override
