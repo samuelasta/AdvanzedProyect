@@ -3,37 +3,58 @@ package co.edu.uniquindio.application.services.impl;
 import co.edu.uniquindio.application.dto.commentDTO.CommentDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CreateCommentDTO;
 import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
+import co.edu.uniquindio.application.mappers.CommentMapper;
+import co.edu.uniquindio.application.mappers.ListCommentsMapper;
 import co.edu.uniquindio.application.model.Accommodation;
+import co.edu.uniquindio.application.model.Comment;
+import co.edu.uniquindio.application.model.User;
+import co.edu.uniquindio.application.repositories.AccommodationRepository;
+import co.edu.uniquindio.application.repositories.CommentRepository;
+import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
-    private final Map<String, Accommodation> commentStore = new ConcurrentHashMap<>();
+    private final CommentRepository commentRepository;
+    private final AccommodationRepository accommodationRepository;
+    private final ListCommentsMapper listCommentsMapper;
+    private final CommentMapper commentMapper;
+    private final UserRepository userRepository;
 
-    //preguntar al profesor
+    //devuelve todos los comentarios de los alojamientos
     @Override
     public List<CommentDTO> listComments(String id) throws Exception {
-
-        Accommodation accommodation = commentStore.get(id);
-        if(accommodation == null){
-            throw new ResourceNotFoundException("No se encontró el alojamiento");
+        List<Comment> list = commentRepository.findAllByAccommodationId(id);
+        if(list.isEmpty()){
+            throw new ResourceNotFoundException("no se encontraron comentarios");
         }
+        return list.stream()
+                .map(listCommentsMapper::ToCommentDTO)
+                .toList();
 
-
-
-        return List.of();
     }
 
+    // metodo para crear el comentario (posible cambio)
     @Override
     public void createComment(String id, CreateCommentDTO createCommentDTO) throws Exception {
-
+        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+        if(accommodation.isEmpty()){
+            throw new ResourceNotFoundException("no se encontró el alojamiento");
+        }
+        Optional<User> user = userRepository.findById(createCommentDTO.userId());
+        if(user.isEmpty()){
+            throw new ResourceNotFoundException("no se encontró al usuario");
+        }
+        Comment comment = commentMapper.toEntity(createCommentDTO);
+        comment.setAccommodation(accommodation.get());
+        comment.setUser(user.get());
+        commentRepository.save(comment);
     }
 }

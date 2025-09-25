@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Comment {
 
@@ -21,7 +22,7 @@ public class Comment {
     private String comment;
 
     @Column(nullable = false)
-    private LocalDateTime commentDate;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private int rating;

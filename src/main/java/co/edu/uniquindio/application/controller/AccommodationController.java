@@ -53,21 +53,21 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "alojamiento actualizado "));
     }
 
-    //eliminar el alojamiento
+    //eliminar el alojamiento (hecho)
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> delete(@PathVariable String id) throws Exception {
         accommodationService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "alojamiento eliminado "));
     }
 
-    //listar los servicios del alojamiento
+    //listar los servicios del alojamiento (hecho)
     @GetMapping("/{id}/amenities")
     public ResponseEntity<ResponseDTO<List<Amenities>>> listAamenities(@PathVariable String id) throws Exception {
         List<Amenities> list = accommodationService.listAllAmenities(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
-    // listar los comentarios del alojamiento
+    // listar los comentarios del alojamiento (hecho)
     @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseDTO<List<CommentDTO>>> listComments(@PathVariable String id) throws Exception {
         List<CommentDTO> list = commentService.listComments(id);

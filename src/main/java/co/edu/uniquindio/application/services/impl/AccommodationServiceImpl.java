@@ -6,6 +6,7 @@ import co.edu.uniquindio.application.dto.commentDTO.CommentDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CreateCommentDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
 import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
+import co.edu.uniquindio.application.exceptions.UnauthorizedException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
 import co.edu.uniquindio.application.mappers.AccommodationMapper;
 import co.edu.uniquindio.application.mappers.ShowAccommodationMapper;
@@ -14,6 +15,7 @@ import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Booking;
 import co.edu.uniquindio.application.model.User;
 import co.edu.uniquindio.application.model.enums.Amenities;
+import co.edu.uniquindio.application.model.enums.BookingState;
 import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.AccommodationRepository;
 import co.edu.uniquindio.application.repositories.BookingRepository;
@@ -116,11 +118,17 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    //eliminar un alojamiento que no tenga reservas
     @Override
     public void delete(String id) throws Exception {
       Optional<Accommodation> accommodation = accommodationRepository.findById(id);
       if(accommodation.isEmpty()){
           throw new ResourceNotFoundException("No se encontró el alojamiento");
+      }
+      //me trae todas las reservas del alojamiento cuyo estado sea pendiente
+      List<Booking> booking = bookingRepository.findByAccommodationIdAndBookingState(id, BookingState.PENDING);
+      if(!booking.isEmpty()){
+          throw new UnauthorizedException("no puedes eliminar este alojamiento, tiene reservas pendientes");
       }
       accommodation.get().setState(State.INACTIVE);
       accommodationRepository.save(accommodation.get());
@@ -197,16 +205,16 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    // devuelve la lista de todos los servicios del alojamiento
     @Override
     public List<Amenities> listAllAmenities(String id) throws Exception {
 
-        Accommodation accommodation = accommodationStore.get(id);
-        if(accommodation == null){
-            throw new ResourceNotFoundException("No se encontró el alojamiento");
-
+        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+        if(accommodation.isPresent()){
+            return accommodation.get().getAmenities();
         }
-
-        return accommodation.getAmenities();
+        // o con este se resume más: .orElseThrow(() -> new ResourceNotFoundException("No se encontraron servicios del alojamiento"));
+        throw new ResourceNotFoundException("No se encontraron servicios del alojamiento");
     }
 
 
