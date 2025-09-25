@@ -88,11 +88,19 @@ public class BookingServiceImpl implements BookingService {
         // añadimos a la lista todas las reservas cuyo id sea igual
         List<Booking> bookings = bookingRepository.findByAccommodationId(id);
         List<BookingDTO> bookingDTOs = new ArrayList<>();
-        for(Booking booking : bookings) {
-            if(booking.getAccommodation().getId().equals(id)) {
-                BookingDTO bookingDTO = bookingMapper.toBookingDTO(booking);
-                bookingDTOs.add(bookingDTO);
+        if(!bookings.isEmpty()) {
+            for (Booking booking : bookings) {
+
+                    BookingDTO bookingDTO = bookingMapper.toBookingDTO(booking);
+                    bookingDTOs.add(bookingDTO);
             }
+        } else{
+            throw new ResourceNotFoundException("No tienes ninguna reserva");
+        }
+
+        if(searchBookingDTO.checkIn() == null && searchBookingDTO.checkOut() == null
+                && searchBookingDTO.guest_number() == null && searchBookingDTO.state() == null) {
+            return bookingDTOs;
         }
         // eliminamos los que tengan estado diferente (si es que viene estado)
         if(searchBookingDTO.state() != null) {
@@ -103,23 +111,19 @@ public class BookingServiceImpl implements BookingService {
                 }
             }
         }
-        // eliminamos los que tengan checkIn diferente (si es que viene checkIn)
-        if(searchBookingDTO.checkIn() != null) {
-            Iterator<BookingDTO> iterator = bookingDTOs.iterator();
-            while(iterator.hasNext()){
-                if(iterator.next().checkIn().isBefore(searchBookingDTO.checkIn())) {
-                    iterator.remove();
-                }
-            }
-        }
-        if(searchBookingDTO.checkOut() != null) {
+
+        //dejamos solo las reservas dentro de estas fechas
+        if(searchBookingDTO.checkIn() != null && searchBookingDTO.checkOut() != null ){
             Iterator<BookingDTO> iterator = bookingDTOs.iterator();
             while(iterator.hasNext()) {
-                if(iterator.next().checkOut().isAfter(searchBookingDTO.checkOut())) {
+                BookingDTO bookingDTO = iterator.next();
+                if ((bookingDTO.checkIn().isBefore(searchBookingDTO.checkIn())
+                        || bookingDTO.checkOut().isAfter(searchBookingDTO.checkOut()))) {
                     iterator.remove();
                 }
             }
         }
+
         if(searchBookingDTO.guest_number() != null){
             Iterator<BookingDTO> iterator = bookingDTOs.iterator();
             while(iterator.hasNext()) {

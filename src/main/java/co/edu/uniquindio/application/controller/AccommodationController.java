@@ -74,14 +74,14 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
-    //crear un comentario, acá porque el comentario pertenece al alojamiento
+    //crear un comentario, acá porque el comentario pertenece al alojamiento (hecho)
     @PostMapping("/{id}/comments")
     public ResponseEntity<ResponseDTO<String>> createComment(@PathVariable String id, @Valid @RequestBody CreateCommentDTO createCommentDTO) throws Exception{
         commentService.createComment(id, createCommentDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "comentario creado exitosamente"));
     }
 
-    //mostrar todas las reservas del alojamiento
+    //mostrar todas las reservas del alojamiento aplicando filtros (hecho)
     @GetMapping("/{id}/bookings")
     public ResponseEntity<ResponseDTO<List<BookingDTO>>> listBookings(@PathVariable String id, @Valid @RequestBody SearchBookingDTO searchBookingDTO) throws Exception {
         List<BookingDTO> list = bookingService.listBookings(id, searchBookingDTO);

@@ -142,7 +142,6 @@ public class AccommodationServiceImpl implements AccommodationService {
         return List.of();
     }
 
-
     // filtro de busqueda de los alojamientos
     @Override
     public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception {
