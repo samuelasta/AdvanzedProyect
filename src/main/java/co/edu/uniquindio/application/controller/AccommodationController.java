@@ -31,10 +31,10 @@ public class AccommodationController {
 
 
     //ver la lista de alojamientos disponibles (aplicando filtros), hecho
-    @GetMapping
-    public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> read(@Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
+    @GetMapping("/{page}")
+    public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> read(@PathVariable int page, @Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
 
-        List<AccommodationDTO> list = accommodationService.search(listAccommodationDTO);
+        List<AccommodationDTO> list = accommodationService.search(listAccommodationDTO, page);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 

@@ -18,7 +18,7 @@ public interface AccommodationService {
     void update(String id, UpdateDTO updateDto) throws Exception;
     void delete(String id) throws Exception;
     List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception;
-    List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception;
+    List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO, int page) throws Exception;
     List<Amenities> listAllAmenities(String id) throws Exception;
     AccommodationStatsDTO stats(String id) throws Exception;
     List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception;

@@ -121,63 +121,17 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     // filtro de busqueda de los alojamientos
     @Override
-    public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO) throws Exception {
+    public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO, int page) throws Exception {
 
-        // Si no viene ningún filtro, devuelvo todos directamente
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Accommodation> accommodations = accommodationRepository.searchAccommodations(listAccommodationDTO, pageable);
 
-        List<Accommodation> list = accommodationRepository.findAll();
-        if ((listAccommodationDTO.city() == null &&
-                listAccommodationDTO.checkIn() == null &&
-                listAccommodationDTO.checkOut() == null &&
-                listAccommodationDTO.guest_number() == null)) {
-
-            return list.stream()
-                    .map(showAccommodationMapper::toAccommodationDTO)
-                    .toList();
+        if(accommodations.isEmpty()){
+            throw new ResourceNotFoundException("No hay alojamientos disponibles, prueba otro filtro");
         }
-
-        if(listAccommodationDTO.city() != null){
-           Iterator<Accommodation> iterator = list.iterator();
-           while (iterator.hasNext()){
-               Accommodation aux = iterator.next();
-               if(!aux.getLocation().getCity().equalsIgnoreCase(listAccommodationDTO.city())){
-                   iterator.remove();
-               }
-           }
-        }
-        if(listAccommodationDTO.checkIn() != null && listAccommodationDTO.checkOut() != null ){
-            Iterator<Accommodation> iterator = list.iterator();
-            while (iterator.hasNext()){
-                Accommodation aux = iterator.next();
-                List<Booking> booking = bookingRepository.findByAccommodationId(aux.getId());
-                if(booking.isEmpty()){
-                    iterator.remove();
-                }
-                for(Booking booking1: booking){
-                     if(booking1.getCheckIn().isBefore(listAccommodationDTO.checkOut()) &&
-                        booking1.getCheckOut().isAfter(listAccommodationDTO.checkIn())){
-                         iterator.remove();
-                     }
-                }
-            }
-        }
-        if(listAccommodationDTO.guest_number() != null){
-            Iterator<Accommodation> iterator = list.iterator();
-            while(iterator.hasNext()){
-                Accommodation accommodation = iterator.next();
-                if(accommodation.getCapacity() != listAccommodationDTO.guest_number()){
-                    iterator.remove();
-                }
-            }
-        }
-        if(list.isEmpty()){
-            throw new ResourceNotFoundException("No tenemos alojamientos que apliquen");
-        }
-
-        return list.stream()
+        return accommodations.stream()
                 .map(showAccommodationMapper::toAccommodationDTO)
                 .toList();
-
     }
 
 

@@ -2,6 +2,7 @@ package co.edu.uniquindio.application.dto.accommodationDTO;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
@@ -11,6 +12,6 @@ public record ListAccommodationDTO(
                                     @Length String city,
                                     @FutureOrPresent LocalDateTime checkIn,
                                    @Future LocalDateTime checkOut,
-                                   Integer guest_number
+                                   @Positive Integer guest_number
 ) {
 }

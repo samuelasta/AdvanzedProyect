@@ -128,15 +128,15 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/api/accommodations
+GET http://localhost:8080/api/accommodations/0
 Content-Type: application/json
 // buscar alojamientos disponibles
 
 {
-  "city": "New York",
-  "checkIn": "2025-09-14T15:00:00",
-  "checkOut": "2025-09-16T11:00:00",
-  "guest_number": 3
+  "city": "Barranquilla",
+  "checkIn": "2025-12-01T15:00:00",
+  "checkOut": "2025-12-05T11:00:00",
+  "guest_number": 4
 }
 
 ###
