@@ -68,9 +68,9 @@ public class AccommodationController {
     }
 
     // listar los comentarios del alojamiento (hecho)
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<ResponseDTO<List<CommentDTO>>> listComments(@PathVariable String id) throws Exception {
-        List<CommentDTO> list = commentService.listComments(id);
+    @GetMapping("/{id}/comments/{page}")
+    public ResponseEntity<ResponseDTO<List<CommentDTO>>> listComments(@PathVariable String id, @PathVariable int page) throws Exception {
+        List<CommentDTO> list = commentService.listComments(id, page);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
@@ -82,9 +82,9 @@ public class AccommodationController {
     }
 
     //mostrar todas las reservas del alojamiento aplicando filtros (hecho)
-    @GetMapping("/{id}/bookings")
-    public ResponseEntity<ResponseDTO<List<BookingDTO>>> listBookings(@PathVariable String id, @Valid @RequestBody SearchBookingDTO searchBookingDTO) throws Exception {
-        List<BookingDTO> list = bookingService.listBookings(id, searchBookingDTO);
+    @GetMapping("/{id}/bookings/{page}")
+    public ResponseEntity<ResponseDTO<List<BookingDTO>>> listBookings(@PathVariable String id, @PathVariable int page, @Valid @RequestBody SearchBookingDTO searchBookingDTO) throws Exception {
+        List<BookingDTO> list = bookingService.listBookings(id, page, searchBookingDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
@@ -92,7 +92,6 @@ public class AccommodationController {
     // mostrar estadisticas del alojamiento
     @GetMapping("/{id}/stats")
     public ResponseEntity<ResponseDTO<AccommodationStatsDTO>> stats(@PathVariable String id) throws Exception {
-
         AccommodationStatsDTO accommodationStatsDTO = accommodationService.stats(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationStatsDTO));
     }

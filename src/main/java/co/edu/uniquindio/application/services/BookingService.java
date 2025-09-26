@@ -17,5 +17,5 @@ public interface BookingService {
 
     void create(String id, CreateBookingDTO createBookingDTO) throws Exception;
     void delete(String id) throws Exception;
-    List<BookingDTO> listBookings(String id, SearchBookingDTO searchBookingDTO) throws Exception;
+    List<BookingDTO> listBookings(String id, int page, SearchBookingDTO searchBookingDTO) throws Exception;
 }

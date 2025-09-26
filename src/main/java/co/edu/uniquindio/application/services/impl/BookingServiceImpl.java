@@ -1,5 +1,5 @@
 package co.edu.uniquindio.application.services.impl;
-
+//samu
 import co.edu.uniquindio.application.dto.bookingDTO.BookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.CreateBookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.SearchBookingDTO;
@@ -17,6 +17,9 @@ import co.edu.uniquindio.application.repositories.AccommodationRepository;
 import co.edu.uniquindio.application.repositories.BookingRepository;
 import co.edu.uniquindio.application.services.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -81,62 +84,25 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    //lista de todas las reservas de un alojamiento (aplicando filtros)
+    //lista de todas las reservas de un alojamiento (aplicando filtros y paginación)
     @Override
-    public List<BookingDTO> listBookings(String id, SearchBookingDTO searchBookingDTO) throws Exception {
+    public List<BookingDTO> listBookings(String id, int page, SearchBookingDTO searchBookingDTO) throws Exception {
 
-        // añadimos a la lista todas las reservas cuyo id sea igual
-        List<Booking> bookings = bookingRepository.findByAccommodationId(id);
-        List<BookingDTO> bookingDTOs = new ArrayList<>();
-        if(!bookings.isEmpty()) {
-            for (Booking booking : bookings) {
-
-                    BookingDTO bookingDTO = bookingMapper.toBookingDTO(booking);
-                    bookingDTOs.add(bookingDTO);
-            }
-        } else{
-            throw new ResourceNotFoundException("No tienes ninguna reserva");
+        Optional<User> user = accommodationRepository.findUserByAccommodationId(id);
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException("No existe usuario");
         }
 
-        if(searchBookingDTO.checkIn() == null && searchBookingDTO.checkOut() == null
-                && searchBookingDTO.guest_number() == null && searchBookingDTO.state() == null) {
-            return bookingDTOs;
-        }
-        // eliminamos los que tengan estado diferente (si es que viene estado)
-        if(searchBookingDTO.state() != null) {
-            Iterator<BookingDTO> iterator = bookingDTOs.iterator();
-            while(iterator.hasNext()) {
-                if(!Objects.equals(iterator.next().state(), searchBookingDTO.state())) {
-                    iterator.remove();
-                }
-            }
+        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+        if (accommodation.isEmpty()) {
+            throw new ResourceNotFoundException("No existe el alojamiento");
         }
 
-        //dejamos solo las reservas dentro de estas fechas
-        if(searchBookingDTO.checkIn() != null && searchBookingDTO.checkOut() != null ){
-            Iterator<BookingDTO> iterator = bookingDTOs.iterator();
-            while(iterator.hasNext()) {
-                BookingDTO bookingDTO = iterator.next();
-                if ((bookingDTO.checkIn().isBefore(searchBookingDTO.checkIn())
-                        || bookingDTO.checkOut().isAfter(searchBookingDTO.checkOut()))) {
-                    iterator.remove();
-                }
-            }
-        }
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Booking> bookings = bookingRepository.findBookingsByAccommodationWithFilters(id, searchBookingDTO, pageable);
 
-        if(searchBookingDTO.guest_number() != null){
-            Iterator<BookingDTO> iterator = bookingDTOs.iterator();
-            while(iterator.hasNext()) {
-                if(!Objects.equals(iterator.next().guest_number(), searchBookingDTO.guest_number())) {
-                    iterator.remove();
-                }
-            }
-        }
-
-        if(bookingDTOs.isEmpty()) {
-            throw new ResourceNotFoundException("No tienes ninguna reserva que aplique");
-        }
-
-        return bookingDTOs;
+        return bookings.stream()
+                .map(bookingMapper::toBookingDTO)
+                .toList();
     }
 }

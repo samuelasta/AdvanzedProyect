@@ -2,6 +2,7 @@ package co.edu.uniquindio.application.repositories;
 
 import co.edu.uniquindio.application.dto.accommodationDTO.ListAccommodationDTO;
 import co.edu.uniquindio.application.model.Accommodation;
+import co.edu.uniquindio.application.model.User;
 import co.edu.uniquindio.application.model.enums.State;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AccommodationRepository extends JpaRepository<Accommodation, String> {
@@ -40,4 +42,6 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, St
     """)
     Page<Accommodation> searchAccommodations(@Param("dto") ListAccommodationDTO dto, Pageable pageable);
 
+    @Query("SELECT a.user FROM Accommodation a WHERE a.id = :accommodationId")
+    Optional<User> findUserByAccommodationId(@Param("accommodationId") String accommodationId);
 }

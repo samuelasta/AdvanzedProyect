@@ -13,6 +13,9 @@ import co.edu.uniquindio.application.repositories.CommentRepository;
 import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +33,11 @@ public class CommentServiceImpl implements CommentService {
 
     //devuelve todos los comentarios de los alojamientos
     @Override
-    public List<CommentDTO> listComments(String id) throws Exception {
-        List<Comment> list = commentRepository.findAllByAccommodationId(id);
+    public List<CommentDTO> listComments(String id, int page) throws Exception {
+
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<Comment> list = commentRepository.findAllByAccommodationId(id, pageable);
         if(list.isEmpty()){
             throw new ResourceNotFoundException("no se encontraron comentarios");
         }

@@ -1,5 +1,5 @@
 package co.edu.uniquindio.application.services.impl;
-
+//samu
 import co.edu.uniquindio.application.dto.accommodationDTO.*;
 import co.edu.uniquindio.application.dto.bookingDTO.BookingDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CommentDTO;
@@ -88,7 +88,6 @@ public class AccommodationServiceImpl implements AccommodationService {
         if(accommodation.isEmpty()){
             throw new ResourceNotFoundException("Accommodation not found");
         }
-        //llamar el mappers
         accommodationMapper.updateAccommodationFromDto(updateDTO, accommodation.get());
 
         accommodationRepository.save(accommodation.get());
@@ -103,8 +102,8 @@ public class AccommodationServiceImpl implements AccommodationService {
           throw new ResourceNotFoundException("No se encontró el alojamiento");
       }
       //me trae todas las reservas del alojamiento cuyo estado sea pendiente
-      List<Booking> booking = bookingRepository.findByAccommodationIdAndBookingState(id, BookingState.PENDING);
-      if(!booking.isEmpty()){
+      Optional<Booking> booking = bookingRepository.findByAccommodationIdAndBookingState(id, BookingState.PENDING);
+      if(booking.isPresent()){
           throw new UnauthorizedException("no puedes eliminar este alojamiento, tiene reservas pendientes");
       }
       accommodation.get().setState(State.INACTIVE);
@@ -150,14 +149,15 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public AccommodationStatsDTO stats(String id) throws Exception {
+
         return null;
     }
 
+    //devuelve la lista paginada de todos los servicios del alojamiento
     @Override
     public List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Accommodation> accommodations = accommodationRepository.findAll(pageable);
-
 
         return accommodations.toList().stream().map(showAccommodationMapper::toAccommodationDTO).collect(Collectors.toList());
     }
