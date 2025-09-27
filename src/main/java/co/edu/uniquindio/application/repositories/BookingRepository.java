@@ -50,7 +50,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
                                           @Param("startDate")LocalDateTime startDate,
                                           @Param("endDate")LocalDateTime endDate);
 
-    //me da el promedio de ocupación del alojamiento (occupancyRate)
+    //promedio de ocupación del alojamiento (occupancyRate)
     @Query("""
     SELECT COALESCE(SUM(DATEDIFF(b.checkOut, b.checkIn)), 0)
     FROM Booking b
@@ -62,7 +62,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
                                                  @Param("startDate")LocalDateTime startDate,
                                                  @Param("endDate")LocalDateTime endDate);
 
-    // me da el numero de reservas que han sido canceladas
+    // numero de reservas que han sido canceladas
     @Query("""
     SELECT COUNT(b)
     FROM Booking b
@@ -76,7 +76,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
                                             @Param("startDate")LocalDateTime startDate,
                                             @Param("endDate")LocalDateTime endDate);
 
-    //
+    //promedio de ganancias de el alojamiento (reservas completadas)
     @Query("""
     SELECT COALESCE(SUM(a.price), 0)
     FROM Booking b
@@ -88,5 +88,18 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
     """)
     Double findAverageRevenueByAccommodationId(@Param("accommodationId")String accommodationId,
                                                @Param("bookingState")BookingState bookingState, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("""
+    SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END
+    FROM Booking b
+    WHERE b.accommodation.id = :accommodationId
+      AND b.checkIn < :checkOut
+      AND b.checkOut > :checkIn
+""")
+    boolean existsOverlappingBooking(
+            @Param("accommodationId") String accommodationId,
+            @Param("checkIn") LocalDateTime checkIn,
+            @Param("checkOut") LocalDateTime checkOut);
+
 }
 

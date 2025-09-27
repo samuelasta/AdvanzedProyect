@@ -32,31 +32,37 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingMapper bookingMapper;
-    private final Map<String, Booking> bookingStore = new ConcurrentHashMap<>();
     private final BookingRepository bookingRepository;
     private final AccommodationRepository accommodationRepository;
 
     @Override
     public void create(String id, CreateBookingDTO createBookingDTO) throws Exception{
 
-        if(createBookingDTO.check_in().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("Datos incorrectos, el checkIn no puede ser en el pasado");
-        }
+        // vreifica que el checkIn no esté en pasado
+       if(createBookingDTO.check_in().isBefore(LocalDateTime.now())){
+           throw new BadRequestException("el checkIn es invalido");
+       }
 
+       //verifica que el checkIn no esté despues del checkOut
         if(createBookingDTO.check_in().isAfter(createBookingDTO.check_out())) {
             throw new BadRequestException("Datos incorrectos o la fecha de checkIn está despues de la fecha de check Out");
         }
 
-        List<Booking> list = bookingRepository.findByAccommodationId(id);
-        for(Booking booking : list) {
-            if(createBookingDTO.check_in().isBefore(booking.getCheckOut())
-                    && createBookingDTO.check_out().isAfter(booking.getCheckIn())){
-                throw new ValueConflictException("fecha ocupada");
-            }
+        // verifica si las fechas están disponibles
+        boolean avaliable = bookingRepository.existsOverlappingBooking(id, createBookingDTO.check_in(), createBookingDTO.check_out());
+        if(avaliable){
+            throw new ValueConflictException("fechas no disponibles");
         }
-        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
-        User user = accommodation.get().getUser();
-        Booking booking = bookingMapper.toEntity(createBookingDTO, accommodation.get(), user);
+
+        //verifica que exista el alojamiento
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el alojamiento"));
+
+        //obtenemos el usuario para poder crear la reserva
+        User user = accommodation.getUser();
+
+        //la mapeamos y la guardamos en la DB
+        Booking booking = bookingMapper.toEntity(createBookingDTO, accommodation, user);
         bookingRepository.save(booking);
 
     }

@@ -25,13 +25,6 @@ public class UserController {
     private final AccommodationService accommodationService;
 
 
-    // crear un usuario (hecho)
-    @PostMapping
-    public ResponseEntity<ResponseDTO<String>> create(@Valid @RequestBody CreateUserDTO createUserDTO) throws Exception {
-        userService.create(createUserDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(false, "registro exitoso :)"));
-    }
-
     @PutMapping(("/{id}"))
     public ResponseEntity<ResponseDTO<String>> update(@PathVariable String id, @Valid @RequestBody UpdateUserDto updateUserDto) throws Exception {
 
@@ -72,14 +65,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
-
-    //devuelve lista de todos los usuarios
-    @GetMapping("/list")
-    public ResponseEntity<ResponseDTO<List<UserDTO>>> listAll() throws Exception {
-
-        List<UserDTO> list = userService.listAll();
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
-    }
 
     //lista de alojamientos del host
     @GetMapping("/{id}/accommodations/host")

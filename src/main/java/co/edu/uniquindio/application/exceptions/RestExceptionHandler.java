@@ -58,4 +58,10 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ResponseDTO<>(true, ex.getMessage()) );
     }
 
+    // http 403
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ResponseDTO<String>> handleForbiddenException(ForbiddenException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body( new ResponseDTO<>(true, ex.getMessage()) );
+    }
+
 }
