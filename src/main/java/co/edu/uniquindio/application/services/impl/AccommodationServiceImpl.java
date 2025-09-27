@@ -10,6 +10,7 @@ import co.edu.uniquindio.application.exceptions.UnauthorizedException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
 import co.edu.uniquindio.application.mappers.AccommodationMapper;
 import co.edu.uniquindio.application.mappers.ShowAccommodationMapper;
+import co.edu.uniquindio.application.mappers.StatsMapper;
 import co.edu.uniquindio.application.mappers.UserMapper;
 import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Booking;
@@ -19,6 +20,7 @@ import co.edu.uniquindio.application.model.enums.BookingState;
 import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.AccommodationRepository;
 import co.edu.uniquindio.application.repositories.BookingRepository;
+import co.edu.uniquindio.application.repositories.CommentRepository;
 import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.AccommodationService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 import co.edu.uniquindio.application.services.GeoUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -44,6 +47,9 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CommentRepository commentRepository;
+    private final StatsMapper statsMapper;
+
 
     @Override
     public void create(String id, CreateAccommodationDTO createAccommodationDTO) throws Exception {
@@ -146,11 +152,18 @@ public class AccommodationServiceImpl implements AccommodationService {
         throw new ResourceNotFoundException("No se encontraron servicios del alojamiento");
     }
 
-
+    //stats del alojamiento, se puede aplicar rango de fechas
     @Override
-    public AccommodationStatsDTO stats(String id) throws Exception {
+    public AccommodationStatsDTO stats(String id, StatsDateDTO statsDateDTO) throws Exception {
 
-        return null;
+        double averageRating = commentRepository.findAverageRatingByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
+        long totalComments = commentRepository.countByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
+        long totalReservations = bookingRepository.countByAccommodationIdAndBetween(id, statsDateDTO.startDate(), statsDateDTO.endDate());
+        double occupancyRate = bookingRepository.findAverageOccupancyByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
+        int cancellations = bookingRepository.countCancellationsByAccommodationId(id, BookingState.CANCELED, statsDateDTO.startDate(), statsDateDTO.endDate());
+        double totalRevenue = bookingRepository.findAverageRevenueByAccommodationId(id, BookingState.COMPLETED, statsDateDTO.startDate(), statsDateDTO.endDate());
+
+        return statsMapper.toAccommodationStatsDTO(averageRating, totalComments, totalReservations, occupancyRate, cancellations, totalRevenue);
     }
 
     //devuelve la lista paginada de todos los servicios del alojamiento

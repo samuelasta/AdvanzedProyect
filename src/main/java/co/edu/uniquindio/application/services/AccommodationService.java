@@ -20,6 +20,6 @@ public interface AccommodationService {
     List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception;
     List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO, int page) throws Exception;
     List<Amenities> listAllAmenities(String id) throws Exception;
-    AccommodationStatsDTO stats(String id) throws Exception;
+    AccommodationStatsDTO stats(String id, StatsDateDTO statsDateDTO) throws Exception;
     List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception;
 }

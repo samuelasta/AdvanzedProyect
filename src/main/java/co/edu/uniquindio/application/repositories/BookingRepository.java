@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
 
     Optional<Booking> findByAccommodationIdAndBookingState(String accommodationId, BookingState bookingState);
 
+    //se hace el filtro a la base de datos directamente en caso de que vengan filtros
     @Query("""
     SELECT b
     FROM Booking b
@@ -36,4 +38,55 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             Pageable pageable
     );
 
+    //cuenta cuantas reservas tiene el alojamiento
+    @Query("""
+    SELECT COUNT(b)
+    FROM Booking b
+    WHERE b.accommodation.id = :accommodationId
+      AND (:startDate IS NULL OR b.createdAt >= :startDate)
+      AND (:endDate IS NULL OR b.createdAt <= :endDate)
+    """)
+    long countByAccommodationIdAndBetween(@Param("accommodationId")String accommodationId,
+                                          @Param("startDate")LocalDateTime startDate,
+                                          @Param("endDate")LocalDateTime endDate);
+
+    //me da el promedio de ocupación del alojamiento (occupancyRate)
+    @Query("""
+    SELECT COALESCE(SUM(DATEDIFF(b.checkOut, b.checkIn)), 0)
+    FROM Booking b
+    WHERE b.accommodation.id = :accommodationId
+      AND (:startDate IS NULL OR b.checkIn >= :startDate)
+      AND (:endDate IS NULL OR b.checkOut <= :endDate)
+    """)
+    Double findAverageOccupancyByAccommodationId(@Param("accommodationId")String accommodationId,
+                                                 @Param("startDate")LocalDateTime startDate,
+                                                 @Param("endDate")LocalDateTime endDate);
+
+    // me da el numero de reservas que han sido canceladas
+    @Query("""
+    SELECT COUNT(b)
+    FROM Booking b
+    WHERE b.accommodation.id = :accommodationId
+      AND b.bookingState=: bookingState
+      AND (:startDate IS NULL OR b.checkIn >= :startDate)
+      AND (:endDate IS NULL OR b.checkOut <= :endDate)
+    """)
+    int countCancellationsByAccommodationId(@Param("accommodationId")String accommodationId,
+                                            @Param("bookingState")BookingState bookingState,
+                                            @Param("startDate")LocalDateTime startDate,
+                                            @Param("endDate")LocalDateTime endDate);
+
+    //
+    @Query("""
+    SELECT COALESCE(SUM(a.price), 0)
+    FROM Booking b
+    JOIN b.accommodation a
+    WHERE a.id = :accommodationId
+      AND b.bookingState=: bookingState
+      AND (:startDate IS NULL OR b.checkIn >= :startDate)
+      AND (:endDate IS NULL OR b.checkOut <= :endDate)
+    """)
+    Double findAverageRevenueByAccommodationId(@Param("accommodationId")String accommodationId,
+                                               @Param("bookingState")BookingState bookingState, LocalDateTime startDate, LocalDateTime endDate);
 }
+

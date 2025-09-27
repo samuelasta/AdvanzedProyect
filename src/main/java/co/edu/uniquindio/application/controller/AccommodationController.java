@@ -30,7 +30,7 @@ public class AccommodationController {
     private final BookingService bookingService;
 
 
-    //ver la lista de alojamientos disponibles (aplicando filtros), hecho
+    //ver la lista de alojamientos disponibles (aplicando filtros), hecho pero falta rango minimo-maximo por precio y por servicios.
     @GetMapping("/{page}")
     public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> read(@PathVariable int page, @Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
 
@@ -91,8 +91,8 @@ public class AccommodationController {
 
     // mostrar estadisticas del alojamiento
     @GetMapping("/{id}/stats")
-    public ResponseEntity<ResponseDTO<AccommodationStatsDTO>> stats(@PathVariable String id) throws Exception {
-        AccommodationStatsDTO accommodationStatsDTO = accommodationService.stats(id);
+    public ResponseEntity<ResponseDTO<AccommodationStatsDTO>> stats(@PathVariable String id, @RequestBody StatsDateDTO statsDateDTO) throws Exception {
+        AccommodationStatsDTO accommodationStatsDTO = accommodationService.stats(id, statsDateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationStatsDTO));
     }
 

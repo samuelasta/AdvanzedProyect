@@ -37,4 +37,5 @@ public interface AccommodationMapper {
     CreateAccommodationDTO toCreateAccommodationDTO(Accommodation accommodation);
 
     void updateAccommodationFromDto(UpdateDTO dto, @MappingTarget Accommodation accommodation);
+
 }

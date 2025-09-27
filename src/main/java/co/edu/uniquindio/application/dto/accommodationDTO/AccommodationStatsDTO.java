@@ -1,14 +1,15 @@
 package co.edu.uniquindio.application.dto.accommodationDTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record AccommodationStatsDTO(
                                     double averageRating,
-                                    int totalComments,
-                                    int totalReservations,
+                                    long totalComments,
+                                    long totalReservations,
                                     double occupancyRate,
                                     int cancellations,
-                                    LocalDate lastReservation,
-                                    LocalDate nextAvailableDate,
+                                    LocalDateTime lastReservation,
+                                    LocalDateTime nextAvailableDate,
                                     double totalRevenue) {
 }
