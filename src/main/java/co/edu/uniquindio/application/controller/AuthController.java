@@ -5,7 +5,9 @@ import co.edu.uniquindio.application.dto.authDTO.LoginDTO;
 import co.edu.uniquindio.application.dto.authDTO.RecoverDTO;
 import co.edu.uniquindio.application.dto.authDTO.TokenDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
-import co.edu.uniquindio.application.dto.usersDTOs.ForgotPasswordDTO;
+import co.edu.uniquindio.application.dto.usersDTOs.RequestResetPasswordDTO;
+import co.edu.uniquindio.application.dto.usersDTOs.ResetPasswordDTO;
+import co.edu.uniquindio.application.services.PasswordResetService;
 import co.edu.uniquindio.application.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
+    private final PasswordResetService passwordResetService;
 
 
     // crear un usuario (hecho)
@@ -42,12 +45,23 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseDTO<>(false, "contraseña actualizada"));
     }
 
-    //método pendiente
+    /**método pendiente
     @PostMapping("/forgot-password")
     public ResponseEntity<ResponseDTO<String>> sendVerificationCode(@RequestBody ForgotPasswordDTO forgotPasswordDTO) throws Exception{
         //TODO llamar al servicio para enviar el código
         return ResponseEntity.ok(new ResponseDTO<>(false, "Código enviado"));
+    }*/
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> requestReset(@Valid @RequestBody RequestResetPasswordDTO dto) {
+        passwordResetService.generateResetCode(dto.email());
+        return ResponseEntity.ok("Se ha enviado un código de recuperación a tu email");
     }
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDTO dto) {
+        passwordResetService.validateAndResetPassword(dto.code(), dto.newPassword());
+        return ResponseEntity.ok("Contraseña cambiada exitosamente");
+    }
+
 
 
 }
