@@ -51,4 +51,10 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(length = 255)
+    private String description;
+
+    @Column(nullable = false)
+    private Boolean isHost;
+
 }
