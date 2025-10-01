@@ -44,7 +44,11 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail
 	implementation("org.simplejavamail:simple-java-mail:8.12.6")
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	//para el servicio donde se alojarán las fotos
+	implementation 'com.cloudinary:cloudinary-http5:2.3.2'
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
