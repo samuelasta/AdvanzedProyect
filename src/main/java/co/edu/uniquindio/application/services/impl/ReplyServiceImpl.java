@@ -47,12 +47,8 @@ public class ReplyServiceImpl implements ReplyService {
         }
 
         //verificar que el host si exista y que si sea el dueño del alojamiento
-        String accommodationOwner = auxComment.get().getAccommodation().getUser().getId();
-        Optional<HostProfile> host = hostRepository.findById(idUser);
-        if(host.isEmpty()) {
-            throw new ResourceNotFoundException("No se pudo encontrar el host");
-        }
-        if(accommodationOwner.equals(host.get().getUser().getId())) {
+
+        if(auxComment.get().getAccommodation().getUser().getId().equals(idUser)) {
             Reply reply = replyMapper.toEntity(replyDTO);
             reply.setComment(auxComment.get());
             replyRepository.save(reply);

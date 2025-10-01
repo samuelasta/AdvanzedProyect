@@ -94,11 +94,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDTO> listBookings(String id, int page, SearchBookingDTO searchBookingDTO) throws Exception {
 
-        Optional<User> user = accommodationRepository.findUserByAccommodationId(id);
-        if (user.isEmpty()) {
-            throw new ResourceNotFoundException("No existe usuario");
-        }
-
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
         if (accommodation.isEmpty()) {
             throw new ResourceNotFoundException("No existe el alojamiento");

@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
-    // metodo para crear el comentario (posible cambio)
+    // metodo para crear el comentario (posible cambio). Validar que el comentario solo se haga si la reserva pasó y que corresponda al alojamiento deonde se quedó el usuario
     @Override
     public void createComment(String id, CreateCommentDTO createCommentDTO) throws Exception {
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
@@ -63,4 +63,5 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(user.get());
         commentRepository.save(comment);
     }
+
 }

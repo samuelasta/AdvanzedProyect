@@ -35,7 +35,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> delete(@PathVariable String id, @Valid @RequestBody DeleteUserDTO deleteUserDTO) throws Exception {
 
-        userService.delete(id);
+        userService.delete(id, deleteUserDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "eliminacion exitosa :)"));
     }
 
@@ -48,6 +48,7 @@ public class UserController {
     //actualizar datos del host
     @PutMapping("/{id}/host")
     public ResponseEntity<ResponseDTO<String>> add_data_host(@PathVariable String id, @Valid @RequestBody HostDTO hostDTO ) throws Exception {
+        userService.addHostData(id, hostDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "datos añadidos con exito "));
     }
 

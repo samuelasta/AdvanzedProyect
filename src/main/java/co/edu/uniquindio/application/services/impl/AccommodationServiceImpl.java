@@ -117,6 +117,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    //Es para listar las reservas de un alojamiento? si es así deben enviar el id del alojamiento no una lista
     @Override
     public List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception {
 
@@ -166,11 +167,11 @@ public class AccommodationServiceImpl implements AccommodationService {
         return statsMapper.toAccommodationStatsDTO(averageRating, totalComments, totalReservations, occupancyRate, cancellations, totalRevenue);
     }
 
-    //devuelve la lista paginada de todos los servicios del alojamiento
+    //Corregir, se debe crear una consulta que dado el id del host, se traiga sus alojamientos.
     @Override
     public List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception {
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Accommodation> accommodations = accommodationRepository.findAll(pageable);
+        Page<Accommodation> accommodations = accommodationRepository.findAll(pageable); //acá sea trae todo XXXXX
 
         return accommodations.toList().stream().map(showAccommodationMapper::toAccommodationDTO).collect(Collectors.toList());
     }
