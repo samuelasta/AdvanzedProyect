@@ -13,6 +13,7 @@ import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    //private final BCryptPasswordEncoder passwordEncoder;
+    //private final BCryptPasswordEncoder cryptPasswordEncoder;
 
 
     @Override
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(createUserDTO);
 
         // Encriptar contraseña con BCrypt (IMPORTANTE)
-        //user.setPassword(passwordEncoder.encode(createUserDTO.password()));
+        user.setPassword(encode(createUserDTO.password()));
 
         //Guardar en BD
         userRepository.save(user);
@@ -104,5 +105,11 @@ public class UserServiceImpl implements UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+    }
+
+    // para encriptar la contraseña
+    private String encode(String password){
+        var passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
     }
 }

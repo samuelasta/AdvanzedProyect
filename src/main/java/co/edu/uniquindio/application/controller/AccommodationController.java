@@ -30,7 +30,7 @@ public class AccommodationController {
     private final BookingService bookingService;
 
 
-    //ver la lista de alojamientos disponibles (aplicando filtros), hecho pero falta rango minimo-maximo por precio y por servicios.
+    //ver la lista de alojamientos disponibles (aplicando filtros), hecho
     @GetMapping("/{page}")
     public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> read(@PathVariable int page, @Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
 

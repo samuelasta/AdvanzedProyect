@@ -5,6 +5,7 @@ import co.edu.uniquindio.application.dto.bookingDTO.BookingDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CommentDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CreateCommentDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
+import co.edu.uniquindio.application.exceptions.BadRequestException;
 import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
 import co.edu.uniquindio.application.exceptions.UnauthorizedException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
@@ -117,18 +118,22 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    /* ya está en bookingService pero lo dejo comentado (pendiente a revisar)
     //Es para listar las reservas de un alojamiento? si es así deben enviar el id del alojamiento no una lista
     @Override
     public List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception {
 
 
         return List.of();
-    }
+    }*/
 
-    // filtro de busqueda de los alojamientos
+    // filtro de busqueda de los alojamientos (rango minimo - maximo precio y servicios added )
     @Override
     public List<AccommodationDTO> search(ListAccommodationDTO listAccommodationDTO, int page) throws Exception {
 
+        if(listAccommodationDTO.minimum() != null && listAccommodationDTO.maximum() != null && listAccommodationDTO.minimum() > listAccommodationDTO.maximum()){
+            throw new BadRequestException("el precio minimo no debe superar el precio maximo");
+        }
         Pageable pageable = PageRequest.of(page, 10);
         Page<Accommodation> accommodations = accommodationRepository.searchAccommodations(listAccommodationDTO, pageable);
 
@@ -167,11 +172,11 @@ public class AccommodationServiceImpl implements AccommodationService {
         return statsMapper.toAccommodationStatsDTO(averageRating, totalComments, totalReservations, occupancyRate, cancellations, totalRevenue);
     }
 
-    //Corregir, se debe crear una consulta que dado el id del host, se traiga sus alojamientos.
+    //Corregido (pendiente), se debe crear una consulta que dado el id del host, se traiga sus alojamientos.
     @Override
-    public List<AccommodationDTO> listAllAccommodationsHost(String id) throws Exception {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Accommodation> accommodations = accommodationRepository.findAll(pageable); //acá sea trae todo XXXXX
+    public List<AccommodationDTO> listAllAccommodationsHost(String id, int page) throws Exception {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Accommodation> accommodations = accommodationRepository.getAccommodations(id, pageable);
 
         return accommodations.toList().stream().map(showAccommodationMapper::toAccommodationDTO).collect(Collectors.toList());
     }

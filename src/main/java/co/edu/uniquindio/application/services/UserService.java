@@ -17,7 +17,7 @@ public interface UserService {
      UserDTO get(String id) throws Exception;
 
      //Actualizar/Editar datos del usuario - PUT /users/{id}
-     void edit(String id, UpdateUserDto userDTO) throws Exception;
+     UserDTO edit(String id, UpdateUserDto userDTO) throws Exception;
 
      //que pasa si el usuario al principio no quiso poner un dato y leugo si, preguntar profe
      UserDTO addHostData(String id, HostDTO hostDTO) throws Exception;

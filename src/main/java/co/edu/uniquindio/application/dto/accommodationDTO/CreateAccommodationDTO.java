@@ -18,9 +18,9 @@ public record CreateAccommodationDTO(@NotBlank(message = "El título no puede es
                                      @NotNull(message = "el tipo de alojamiento es obligatorio")
                                      AccommodationType accommodationType,
                                      @Min(1) @Max(60) int capacity,
-                                     @NotBlank String country,
-                                     @NotBlank String department,
-                                     @NotBlank String city,
+                                     @NotBlank @Max(30) String country,
+                                     @NotBlank @Max(30) String department,
+                                     @NotBlank @Max(30) String city,
                                      @Length(max = 20) String neighborhood //puede ser opcional
                                      , String street,
                                      @NotBlank @Pattern(regexp = "^[0-9A-Za-z]{4,10}$", message = "El código postal no es válido")

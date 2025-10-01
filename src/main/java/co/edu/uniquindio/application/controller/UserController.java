@@ -68,9 +68,9 @@ public class UserController {
 
 
     //lista de alojamientos del host
-    @GetMapping("/{id}/accommodations/host")
-    public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> listAccommodationHost(@PathVariable String id) throws Exception {
-        List<AccommodationDTO> list = accommodationService.listAllAccommodationsHost(id);
+    @GetMapping("/{id}/accommodations/host/{page}")
+    public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> listAccommodationHost(@PathVariable String id, @PathVariable int page) throws Exception {
+        List<AccommodationDTO> list = accommodationService.listAllAccommodationsHost(id, page);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 

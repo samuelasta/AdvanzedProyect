@@ -22,23 +22,39 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, St
 
     List<Accommodation> findByState(State state);
 
+
+    //para filtrar los alojamientos disponibles
     @Query("""
     SELECT a
     FROM Accommodation a
     WHERE (:#{#dto.city} IS NULL OR LOWER(a.location.city) = LOWER(:#{#dto.city}))
       AND (:#{#dto.guest_number} IS NULL OR a.capacity >= :#{#dto.guest_number})
       AND a.state = co.edu.uniquindio.application.model.enums.State.ACTIVE
+      AND (:#{#dto.minimum} IS NULL OR a.price >= :#{#dto.minimum})
+      AND (:#{#dto.maximum} IS NULL OR a.price <= :#{#dto.maximum})
+      AND (
+            :#{#dto.list == null || #dto.list.isEmpty()} = true
+            OR (
+                SELECT COUNT(s) 
+                FROM a.servicios s
+                WHERE s IN (:#{#dto.list})
+            ) = :#{#dto.list.size()}
+          )
       AND (:#{#dto.checkIn} IS NULL OR :#{#dto.checkOut} IS NULL OR 
            NOT EXISTS (
                SELECT b FROM Booking b 
                WHERE b.accommodation = a 
-               AND b.bookingState IN (co.edu.uniquindio.application.model.enums.BookingState.PENDING, co.edu.uniquindio.application.model.enums.BookingState.COMPLETED)
-               AND (
-                   (b.checkIn <= :#{#dto.checkIn} AND b.checkOut > :#{#dto.checkIn})
-                   OR (b.checkIn < :#{#dto.checkOut} AND b.checkOut >= :#{#dto.checkOut})
-                   OR (b.checkIn >= :#{#dto.checkIn} AND b.checkOut <= :#{#dto.checkOut})
-               )
-           ))
+                 AND b.bookingState IN (
+                     co.edu.uniquindio.application.model.enums.BookingState.PENDING, 
+                     co.edu.uniquindio.application.model.enums.BookingState.COMPLETED
+                 )
+                 AND (
+                       (b.checkIn <= :#{#dto.checkIn} AND b.checkOut > :#{#dto.checkIn})
+                    OR (b.checkIn < :#{#dto.checkOut} AND b.checkOut >= :#{#dto.checkOut})
+                    OR (b.checkIn >= :#{#dto.checkIn} AND b.checkOut <= :#{#dto.checkOut})
+                 )
+           )
+      )
     """)
     Page<Accommodation> searchAccommodations(@Param("dto") ListAccommodationDTO dto, Pageable pageable);
 
