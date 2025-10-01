@@ -1,5 +1,7 @@
 package co.edu.uniquindio.application.services.impl;
 
+import co.edu.uniquindio.application.dto.authDTO.LoginDTO;
+import co.edu.uniquindio.application.dto.authDTO.TokenDTO;
 import co.edu.uniquindio.application.dto.hostDTO.HostDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.DeleteUserDTO;
@@ -11,6 +13,7 @@ import co.edu.uniquindio.application.mappers.UserMapper;
 import co.edu.uniquindio.application.model.User;
 import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.UserRepository;
+import co.edu.uniquindio.application.security.JWTUtils;
 import co.edu.uniquindio.application.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     //private final BCryptPasswordEncoder cryptPasswordEncoder;
-
+    private final JWTUtils jwtUtils;
 
     @Override
     public void create(CreateUserDTO createUserDTO) throws Exception {
@@ -62,9 +65,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
         //Validacion foto de perfil
-        if (updateUserDto.photoUrl() != null && !imageValidator.isValid(updateUserDto.photoUrl())) {
-            throw new ValueConflictException("El formato de imagen no es valido");
-        }
+        //if (updateUserDto.photoUrl() != null && !imageValidator.isValid(updateUserDto.photoUrl())) {
+          //  throw new ValueConflictException("El formato de imagen no es valido");
+        //}
         userMapper.updateUserFromDto(updateUserDto, user);
 
         User updateUser = userRepository.save(user);
@@ -105,6 +108,33 @@ public class UserServiceImpl implements UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+    }
+
+    @Override
+    public TokenDTO login(LoginDTO loginDTO) throws Exception {
+        Optional<User> optionalUser = userRepository.findByEmail(loginDTO.email());
+
+        if(optionalUser.isEmpty()){
+            throw new Exception("El usuario no existe");
+        }
+
+        User user = optionalUser.get();
+
+        // Verificar si la contraseña es correcta usando el PasswordEncoder
+        if(!passwordEncoder.matches(loginDTO.password(), user.getPassword())){
+            throw new Exception("El usuario no existe");
+        }
+
+        String token = jwtUtils.generateToken(user.getId(), createClaims(user));
+        return new TokenDTO(token);
+    }
+
+    private Map<String, String> createClaims(User user){
+        return Map.of(
+                "email", user.getEmail(),
+                "name", user.getName(),
+                "role", "ROLE_"+user.getRole().name()
+        );
     }
 
     // para encriptar la contraseña

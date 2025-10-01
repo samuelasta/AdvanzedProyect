@@ -96,4 +96,6 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationStatsDTO));
     }
 
+    // falta el de obtener el alojamiento, cuando un espectador sin loguearse toca en una alojamiento
+
 }

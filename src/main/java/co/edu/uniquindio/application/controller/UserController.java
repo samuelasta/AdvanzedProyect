@@ -21,8 +21,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
     private final AccommodationService accommodationService;
+    private final UserService userService;
 
 
     @PutMapping(("/{id}"))

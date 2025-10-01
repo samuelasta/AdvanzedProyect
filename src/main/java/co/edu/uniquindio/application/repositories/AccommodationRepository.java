@@ -36,7 +36,7 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, St
             :#{#dto.list == null || #dto.list.isEmpty()} = true
             OR (
                 SELECT COUNT(s) 
-                FROM a.servicios s
+                FROM a.amenities s
                 WHERE s IN (:#{#dto.list})
             ) = :#{#dto.list.size()}
           )

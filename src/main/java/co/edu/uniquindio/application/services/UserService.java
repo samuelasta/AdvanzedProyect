@@ -1,5 +1,7 @@
 package co.edu.uniquindio.application.services;
 
+import co.edu.uniquindio.application.dto.authDTO.LoginDTO;
+import co.edu.uniquindio.application.dto.authDTO.TokenDTO;
 import co.edu.uniquindio.application.dto.hostDTO.HostDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.DeleteUserDTO;
@@ -27,6 +29,8 @@ public interface UserService {
 
      User findByEmail(String email);
 
+     //login
+     TokenDTO login(LoginDTO loginDTO) throws Exception;
 
 
 

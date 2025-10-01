@@ -14,8 +14,9 @@ public interface UserMapper {
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "password", ignore = true)//Se maneja en el servicio
     @Mapping(target = "isHost", constant = "false")
-    @Mapping(target = "descrption", ignore = true)
-    @Mapping(target = "profilePicture", ignore = true)
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "photoUrl", ignore = true)
+    @Mapping(target = "role", ignore = true)
 
     User toEntity(CreateUserDTO createUserDTO);
 
@@ -30,7 +31,7 @@ public interface UserMapper {
     @Mapping(target = "birthDate", ignore = true)
     @Mapping(target = "country", ignore = true)
     @Mapping(target = "state", ignore = true)
-    @Mapping(target = "createAt", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "isHost", ignore = true)
     @Mapping(target = "description", ignore = true)
     void updateUserFromDto(UpdateUserDto updateUserDTO, @MappingTarget User user);
