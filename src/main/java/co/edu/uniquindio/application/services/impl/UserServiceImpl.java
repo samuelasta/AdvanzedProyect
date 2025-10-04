@@ -3,10 +3,8 @@ package co.edu.uniquindio.application.services.impl;
 import co.edu.uniquindio.application.dto.authDTO.LoginDTO;
 import co.edu.uniquindio.application.dto.authDTO.TokenDTO;
 import co.edu.uniquindio.application.dto.hostDTO.HostDTO;
-import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
-import co.edu.uniquindio.application.dto.usersDTOs.DeleteUserDTO;
-import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
-import co.edu.uniquindio.application.dto.usersDTOs.UserDTO;
+import co.edu.uniquindio.application.dto.usersDTOs.*;
+import co.edu.uniquindio.application.exceptions.BadRequestException;
 import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
 import co.edu.uniquindio.application.mappers.UserMapper;
@@ -86,7 +84,6 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toUserDTO(userRepository.save(user));
 
-
     }
 
     @Override
@@ -127,6 +124,22 @@ public class UserServiceImpl implements UserService {
 
         String token = jwtUtils.generateToken(user.getId(), createClaims(user));
         return new TokenDTO(token);
+    }
+
+    @Override
+    public void changePassword(String id, UpdatePasswordDTO updatePasswordDTO) throws Exception {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new ResourceNotFoundException("Usuario no encontrado");
+        }
+        User user = optionalUser.get();
+        if(!passwordEncoder.matches(updatePasswordDTO.old_password(), user.getPassword())){
+            throw new BadRequestException("la contraseña no coincide");
+        }
+
+        // se actualiza la contraseña y guardamos el cambio
+        user.setPassword(passwordEncoder.encode(updatePasswordDTO.new_password()));
+        userRepository.save(user);
     }
 
     private Map<String, String> createClaims(User user){

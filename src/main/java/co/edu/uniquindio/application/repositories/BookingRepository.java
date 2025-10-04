@@ -38,6 +38,25 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             Pageable pageable
     );
 
+    //se hace el filtro a la base de datos directamente en caso de que vengan filtros
+    @Query("""
+    SELECT b
+    FROM Booking b
+    WHERE b.user.id = :userId
+      AND (:#{#filters.state} IS NULL OR b.bookingState = :#{#filters.state})
+      AND (:#{#filters.checkIn} IS NULL OR b.checkIn >= :#{#filters.checkIn})
+      AND (:#{#filters.checkOut} IS NULL OR b.checkOut <= :#{#filters.checkOut})
+      AND (:#{#filters.guest_number} IS NULL OR b.guest_number = :#{#filters.guest_number})
+    ORDER BY b.checkIn DESC
+    """)
+    Page<Booking> findBookingsByUserWithFilters(
+            @Param("userId") String userId,
+            @Param("filters") SearchBookingDTO filters,
+            Pageable pageable
+    );
+
+
+
     //cuenta cuantas reservas tiene el alojamiento
     @Query("""
     SELECT COUNT(b)

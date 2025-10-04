@@ -2,11 +2,10 @@ package co.edu.uniquindio.application.services;
 
 import co.edu.uniquindio.application.dto.authDTO.LoginDTO;
 import co.edu.uniquindio.application.dto.authDTO.TokenDTO;
+import co.edu.uniquindio.application.dto.bookingDTO.BookingDTO;
+import co.edu.uniquindio.application.dto.bookingDTO.SearchBookingDTO;
 import co.edu.uniquindio.application.dto.hostDTO.HostDTO;
-import co.edu.uniquindio.application.dto.usersDTOs.CreateUserDTO;
-import co.edu.uniquindio.application.dto.usersDTOs.DeleteUserDTO;
-import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
-import co.edu.uniquindio.application.dto.usersDTOs.UserDTO;
+import co.edu.uniquindio.application.dto.usersDTOs.*;
 import co.edu.uniquindio.application.model.User;
 
 public interface UserService {
@@ -31,6 +30,8 @@ public interface UserService {
 
      //login
      TokenDTO login(LoginDTO loginDTO) throws Exception;
+
+     void changePassword(String id, UpdatePasswordDTO updatePasswordDTO) throws Exception;
 
 
 

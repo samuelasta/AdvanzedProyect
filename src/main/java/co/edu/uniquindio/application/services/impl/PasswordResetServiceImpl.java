@@ -44,12 +44,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         prc.setUser(user);
         prc.setCode(code);
         prc.setCreatedAt(LocalDateTime.now());
-        prc.setExpiresAt(LocalDateTime.now().plusSeconds(15));
+        prc.setExpiresAt(LocalDateTime.now().plusSeconds(900));
 
         passwordResetCodeRepository.save(prc);
 
         //enviar el correo
-        emailService.sendMail(new SendEmailDTO("Asunto", "Cuerpo mensaje", "Correo destino"));
+        emailService.sendMail(new SendEmailDTO("Cambio de contraseña", "Utiliza este codigo: "+code, requestResetPasswordDTO.email()));
 
     }
 

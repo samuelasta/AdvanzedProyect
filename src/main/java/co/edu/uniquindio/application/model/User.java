@@ -1,9 +1,7 @@
 package co.edu.uniquindio.application.model;
 
 import co.edu.uniquindio.application.model.enums.State;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import co.edu.uniquindio.application.model.enums.Role;
 import org.hibernate.validator.constraints.Length;
@@ -37,6 +35,7 @@ public class User {
     private String country;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(nullable = false)

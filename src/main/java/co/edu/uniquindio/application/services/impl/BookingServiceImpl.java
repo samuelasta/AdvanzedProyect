@@ -15,8 +15,10 @@ import co.edu.uniquindio.application.model.enums.BookingState;
 import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.AccommodationRepository;
 import co.edu.uniquindio.application.repositories.BookingRepository;
+import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
     private final AccommodationRepository accommodationRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void create(String id, CreateBookingDTO createBookingDTO) throws Exception{
@@ -95,15 +98,44 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingDTO> listBookings(String id, int page, SearchBookingDTO searchBookingDTO) throws Exception {
 
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
-        if (accommodation.isEmpty()) {
-            throw new ResourceNotFoundException("No existe el alojamiento");
+        return getBookingAccommodationDTOS(id, page, searchBookingDTO, accommodation.isEmpty(), accommodation);
+    }
+
+    //lista de todas las reservas de un usuario (aplicando filtros y paginación)
+    @Override
+    public List<BookingDTO> listBookingsUser(String id, int page, SearchBookingDTO searchBookingDTO) throws Exception {
+
+        Optional<User> user = userRepository.findById(id);
+        return getBookingUserDTOS(id, page, searchBookingDTO, user.isEmpty(), user);
+    }
+
+    @NotNull
+    private List<BookingDTO> getBookingUserDTOS(String id, int page, SearchBookingDTO searchBookingDTO, boolean empty, Optional<User> user) {
+        if (empty) {
+            throw new ResourceNotFoundException("No existe el usuario");
         }
 
         Pageable pageable = PageRequest.of(page, 10);
-        Page<Booking> bookings = bookingRepository.findBookingsByAccommodationWithFilters(id, searchBookingDTO, pageable);
+        Page<Booking> bookings = bookingRepository.findBookingsByUserWithFilters(id, searchBookingDTO, pageable);
 
         return bookings.stream()
                 .map(bookingMapper::toBookingDTO)
                 .toList();
     }
+
+    @NotNull
+    private List<BookingDTO> getBookingAccommodationDTOS(String id, int page, SearchBookingDTO searchBookingDTO, boolean empty, Optional<Accommodation> accommodation) {
+        if (empty) {
+            throw new ResourceNotFoundException("No existe el alojamiento");
+        }
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Booking> bookings = bookingRepository.findBookingsByUserWithFilters(id, searchBookingDTO, pageable);
+
+        return bookings.stream()
+                .map(bookingMapper::toBookingDTO)
+                .toList();
+    }
+
+
 }

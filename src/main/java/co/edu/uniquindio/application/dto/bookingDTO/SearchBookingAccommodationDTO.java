@@ -5,12 +5,10 @@ import co.edu.uniquindio.application.model.enums.State;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public record SearchBookingDTO(BookingState state,
-                               LocalDateTime checkIn,
-                               LocalDateTime checkOut,
-                               @Positive @Length(max = 60) Integer guest_number
-                               ) {
+public record SearchBookingAccommodationDTO(BookingState state,
+                                            LocalDateTime checkIn,
+                                            LocalDateTime checkOut,
+                                            @Positive @Length(max = 60) Integer guest_number) {
 }

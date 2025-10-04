@@ -4,8 +4,9 @@ GET https://examples.http-client.intellij.net/get
 
 
 ###
-PATCH http://localhost:8080/api/users/123/password
+PATCH http://localhost:8080/api/users/{id}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 //cambiar contraseña
 
 {
@@ -14,8 +15,9 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8080/api/users/123/host
+PUT http://localhost:8080/api/users/{id}/host
 Content-Type: application/json
+Authorization: Bearer {{token}}
 //añadir descripcion y/o documentos legales
 
 {
@@ -32,7 +34,7 @@ Content-Type: application/json
 // login
 
 {
-  "email": "samuelo@gmail.com",
+  "email": "karenscastanom@gmail.com",
   "password": "perroGato123"
 }
 
@@ -45,7 +47,7 @@ Content-Type: application/json
 // solicitar codigo para cambiar la contraseña
 
 {
-  "email": "samuelo@gmail.com"
+  "email": "karenscastanom@gmail.com"
 }
 
 
@@ -55,10 +57,11 @@ Content-Type: application/json
 //cambiar contraseña olvidada
 
 {
-  "code": "123456",
-  "email": "samuelo@gmail.com",
-  "newPassword": "samuelo1234"
+  "code": "202821",
+  "email": "karenscastanom@gmail.com",
+  "newPassword": "sofialamejor"
 }
+
 
 ###
 POST http://localhost:8080/api/auth
@@ -68,7 +71,7 @@ Content-Type: application/json
 {
   "name": "samuel",
   "surname": "andres",
-  "email": "samuelo@gmail.com",
+  "email": "karenscastanom@gmail.com",
   "phone": "31934232",
   "birthDate": "2005-02-23",
   "password": "perroGato123",
@@ -109,8 +112,8 @@ Authorization: Bearer {{token}}
 
 ###
 GET http://localhost:8080/api/users/{id}
-// obtener el usuario (ver su perfil)
 Authorization: Bearer {{token}}
+// obtener el usuario (ver su perfil)
 
 
 ###
@@ -127,12 +130,12 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/users/12/bookings
+GET http://localhost:8080/api/users/12/bookings/{page}
 Content-Type: application/json
 // ver el listado de reservas aplicando filtros
 
 {
-  "bookingState": "COMPLETED",
+  "state": "COMPLETED",
   "checkIn": "2025-09-14T14:00:00",
   "checkOut": "2025-09-15T11:30:00",
   "guest_number": 2
@@ -140,7 +143,7 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:8080/api/bookings/12
+DELETE http://localhost:8080/api/bookings/{id}
 Authorization: Bearer {{token}}
 //eliminar cancelar reserva
 
@@ -163,7 +166,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/api/accommodations/6a37e06c-56c0-4e6f-ba57-b0ec3384e13a
+POST http://localhost:8080/api/accommodations/033dc7c2-e6dc-48c4-b77f-e27018730ea0
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // Crear un alojamiento
@@ -279,9 +282,9 @@ GET http://localhost:8080/api/accommodations/{id}
 
 
 ###
-GET http://localhost:8080/api/users/12/accommodations/host
+GET http://localhost:8080/api/users/{id}/accommodations/host/{page}
+Authorization: Bearer {{token}}
 // lista los alojamientos del cliente
-
 
 
 
