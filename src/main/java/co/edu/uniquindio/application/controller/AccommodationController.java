@@ -34,15 +34,14 @@ public class AccommodationController {
     //ver la lista de alojamientos disponibles (aplicando filtros), hecho
     @GetMapping("/{page}")
     public ResponseEntity<ResponseDTO<List<AccommodationDTO>>> read(@PathVariable int page, @Valid @RequestBody ListAccommodationDTO listAccommodationDTO) throws Exception {
-
         List<AccommodationDTO> list = accommodationService.search(listAccommodationDTO, page);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
 
     //crear el alojamiento (hecho)
-    @PostMapping
-    public ResponseEntity<ResponseDTO<String>> create(@Valid @RequestBody CreateAccommodationDTO createAccommodationDTO) throws Exception {
-        String id = getCurrentUserId();
+    @PostMapping("/{id}")
+    public ResponseEntity<ResponseDTO<String>> create(@PathVariable String id, @Valid @RequestBody CreateAccommodationDTO createAccommodationDTO) throws Exception {
+       // String id = getCurrentUserId();
         accommodationService.create(id, createAccommodationDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "alojamiento creado "));
     }
@@ -97,7 +96,7 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationStatsDTO));
     }
 
-    // falta el de obtener el alojamiento, cuando un espectador sin loguearse toca en una alojamiento
+    // obtener el alojamiento, cuando un espectador sin loguearse toca en un alojamiento
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<AccommodationDetailDTO>> get(@PathVariable String id) throws Exception {
         AccommodationDetailDTO accommodationDetailDTO = accommodationService.get(id);

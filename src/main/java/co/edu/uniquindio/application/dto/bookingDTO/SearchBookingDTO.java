@@ -5,10 +5,11 @@ import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record SearchBookingDTO(State state,
-                               LocalDate checkIn,
-                               LocalDate checkOut,
+                               LocalDateTime checkIn,
+                               LocalDateTime checkOut,
                                @Positive @Length(max = 60) Integer guest_number
                                ) {
 }

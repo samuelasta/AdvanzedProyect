@@ -11,6 +11,6 @@ import java.time.LocalDate;
 public record UpdateUserDto(@NotBlank @Length(max = 100) String name,
                             @Length(max = 10) String phone,
                             @Length(max = 300) String photoUrl,
-                            @NotNull @Past LocalDate BirthDay,
-                            @NotNull Role role) {
+                            @NotNull @Past LocalDate BirthDate
+                            ) {
 }

@@ -37,6 +37,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponseDTO<>(false, token));
     }
 
+    // solicitar codigo para cambiar la contraseña
     @PostMapping("/forgot-password")
     public ResponseEntity<String> requestReset(@Valid @RequestBody RequestResetPasswordDTO dto) throws Exception{
         passwordResetService.requestPasswordReset(dto);

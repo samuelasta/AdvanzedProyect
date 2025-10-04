@@ -5,5 +5,6 @@ import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
-public record HostDTO(@NotNull @Length(max = 500) String description,@NotNull @Size(max = 10)List<String> legal_documents) {
+public record HostDTO(@NotNull @Length(max = 500) String description,
+                      @NotNull @Size(max = 10)List<String> legal_documents) {
 }

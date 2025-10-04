@@ -56,7 +56,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if(optionalUser.isEmpty()){
-            throw new ResourceNotFoundException("User not found");
+            throw new ResourceNotFoundException("usuario no encontrado");
         }
 
        if(verifyExistence(createAccommodationDTO)){

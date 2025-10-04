@@ -4,13 +4,13 @@ import co.edu.uniquindio.application.model.enums.Role;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 public record UserDTO(String name,
-                      String phone,
-                      String email,
                       String photoUrl,
                       LocalDate BirthDate,
-                      Role role
+                      Role role,
+                      LocalDateTime createdAt
 ) {
 }

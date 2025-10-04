@@ -38,9 +38,10 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/accommodations/{page}**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/accommodations/").hasRole("HOST")
+                        .requestMatchers(HttpMethod.GET, "/api/accommodations/**").permitAll() //listar o .... gets
+                        .requestMatchers("/api/auth/**").permitAll() //login y registro
+                        .requestMatchers(HttpMethod.POST, "/api/accommodations").hasRole("HOST")
+                                .requestMatchers("/api/bookings/**").permitAll()
                         .anyRequest().authenticated()
                         //.requestMatchers("/api/admin/**").hasRole("ADMIN")
                       //  .requestMatchers("/api/bookings/**").hasAnyRole("USER", "HOST")
@@ -56,7 +57,7 @@ public class SecurityConfig {
         // Configura las políticas de CORS para permitir solicitudes desde el frontend
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 

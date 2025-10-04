@@ -39,17 +39,17 @@ public class BookingServiceImpl implements BookingService {
     public void create(String id, CreateBookingDTO createBookingDTO) throws Exception{
 
         // vreifica que el checkIn no esté en pasado
-       if(createBookingDTO.check_in().isBefore(LocalDateTime.now())){
+       if(createBookingDTO.checkIn().isBefore(LocalDateTime.now())){
            throw new BadRequestException("el checkIn es invalido");
        }
 
        //verifica que el checkIn no esté despues del checkOut
-        if(createBookingDTO.check_in().isAfter(createBookingDTO.check_out())) {
+        if(createBookingDTO.checkIn().isAfter(createBookingDTO.checkOut())) {
             throw new BadRequestException("Datos incorrectos o la fecha de checkIn está despues de la fecha de check Out");
         }
 
         // verifica si las fechas están disponibles
-        boolean avaliable = bookingRepository.existsOverlappingBooking(id, createBookingDTO.check_in(), createBookingDTO.check_out());
+        boolean avaliable = bookingRepository.existsOverlappingBooking(id, createBookingDTO.checkIn(), createBookingDTO.checkOut());
         if(avaliable){
             throw new ValueConflictException("fechas no disponibles");
         }

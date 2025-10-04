@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record CreateBookingDTO(@NotNull @FutureOrPresent LocalDateTime check_in,
-                               @NotNull @Future LocalDateTime check_out,
+public record CreateBookingDTO(@NotNull @FutureOrPresent LocalDateTime checkIn,
+                               @NotNull @Future LocalDateTime checkOut,
                                @NotNull int guest_number
 
 ) {

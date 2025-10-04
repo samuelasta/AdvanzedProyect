@@ -38,15 +38,26 @@ Content-Type: application/json
 
 > {% client.global.set("token", response.body.message.token); %}
 
+
 ###
-PATCH http://localhost:8080/api/auth/recover
+POST http://localhost:8080/api/auth/forgot-password
+Content-Type: application/json
+// solicitar codigo para cambiar la contraseña
+
+{
+  "email": "samuelo@gmail.com"
+}
+
+
+###
+PATCH http://localhost:8080/api/auth/reset-password
 Content-Type: application/json
 //cambiar contraseña olvidada
 
 {
-  "email": "samuel@gmail.com",
   "code": "123456",
-  "new_password": "samuelo1234"
+  "email": "samuelo@gmail.com",
+  "newPassword": "samuelo1234"
 }
 
 ###
@@ -70,29 +81,42 @@ Content-Type: application/json
 GET http://localhost:8080/api/users/list
 //devuelve una lista de todos los usuarios
 
+
 ###
 PUT http://localhost:8080/api/users/12
 Content-Type: application/json
+Authorization: Bearer {{token}}
 //editar datos del usuario
 
 {
   "name": "samuel",
   "phone": "31932404",
-  "photoUrl": "/mnt/data/ff6a4b1e-5eda-40ec-8903-aeaaa1ae0b83.png"
+  "photoUrl": "/mnt/data/ff6a4b1e-5eda-40ec-8903-aeaaa1ae0b83.png",
+  "BirthDate": "2005-23-02"
 }
 
+
 ###
-DELETE http://localhost:8080/api/users/12
+DELETE http://localhost:8080/api/users/{id}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 //eliminar usuario
 
 {
   "password": "234565"
 }
 
+
 ###
-POST http://localhost:8080/api/bookings/12
+GET http://localhost:8080/api/users/{id}
+// obtener el usuario (ver su perfil)
+Authorization: Bearer {{token}}
+
+
+###
+POST http://localhost:8080/api/bookings/{id}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 //crear una reserva
 
 {
@@ -114,36 +138,32 @@ Content-Type: application/json
   "guest_number": 2
 }
 
+
 ###
 DELETE http://localhost:8080/api/bookings/12
+Authorization: Bearer {{token}}
 //eliminar cancelar reserva
 
-###
-GET http://localhost:8080/api/accommodations/12/bookings
-Content-Type: application/json
-// ver el listado de reservas que tiene el alojamiento
 
-{
-  "bookingState": "CONFIRMED",
-  "checkIn": "2025-09-14T14:00:00",
-  "checkOut": "2025-09-16T11:30:00",
-  "guest_number": 2
-}
 
 ###
 GET http://localhost:8080/api/accommodations/0
 Content-Type: application/json
-// buscar alojamientos disponibles
+// ver la lista de alojamientos disponibles (aplicando filtros y paginación)
 
 {
-  "city": "Barranquilla",
-  "checkIn": "2025-12-01T15:00:00",
-  "checkOut": "2025-12-05T11:00:00",
-  "guest_number": 4
+  "city": "Armenia",
+  "checkIn": "2025-10-15T15:00:00",
+  "checkOut": "2025-10-20T11:00:00",
+  "guest_number": 3,
+  "minimum": 80000.0,
+  "maximum": 250000.0,
+  "list": ["WIFI", "KITCHEN"]
 }
 
+
 ###
-POST http://localhost:8080/api/accommodations
+POST http://localhost:8080/api/accommodations/6a37e06c-56c0-4e6f-ba57-b0ec3384e13a
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // Crear un alojamiento
@@ -174,7 +194,7 @@ Authorization: Bearer {{token}}
 ###
 PUT http://localhost:8080/api/accommodations/5a552401-8b34-4d25-90a6-ba939ebd74ff
 Content-Type: application/json
-Authorization: Bearer ...
+Authorization: Bearer {{token}}
 //actualizar, editar alojamiento
 
 {
@@ -200,42 +220,81 @@ Authorization: Bearer ...
 
 ###
 DELETE http://localhost:8080/api/accommodations/8d02c6c0-58bb-49c4-92e0-76f16a584570
+Authorization: Bearer {{token}}
 // eliminar un alojamiento (cambiar su estado)
 
-###
-GET http://localhost:8080/api/users/12/accommodations/host
-// lista los alojamientos del cliente
 
 ###
 GET http://localhost:8080/api/accommodations/12/amenities
 // lista de todos los servicios del alojamiento
 
-###
-GET http://localhost:8080/api/accommodations/12/comments
-// lista de todos los comentarios del alojamiento
 
 ###
-POST http://localhost:8080/api/accommodations/12/comments
+GET http://localhost:8080/api/accommodations/{id}/comments{page}
+// lista de los comentarios del alojamiento
+
+
+###
+POST http://localhost:8080/api/accommodations/{id}/comments
 Content-Type: application/json
+Authorization: Bearer {{token}}
 // crear un comentario a un alojamiento (reserva stado == finalizada)
 
 {
-  "comment": "muy bonita la finca",
-  "rating": 5
+  "comment": "Excelente alojamiento, muy limpio y bien ubicado. El anfitrión fue muy amable y siempre estuvo atento a nuestras necesidades. Definitivamente volvería.",
+  "rating": 5,
+  "userId": "b12f6c3e-9a4d-4bfa-b5df-0d2e5f8c1a47"
 }
 
+
 ###
-POST http://localhost:8080/api/comments/12
+GET http://localhost:8080/api/accommodations/12/bookings
 Content-Type: application/json
+// ver el listado de reservas que tiene el alojamiento
+
+{
+  "state": "CONFIRMED",
+  "checkIn": "2025-09-14T14:00:00",
+  "checkOut": "2025-09-16T11:30:00",
+  "guest_number": 2
+}
+
+
+###
+GET http://localhost:8080/api/accommodations/{id}/stats
+Content-Type: application/json
+Authorization: Bearer {{token}}
+// ver estadisticas del alojamiento
+
+{
+  "startDate": "2024-01-14T14:00:00",
+  "endDate": "2025-012-14T14:00:00"
+}
+
+
+###
+GET http://localhost:8080/api/accommodations/{id}
+// ver el alojamiento (GET)
+
+
+
+###
+GET http://localhost:8080/api/users/12/accommodations/host
+// lista los alojamientos del cliente
+
+
+
+
+###
+POST http://localhost:8080/api/comments/{idComment}/reply/{idUser}
+Content-Type: application/json
+Authorization: Bearer {{token}}
 //reponder un comentario
 
 {
   "reply": "gracias"
 }
 
-###
-GET http://localhost:8080/api/accommodations/12/stats
-// ver estadisticas del alojamiento
 
 
 

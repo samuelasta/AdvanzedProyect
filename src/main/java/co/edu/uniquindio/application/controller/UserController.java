@@ -27,7 +27,6 @@ public class UserController {
 
     @PutMapping(("/{id}"))
     public ResponseEntity<ResponseDTO<String>> update(@PathVariable String id, @Valid @RequestBody UpdateUserDto updateUserDto) throws Exception {
-
         userService.edit(id, updateUserDto);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "actualizacion exitosa :)"));
     }
@@ -39,6 +38,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "eliminacion exitosa :)"));
     }
 
+    // obtener el usuario
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserDTO>> get(@PathVariable String id) throws Exception{
         UserDTO userDTO = userService.get(id);
