@@ -39,9 +39,9 @@ public class AccommodationController {
     }
 
     //crear el alojamiento (hecho)
-    @PostMapping("/{id}")
-    public ResponseEntity<ResponseDTO<String>> create(@PathVariable String id, @Valid @RequestBody CreateAccommodationDTO createAccommodationDTO) throws Exception {
-       // String id = getCurrentUserId();
+    @PostMapping
+    public ResponseEntity<ResponseDTO<String>> create( @Valid @RequestBody CreateAccommodationDTO createAccommodationDTO) throws Exception {
+        String id = getCurrentUserId();
         accommodationService.create(id, createAccommodationDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "alojamiento creado "));
     }

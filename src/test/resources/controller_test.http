@@ -166,9 +166,9 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/api/accommodations/033dc7c2-e6dc-48c4-b77f-e27018730ea0
+POST http://localhost:8080/api/accommodations
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{$auth.token("")}}
 // Crear un alojamiento
 
 {

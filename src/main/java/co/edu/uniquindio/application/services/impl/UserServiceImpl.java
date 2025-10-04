@@ -123,6 +123,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String token = jwtUtils.generateToken(user.getId(), createClaims(user));
+        System.out.println(user.getId() + "" + user.getRole().toString() );
         return new TokenDTO(token);
     }
 
