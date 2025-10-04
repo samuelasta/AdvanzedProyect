@@ -12,12 +12,8 @@ public interface UserMapper {
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "state", constant = "ACTIVE")
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
-    @Mapping(target = "password", ignore = true)//Se maneja en el servicio
     @Mapping(target = "isHost", constant = "false")
     @Mapping(target = "description", ignore = true)
-    @Mapping(target = "photoUrl", ignore = true)
-    @Mapping(target = "role", ignore = true)
-
     User toEntity(CreateUserDTO createUserDTO);
 
     UserDTO toUserDTO(User user);

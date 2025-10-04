@@ -9,10 +9,7 @@ import co.edu.uniquindio.application.exceptions.BadRequestException;
 import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
 import co.edu.uniquindio.application.exceptions.UnauthorizedException;
 import co.edu.uniquindio.application.exceptions.ValueConflictException;
-import co.edu.uniquindio.application.mappers.AccommodationMapper;
-import co.edu.uniquindio.application.mappers.ShowAccommodationMapper;
-import co.edu.uniquindio.application.mappers.StatsMapper;
-import co.edu.uniquindio.application.mappers.UserMapper;
+import co.edu.uniquindio.application.mappers.*;
 import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Booking;
 import co.edu.uniquindio.application.model.User;
@@ -50,6 +47,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final UserMapper userMapper;
     private final CommentRepository commentRepository;
     private final StatsMapper statsMapper;
+    private final AccommodationDetailMapper accommodationDetailMapper;
 
 
     @Override
@@ -85,7 +83,6 @@ public class AccommodationServiceImpl implements AccommodationService {
         }
         return false;
     }
-
 
     //update
     @Override
@@ -179,5 +176,16 @@ public class AccommodationServiceImpl implements AccommodationService {
         Page<Accommodation> accommodations = accommodationRepository.getAccommodations(id, pageable);
 
         return accommodations.toList().stream().map(showAccommodationMapper::toAccommodationDTO).collect(Collectors.toList());
+    }
+
+    // para ver el alojamiento
+    @Override
+    public AccommodationDetailDTO get(String id) throws Exception {
+       Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+       if(accommodation.isEmpty()){
+           throw new ResourceNotFoundException("no se encontró el alojamiento");
+       }
+
+        return accommodationDetailMapper.toAccommodationDetailDTO(accommodation.get());
     }
 }

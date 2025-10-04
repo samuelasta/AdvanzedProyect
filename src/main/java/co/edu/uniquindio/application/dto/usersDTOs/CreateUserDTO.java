@@ -1,5 +1,6 @@
 package co.edu.uniquindio.application.dto.usersDTOs;
 
+import co.edu.uniquindio.application.model.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,9 +23,11 @@ public record CreateUserDTO(@NotBlank(message = "Nombre requerido")
                             LocalDate birthDate,
                             @NotBlank(message = "País requerido")
                             String country,
+                            String photoUrl,
                             @NotBlank(message = "Contraseña requerida")
                             @Size(min = 6, message = "Contraseña debe tener al menos 6 caracteres")
-                            String password
+                            String password,
+                            @NotNull Role role
                            ) {
 
 

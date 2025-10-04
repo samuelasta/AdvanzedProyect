@@ -7,7 +7,8 @@ import java.util.List;
 
 @Getter
 @Entity
-public class HostProfile {
+public class
+HostProfile {
 
     @Id
     private String id;

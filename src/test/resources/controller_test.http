@@ -32,9 +32,11 @@ Content-Type: application/json
 // login
 
 {
-  "email": "samuel@gmail.com",
-  "password": "pepitoperez32"
+  "email": "samuelo@gmail.com",
+  "password": "perroGato123"
 }
+
+> {% client.global.set("token", response.body.message.token); %}
 
 ###
 PATCH http://localhost:8080/api/auth/recover
@@ -48,19 +50,20 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/users
+POST http://localhost:8080/api/auth
 Content-Type: application/json
 //registrarse
 
 {
   "name": "samuel",
+  "surname": "andres",
   "email": "samuelo@gmail.com",
   "phone": "31934232",
   "birthDate": "2005-02-23",
   "password": "perroGato123",
   "photoUrl": "dfdsfdsfsdfsdfs",
   "country": "colombia",
-  "role": "USER"
+  "role": "HOST"
 }
 
 ###
@@ -140,8 +143,9 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/accommodations/40cb145b-00c6-4fb5-8042-f79e42550d03
+POST http://localhost:8080/api/accommodations
 Content-Type: application/json
+Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
@@ -170,6 +174,7 @@ Content-Type: application/json
 ###
 PUT http://localhost:8080/api/accommodations/5a552401-8b34-4d25-90a6-ba939ebd74ff
 Content-Type: application/json
+Authorization: Bearer ...
 //actualizar, editar alojamiento
 
 {

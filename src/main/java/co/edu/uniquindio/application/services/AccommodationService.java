@@ -22,4 +22,5 @@ public interface AccommodationService {
     List<Amenities> listAllAmenities(String id) throws Exception;
     AccommodationStatsDTO stats(String id, StatsDateDTO statsDateDTO) throws Exception;
     List<AccommodationDTO> listAllAccommodationsHost(String id, int page) throws Exception;
+    AccommodationDetailDTO get(String id) throws Exception;
 }
