@@ -52,6 +52,7 @@ public class Accommodation {
     private int capacity;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private State state;
 
     @Column(nullable = false)

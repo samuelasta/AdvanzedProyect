@@ -16,6 +16,8 @@ HostProfile {
     private String id;
 
     @OneToOne
+    //@MapsId
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ElementCollection

@@ -52,14 +52,18 @@ public class UserServiceImpl implements UserService {
         // Encriptar contraseña con BCrypt (IMPORTANTE)
         user.setPassword(encode(createUserDTO.password()));
 
+        //Guardar en BD
+        userRepository.save(user);
+
+
         if(createUserDTO.role() == Role.HOST){
             HostProfile host = new HostProfile();
             host.setUser(user);
+            host.setId(user.getId());
             hostRepository.save(host);
 
         }
-        //Guardar en BD
-        userRepository.save(user);
+
     }
 
     @Override
@@ -134,14 +138,14 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findByEmail(loginDTO.email());
 
         if(optionalUser.isEmpty()){
-            throw new Exception("El usuario no existe");
+            throw new ResourceNotFoundException("El usuario no existe");
         }
 
         User user = optionalUser.get();
 
         // Verificar si la contraseña es correcta usando el PasswordEncoder
         if(!passwordEncoder.matches(loginDTO.password(), user.getPassword())){
-            throw new Exception("El usuario no existe");
+            throw new ResourceNotFoundException("El usuario no existe");
         }
 
         String token = jwtUtils.generateToken(user.getId(), createClaims(user));

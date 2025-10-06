@@ -20,6 +20,7 @@ public interface AccommodationMapper {
     @Mapping(target = "location.city", source = "city")
     @Mapping(target = "location.neighborhood", source = "neighborhood")
     @Mapping(target = "location.street", source = "street")
+    @Mapping(target = "location.postalCode", source = "postalCode")
     @Mapping(target = "location.coordinates.latitude", source = "latitude")
     @Mapping(target = "location.coordinates.longitude", source = "longitude")
 

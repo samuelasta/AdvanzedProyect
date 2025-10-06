@@ -109,6 +109,8 @@ public class AccommodationController {
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder
                         .getContext().getAuthentication().getPrincipal();
+        System.out.println(user.getUsername());
+        System.out.println(user.getAuthorities());
         return user.getUsername(); // este es el id que metiste en el token
     }
 }
