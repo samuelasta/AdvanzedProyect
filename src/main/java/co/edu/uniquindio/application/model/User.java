@@ -50,7 +50,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(length = 255)
+    @Column(length = 500)
     private String description;
 
     @Column(nullable = false)

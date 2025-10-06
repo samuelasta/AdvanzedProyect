@@ -28,7 +28,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Map upload(MultipartFile image) throws Exception {
         File file = convert(image);
-        // Reemplace "app_name" con el nombre de la carpeta donde se guardarán las imágenes en Cloudinary
+        // Reemplace "folder" si quiero guardar las imagenes en otra carpeta de cloudinary
         return cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", "AdvanzedProyect"));
     }
 

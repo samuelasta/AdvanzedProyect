@@ -42,6 +42,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() //login y registro
                         .requestMatchers(HttpMethod.POST, "/api/accommodations/**").hasRole("HOST")
                                 .requestMatchers("/api/bookings/**").permitAll()
+                                .requestMatchers(
+                                        "/api/auth/**",       // login, registro
+                                        "/ws-chat/**",        // endpoint WebSocket
+                                        "/app/**"             // destino STOMP del cliente
+                                ).permitAll()
                         .anyRequest().authenticated()
                         //.requestMatchers("/api/admin/**").hasRole("ADMIN")
                       //  .requestMatchers("/api/bookings/**").hasAnyRole("USER", "HOST")

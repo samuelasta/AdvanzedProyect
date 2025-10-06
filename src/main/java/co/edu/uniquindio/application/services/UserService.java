@@ -18,10 +18,10 @@ public interface UserService {
      UserDTO get(String id) throws Exception;
 
      //Actualizar/Editar datos del usuario - PUT /users/{id}
-     UserDTO edit(String id, UpdateUserDto userDTO) throws Exception;
+     void edit(String id, UpdateUserDto userDTO) throws Exception;
 
      //que pasa si el usuario al principio no quiso poner un dato y leugo si, preguntar profe
-     UserDTO addHostData(String id, HostDTO hostDTO) throws Exception;
+     void addHostData(String id, HostDTO hostDTO) throws Exception;
 
      //Eliminar Usuario - DELETE /user/{id}
      void delete(String id, DeleteUserDTO deleteUserDTO) throws Exception;
