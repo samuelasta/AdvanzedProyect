@@ -75,9 +75,10 @@ public class AccommodationController {
     }
 
     //crear un comentario, acá porque el comentario pertenece al alojamiento (hecho)
-    @PostMapping("/{id}/comments")
-    public ResponseEntity<ResponseDTO<String>> createComment(@PathVariable String id, @Valid @RequestBody CreateCommentDTO createCommentDTO) throws Exception {
-        commentService.createComment(id, createCommentDTO);
+    @PostMapping("/{bookingId}/comments")
+    public ResponseEntity<ResponseDTO<String>> createComment(@PathVariable String bookingId, @Valid @RequestBody CreateCommentDTO createCommentDTO) throws Exception {
+        String userId = getCurrentUserId();
+        commentService.createComment(bookingId, userId, createCommentDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "comentario creado exitosamente"));
     }
 
@@ -111,6 +112,6 @@ public class AccommodationController {
                         .getContext().getAuthentication().getPrincipal();
         System.out.println(user.getUsername());
         System.out.println(user.getAuthorities());
-        return user.getUsername(); // este es el id que metiste en el token
+        return user.getUsername(); // este es el id que se metió en el token
     }
 }

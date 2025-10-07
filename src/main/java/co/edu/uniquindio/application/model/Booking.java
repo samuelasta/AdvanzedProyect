@@ -28,6 +28,7 @@ public class Booking {
     private int guest_number;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BookingState bookingState;
 
     @ManyToOne

@@ -117,14 +117,14 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST http://localhost:8080/api/bookings/{id}
+POST http://localhost:8080/api/bookings/5ecc3e5c-edbb-4e56-af99-e9d50546f217
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //crear una reserva
 
 {
-  "check_in": "2025-09-30T14:00:00",
-  "check_out": "2025-10-15T11:30:00",
+  "checkIn": "2025-10-20T14:00:00",
+  "checkOut": "2025-10-25T11:30:00",
   "guest_number": 2
 }
 
@@ -195,7 +195,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-PUT http://localhost:8080/api/accommodations/2b5a6d6d-1c42-4dc4-8208-09000ef22b97
+PUT http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //actualizar, editar alojamiento
@@ -238,28 +238,27 @@ GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420
 
 
 ###
-POST http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d/comments
+POST http://localhost:8080/api/accommodations/f25f2b4e-ccac-4db3-a793-f424940eb6c2/comments
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // crear un comentario a un alojamiento (reserva stado == finalizada)
 
 {
   "comment": "Excelente alojamiento, muy limpio y bien ubicado. El anfitrión fue muy amable y siempre estuvo atento a nuestras necesidades. Definitivamente volvería.",
-  "rating": 5,
-  "userId": "b12f6c3e-9a4d-4bfa-b5df-0d2e5f8c1a47"
+  "rating": 5
 }
 
 
 ###
-GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d/bookings
+GET http://localhost:8080/api/accommodations/5ecc3e5c-edbb-4e56-af99-e9d50546f217/bookings/0
 Content-Type: application/json
 // ver el listado de reservas que tiene el alojamiento
 
 {
-  "state": "CONFIRMED",
-  "checkIn": "2025-09-14T14:00:00",
-  "checkOut": "2025-09-16T11:30:00",
-  "guest_number": 2
+  "state": null,
+  "checkIn": null,
+  "checkOut": null,
+  "guest_number": null
 }
 
 

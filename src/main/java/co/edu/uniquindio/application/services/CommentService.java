@@ -8,6 +8,6 @@ import java.util.List;
 public interface CommentService {
 
     List<CommentDTO> listComments(String id, int page) throws Exception;
-    void createComment(String id, CreateCommentDTO createCommentDTO) throws Exception;
+    void createComment(String accommodationId, String userId, CreateCommentDTO createCommentDTO) throws Exception;
 
 }

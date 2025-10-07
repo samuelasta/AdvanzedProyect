@@ -31,6 +31,11 @@ public class Comment {
     @JoinColumn(nullable = false)
     private Accommodation accommodation;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "booking_id", nullable = false)
+    private Booking booking;
+
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;

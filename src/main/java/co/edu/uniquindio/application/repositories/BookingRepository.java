@@ -19,6 +19,8 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
 
     List<Booking> findByAccommodationId(String accommodationId);
 
+    //Optional<Booking> findById(String bookingId);
+
     Optional<Booking> findByAccommodationIdAndBookingState(String accommodationId, BookingState bookingState);
 
     //se hace el filtro a la base de datos directamente en caso de que vengan filtros

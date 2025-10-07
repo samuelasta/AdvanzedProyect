@@ -7,8 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public record CreateCommentDTO(@Length(max = 1000) String comment,
-                                @Min(1) @Max(5) int rating,
-                               String userId
+                                @Min(1) @Max(5) int rating
 
                                ) {
 }

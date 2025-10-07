@@ -18,6 +18,8 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
 
     Page<Comment> findAllByAccommodationId(String accommodationId, Pageable pageable);
 
+    boolean existsByBookingId(String bookingId);
+
     @Query("""
     SELECT AVG(c.rating)
     FROM Comment c

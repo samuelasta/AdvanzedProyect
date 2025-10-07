@@ -39,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
 
     @Override
-    public void create(String id, CreateBookingDTO createBookingDTO) throws Exception{
+    public void create(String id, String userId, CreateBookingDTO createBookingDTO) throws Exception{
 
         // vreifica que el checkIn no esté en pasado
        if(createBookingDTO.checkIn().isBefore(LocalDateTime.now())){
@@ -61,8 +61,9 @@ public class BookingServiceImpl implements BookingService {
         Accommodation accommodation = accommodationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el alojamiento"));
 
-        //obtenemos el usuario para poder crear la reserva
-        User user = accommodation.getUser();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario"));
+
 
         //la mapeamos y la guardamos en la DB
         Booking booking = bookingMapper.toEntity(createBookingDTO, accommodation, user);
@@ -98,6 +99,10 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingDTO> listBookings(String id, int page, SearchBookingDTO searchBookingDTO) throws Exception {
 
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+
+        if (searchBookingDTO.guest_number() != null && searchBookingDTO.guest_number() <= 0) {
+            throw new BadRequestException("el numero de huespedes no puede ser menor o 0");
+        }
         return getBookingAccommodationDTOS(id, page, searchBookingDTO, accommodation.isEmpty(), accommodation);
     }
 
@@ -130,7 +135,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         Pageable pageable = PageRequest.of(page, 10);
-        Page<Booking> bookings = bookingRepository.findBookingsByUserWithFilters(id, searchBookingDTO, pageable);
+        Page<Booking> bookings = bookingRepository.findBookingsByAccommodationWithFilters(id, searchBookingDTO, pageable);
 
         return bookings.stream()
                 .map(bookingMapper::toBookingDTO)
