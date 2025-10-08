@@ -3,10 +3,7 @@ package co.edu.uniquindio.application.services.impl;
 import co.edu.uniquindio.application.dto.bookingDTO.BookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.CreateBookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.SearchBookingDTO;
-import co.edu.uniquindio.application.exceptions.BadRequestException;
-import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
-import co.edu.uniquindio.application.exceptions.UnauthorizedException;
-import co.edu.uniquindio.application.exceptions.ValueConflictException;
+import co.edu.uniquindio.application.exceptions.*;
 import co.edu.uniquindio.application.mappers.BookingMapper;
 import co.edu.uniquindio.application.model.Accommodation;
 import co.edu.uniquindio.application.model.Booking;
@@ -37,6 +34,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
+    private final CurrentUserServiceImpl currentUserService;
 
     @Override
     public void create(String id, String userId, CreateBookingDTO createBookingDTO) throws Exception{
@@ -76,8 +74,14 @@ public class BookingServiceImpl implements BookingService {
     public void delete(String id) throws Exception {
         Optional<Booking> booking = bookingRepository.findById(id);
         if (booking.isEmpty()) {
-            throw new ResourceNotFoundException("No existe este alojamiento");
+            throw new ResourceNotFoundException("No existe esta reserva");
         }
+
+
+        if(!Objects.equals(currentUserService.getCurrentUser(), booking.get().getUser().getId())) {
+            throw new ForbiddenException("No te pertenece esta reserva");
+        }
+
         if(booking.get().getBookingState().equals(BookingState.PENDING)){
             LocalDateTime checkIn = booking.get().getCheckIn();
             LocalDateTime now = LocalDateTime.now();

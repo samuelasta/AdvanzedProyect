@@ -98,7 +98,7 @@ public class AccommodationController {
     }
 
     // obtener el alojamiento, cuando un espectador sin loguearse toca en un alojamiento
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/detail")
     public ResponseEntity<ResponseDTO<AccommodationDetailDTO>> get(@PathVariable String id) throws Exception {
         AccommodationDetailDTO accommodationDetailDTO = accommodationService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationDetailDTO));

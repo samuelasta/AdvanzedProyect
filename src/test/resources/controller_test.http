@@ -4,18 +4,18 @@ GET https://examples.http-client.intellij.net/get
 
 
 ###
-PATCH http://localhost:8080/api/users/{id}
+PATCH http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //cambiar contraseña
 
 {
-  "old_password": "233455665",
+  "old_password": "perroGato123",
   "new_password": "3435555555"
 }
 
 ###
-PUT http://localhost:8080/api/users/{id}/host
+PUT http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a/host
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //añadir descripcion y/o documentos legales
@@ -34,7 +34,7 @@ Content-Type: application/json
 // login
 
 {
-  "email": "test1@gmail.com",
+  "email": "samuela.castanom@uqvirtual.edu.co",
   "password": "perroGato123"
 }
 
@@ -47,7 +47,7 @@ Content-Type: application/json
 // solicitar codigo para cambiar la contraseña
 
 {
-  "email": "karenscastanom@gmail.com"
+  "email": "samuela.castanom@uqvirtual.edu.co"
 }
 
 
@@ -57,8 +57,8 @@ Content-Type: application/json
 //cambiar contraseña olvidada
 
 {
-  "code": "202821",
-  "email": "test1@gmail.com",
+  "code": "237475",
+  "email": "samuela.castanom@uqvirtual.edu.co",
   "newPassword": "sofialamejor"
 }
 
@@ -71,7 +71,7 @@ Content-Type: application/json
 {
   "name": "samuel",
   "surname": "andres",
-  "email": "test1@gmail.com",
+  "email": "samuela.castanom@uqvirtual.edu.co",
   "phone": "31934232",
   "birthDate": "2005-02-23",
   "password": "perroGato123",
@@ -111,26 +111,26 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/users/{id}
+GET http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a
 Authorization: Bearer {{token}}
 // obtener el usuario (ver su perfil)
 
 
 ###
-POST http://localhost:8080/api/bookings/5ecc3e5c-edbb-4e56-af99-e9d50546f217
+POST http://localhost:8080/api/bookings/7252d9ed-1165-4f2a-9b95-233e3a2d48f9
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //crear una reserva
 
 {
-  "checkIn": "2025-10-20T14:00:00",
-  "checkOut": "2025-10-25T11:30:00",
+  "checkIn": "2025-10-27T14:00:00",
+  "checkOut": "2025-10-28T11:30:00",
   "guest_number": 2
 }
 
 
 ###
-GET http://localhost:8080/api/users/12/bookings/{page}
+GET http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a/bookings/0
 Content-Type: application/json
 // ver el listado de reservas aplicando filtros
 
@@ -143,10 +143,9 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:8080/api/bookings/{id}
+DELETE http://localhost:8080/api/bookings/603883ef-1220-4d66-b4e1-04614f8e8d22
 Authorization: Bearer {{token}}
 //eliminar cancelar reserva
-
 
 
 ###
@@ -238,7 +237,7 @@ GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420
 
 
 ###
-POST http://localhost:8080/api/accommodations/f25f2b4e-ccac-4db3-a793-f424940eb6c2/comments
+POST http://localhost:8080/api/accommodations/4855309d-a4c7-45b2-a98a-adc079ce48b9/comments
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // crear un comentario a un alojamiento (reserva stado == finalizada)
@@ -263,32 +262,32 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d/stats
+GET http://localhost:8080/api/accommodations/7252d9ed-1165-4f2a-9b95-233e3a2d48f9/stats
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // ver estadisticas del alojamiento
 
 {
   "startDate": "2024-01-14T14:00:00",
-  "endDate": "2025-012-14T14:00:00"
+  "endDate": "2025-12-14T14:00:00"
 }
 
 
 ###
-GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d
+GET http://localhost:8080/api/accommodations/5ecc3e5c-edbb-4e56-af99-e9d50546f217/detail
 // ver el alojamiento (GET)
 
 
 
 ###
-GET http://localhost:8080/api/users/{id}/accommodations/host/{page}
+GET http://localhost:8080/api/users/1e89fcc2-091b-4343-b31d-e33ea15f46ab/accommodations/host/0
 Authorization: Bearer {{token}}
-// lista los alojamientos del cliente
+// lista los alojamientos del host
 
 
 
 ###
-POST http://localhost:8080/api/comments/{idComment}/reply/{idUser}
+POST http://localhost:8080/api/comments/ba671770-bd8e-45e4-a9e5-b576a121bc1a/reply/34a29e7f-c062-4937-8d44-2d0a7304914a
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //reponder un comentario

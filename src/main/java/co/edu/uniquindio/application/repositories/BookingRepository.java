@@ -88,12 +88,11 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
     SELECT COUNT(b)
     FROM Booking b
     WHERE b.accommodation.id = :accommodationId
-      AND b.bookingState=: bookingState
+      AND b.bookingState = co.edu.uniquindio.application.model.enums.BookingState.CANCELED
       AND (:startDate IS NULL OR b.checkIn >= :startDate)
       AND (:endDate IS NULL OR b.checkOut <= :endDate)
     """)
     int countCancellationsByAccommodationId(@Param("accommodationId")String accommodationId,
-                                            @Param("bookingState")BookingState bookingState,
                                             @Param("startDate")LocalDateTime startDate,
                                             @Param("endDate")LocalDateTime endDate);
 
@@ -103,12 +102,12 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
     FROM Booking b
     JOIN b.accommodation a
     WHERE a.id = :accommodationId
-      AND b.bookingState=: bookingState
+      AND b.bookingState = co.edu.uniquindio.application.model.enums.BookingState.COMPLETED
       AND (:startDate IS NULL OR b.checkIn >= :startDate)
       AND (:endDate IS NULL OR b.checkOut <= :endDate)
     """)
     Double findAverageRevenueByAccommodationId(@Param("accommodationId")String accommodationId,
-                                               @Param("bookingState")BookingState bookingState, LocalDateTime startDate, LocalDateTime endDate);
+                                                LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("""
     SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END

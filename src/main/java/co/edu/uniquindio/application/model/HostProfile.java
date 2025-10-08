@@ -21,7 +21,7 @@ HostProfile {
     private User user;
 
     @ElementCollection
-    @CollectionTable(joinColumns = @JoinColumn(name = "hostProfileDocuments"))
+    @CollectionTable(joinColumns = @JoinColumn(name = "hostProfileId"))
     @Column(name = "document")
     private List<String> documents;
 

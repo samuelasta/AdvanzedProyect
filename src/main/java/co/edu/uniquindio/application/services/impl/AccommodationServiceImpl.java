@@ -163,8 +163,8 @@ public class AccommodationServiceImpl implements AccommodationService {
         long totalComments = commentRepository.countByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
         long totalReservations = bookingRepository.countByAccommodationIdAndBetween(id, statsDateDTO.startDate(), statsDateDTO.endDate());
         double occupancyRate = bookingRepository.findAverageOccupancyByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
-        int cancellations = bookingRepository.countCancellationsByAccommodationId(id, BookingState.CANCELED, statsDateDTO.startDate(), statsDateDTO.endDate());
-        double totalRevenue = bookingRepository.findAverageRevenueByAccommodationId(id, BookingState.COMPLETED, statsDateDTO.startDate(), statsDateDTO.endDate());
+        int cancellations = bookingRepository.countCancellationsByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
+        double totalRevenue = bookingRepository.findAverageRevenueByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
 
         return statsMapper.toAccommodationStatsDTO(averageRating, totalComments, totalReservations, occupancyRate, cancellations, totalRevenue);
     }
