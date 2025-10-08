@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +56,7 @@ public class CommentServiceImpl implements CommentService {
 
     // metodo para crear el comentario (posible cambio). Validar que el comentario solo se haga si la reserva pasó y que corresponda al alojamiento deonde se quedó el usuario
     @Override
+    @Transactional
     public void createComment(String bookingId, String userId, CreateCommentDTO createCommentDTO) throws Exception {
 
         // validar existencia de la reserva
@@ -87,6 +89,11 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(user);
 
         commentRepository.save(comment);
+
+        Double averageRating = commentRepository.findAverageRatingByAccommodationId(booking.getAccommodation().getId(), null, null);
+        booking.getAccommodation().setAverageRatings(averageRating != null ? averageRating : 0.0);
+
+        accommodationRepository.save(booking.getAccommodation());
 
         }
 

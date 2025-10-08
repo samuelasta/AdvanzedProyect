@@ -32,6 +32,14 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
                                               @Param("endDate")LocalDateTime endDate);
 
 
+    @Query("""
+    SELECT COALESCE(SUM(c.rating), 0)
+    FROM Comment c
+    WHERE c.accommodation.id = :accommodationId
+""")
+    Double sumRatingsByAccommodationId(@Param("accommodationId") String accommodationId);
+
+
     //cuenta el numero dde comentarios de un alojamiento
     @Query("""
 SELECt COUNT(c)

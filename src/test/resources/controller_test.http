@@ -117,14 +117,14 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST http://localhost:8080/api/bookings/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3
+POST http://localhost:8080/api/bookings/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //crear una reserva
 
 {
-  "checkIn": "2025-10-29T14:00:00",
-  "checkOut": "2025-10-30T11:30:00",
+  "checkIn": "2025-11-29T14:00:00",
+  "checkOut": "2025-11-30T11:30:00",
   "guest_number": 2
 }
 
@@ -171,7 +171,7 @@ Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
-  "title": "Casa en salento",
+  "title": "Casa en quimbaya",
   "description": "Hermosa casa frente al mar, equipada con todas las comodidades para unas vacaciones inolvidables. Incluye piscina, terraza y acceso directo a la playa.",
   "price": 150.0,
   "picsUrl": [
@@ -237,7 +237,7 @@ GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420
 
 
 ###
-POST http://localhost:8080/api/accommodations/6d93c2c4-975a-4540-b722-4c68c40fd59b/comments
+POST http://localhost:8080/api/accommodations/238c42c0-b003-4b4e-ab0f-113314514d1b/comments
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // crear un comentario a un alojamiento (reserva stado == finalizada)
@@ -249,7 +249,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/bookings/0
+GET http://localhost:8080/api/accommodations/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9/bookings/0
 Content-Type: application/json
 // ver el listado de reservas que tiene el alojamiento
 
@@ -262,19 +262,19 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/stats
+GET http://localhost:8080/api/accommodations/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9/stats
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // ver estadisticas del alojamiento
 
 {
   "startDate": "2025-09-14T14:00:00",
-  "endDate": "2025-10-31T14:00:00"
+  "endDate": "2025-12-31T14:00:00"
 }
 
 
 ###
-GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/detail
+GET http://localhost:8080/api/accommodations/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9/detail
 // ver el alojamiento (GET)
 
 

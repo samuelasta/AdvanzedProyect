@@ -14,7 +14,7 @@ public interface
 BookingMapper {
 
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "bookingState", constant = "PENDING")
+    @Mapping(target = "bookingState", constant = "COMPLETED")
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(source = "accommodation", target = "accommodation")
     @Mapping(source = "user", target = "user")

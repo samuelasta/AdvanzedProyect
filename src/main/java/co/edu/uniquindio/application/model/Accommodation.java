@@ -58,6 +58,7 @@ public class Accommodation {
     @Column(nullable = false)
     private int totalRatings;
 
+
     @Column(nullable = false)
     private double averageRatings;
 
