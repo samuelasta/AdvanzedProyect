@@ -21,7 +21,7 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
     boolean existsByBookingId(String bookingId);
 
     @Query("""
-    SELECT AVG(c.rating)
+    SELECT COALESCE(AVG(c.rating), 0.0)
     FROM Comment c
     WHERE c.accommodation.id = :accommodationId
       AND (:startDate IS NULL OR c.createdAt >= :startDate)

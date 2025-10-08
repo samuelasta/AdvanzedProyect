@@ -12,6 +12,7 @@ public interface ShowAccommodationMapper {
 
     // Para el listado (resumen)
     @Mapping(target = "photo_url", expression = "java(accommodation.getPics_url() != null && !accommodation.getPics_url().isEmpty() ? accommodation.getPics_url().get(0) : null)")
+    @Mapping(target = "city", source = "accommodation.location.city")
     AccommodationDTO toAccommodationDTO(Accommodation accommodation);
 
 

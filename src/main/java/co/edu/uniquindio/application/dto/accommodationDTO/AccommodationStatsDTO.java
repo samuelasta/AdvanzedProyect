@@ -9,7 +9,5 @@ public record AccommodationStatsDTO(
                                     long totalReservations,
                                     double occupancyRate,
                                     int cancellations,
-                                    LocalDateTime lastReservation,
-                                    LocalDateTime nextAvailableDate,
                                     double totalRevenue) {
 }

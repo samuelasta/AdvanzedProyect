@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public record UserDTO(String name,
                       String photoUrl,
-                      LocalDate BirthDate,
+                      LocalDate birthDate,
                       Role role,
                       LocalDateTime createdAt
 ) {

@@ -76,9 +76,10 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
     SELECT COALESCE(SUM(DATEDIFF(b.checkOut, b.checkIn)), 0)
     FROM Booking b
     WHERE b.accommodation.id = :accommodationId
+      AND b.bookingState = co.edu.uniquindio.application.model.enums.BookingState.COMPLETED
       AND (:startDate IS NULL OR b.checkIn >= :startDate)
       AND (:endDate IS NULL OR b.checkOut <= :endDate)
-    """)
+""")
     Double findAverageOccupancyByAccommodationId(@Param("accommodationId")String accommodationId,
                                                  @Param("startDate")LocalDateTime startDate,
                                                  @Param("endDate")LocalDateTime endDate);

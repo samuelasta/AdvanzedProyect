@@ -86,16 +86,16 @@ GET http://localhost:8080/api/users/list
 
 
 ###
-PUT http://localhost:8080/api/users/12
+PUT http://localhost:8080/api/users/1e89fcc2-091b-4343-b31d-e33ea15f46ab
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //editar datos del usuario
 
 {
-  "name": "samuel",
+  "name": "samu",
   "phone": "31932404",
-  "photoUrl": "/mnt/data/ff6a4b1e-5eda-40ec-8903-aeaaa1ae0b83.png",
-  "BirthDate": "2005-23-02"
+  "photoUrl": "http://mnt/data/ff6a4b1e-5eda-40ec-8903-aeaaa1ae0b83.png",
+  "birthDate": "2005-02-22"
 }
 
 
@@ -111,20 +111,20 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a
+GET http://localhost:8080/api/users/1e89fcc2-091b-4343-b31d-e33ea15f46ab
 Authorization: Bearer {{token}}
 // obtener el usuario (ver su perfil)
 
 
 ###
-POST http://localhost:8080/api/bookings/7252d9ed-1165-4f2a-9b95-233e3a2d48f9
+POST http://localhost:8080/api/bookings/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //crear una reserva
 
 {
-  "checkIn": "2025-10-27T14:00:00",
-  "checkOut": "2025-10-28T11:30:00",
+  "checkIn": "2025-10-29T14:00:00",
+  "checkOut": "2025-10-30T11:30:00",
   "guest_number": 2
 }
 
@@ -143,7 +143,7 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:8080/api/bookings/603883ef-1220-4d66-b4e1-04614f8e8d22
+DELETE http://localhost:8080/api/bookings/6d93c2c4-975a-4540-b722-4c68c40fd59b
 Authorization: Bearer {{token}}
 //eliminar cancelar reserva
 
@@ -171,7 +171,7 @@ Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
-  "title": "Casa en la playa",
+  "title": "Casa en salento",
   "description": "Hermosa casa frente al mar, equipada con todas las comodidades para unas vacaciones inolvidables. Incluye piscina, terraza y acceso directo a la playa.",
   "price": 150.0,
   "picsUrl": [
@@ -189,8 +189,8 @@ Authorization: Bearer {{token}}
   "amenities": [
     "WIFI"
   ],
-  "latitude": 10.9685,
-  "longitude": -74.7813
+  "latitude": 11.9685,
+  "longitude": -76.7813
 }
 
 ###
@@ -227,7 +227,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d/amenities
+GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/amenities
 // lista de todos los servicios del alojamiento
 
 
@@ -237,7 +237,7 @@ GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420
 
 
 ###
-POST http://localhost:8080/api/accommodations/4855309d-a4c7-45b2-a98a-adc079ce48b9/comments
+POST http://localhost:8080/api/accommodations/6d93c2c4-975a-4540-b722-4c68c40fd59b/comments
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // crear un comentario a un alojamiento (reserva stado == finalizada)
@@ -249,7 +249,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/5ecc3e5c-edbb-4e56-af99-e9d50546f217/bookings/0
+GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/bookings/0
 Content-Type: application/json
 // ver el listado de reservas que tiene el alojamiento
 
@@ -262,19 +262,19 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/api/accommodations/7252d9ed-1165-4f2a-9b95-233e3a2d48f9/stats
+GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/stats
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // ver estadisticas del alojamiento
 
 {
-  "startDate": "2024-01-14T14:00:00",
-  "endDate": "2025-12-14T14:00:00"
+  "startDate": "2025-09-14T14:00:00",
+  "endDate": "2025-10-31T14:00:00"
 }
 
 
 ###
-GET http://localhost:8080/api/accommodations/5ecc3e5c-edbb-4e56-af99-e9d50546f217/detail
+GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/detail
 // ver el alojamiento (GET)
 
 

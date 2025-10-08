@@ -30,6 +30,7 @@ import co.edu.uniquindio.application.services.GeoUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -162,7 +163,12 @@ public class AccommodationServiceImpl implements AccommodationService {
         double averageRating = commentRepository.findAverageRatingByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
         long totalComments = commentRepository.countByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
         long totalReservations = bookingRepository.countByAccommodationIdAndBetween(id, statsDateDTO.startDate(), statsDateDTO.endDate());
-        double occupancyRate = bookingRepository.findAverageOccupancyByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
+        double occupancy = bookingRepository.findAverageOccupancyByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
+        long totalDays = (statsDateDTO.startDate() != null && statsDateDTO.endDate() != null)
+                ? ChronoUnit.DAYS.between(statsDateDTO.startDate(), statsDateDTO.endDate())
+                : 30; // se calcula el promedio de 30 dias si el usuario no pasa fechas
+
+        double occupancyRate = totalDays > 0 ? (occupancy / totalDays) * 100 : 0.0;
         int cancellations = bookingRepository.countCancellationsByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
         double totalRevenue = bookingRepository.findAverageRevenueByAccommodationId(id, statsDateDTO.startDate(), statsDateDTO.endDate());
 
