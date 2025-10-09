@@ -4,7 +4,7 @@ GET https://examples.http-client.intellij.net/get
 
 
 ###
-PATCH http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a
+PATCH http://localhost:8080/api/users/27322d50-8770-40e4-9e9e-0ef381835ad8
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //cambiar contraseña
@@ -34,8 +34,8 @@ Content-Type: application/json
 // login
 
 {
-  "email": "samuela.castanom@uqvirtual.edu.co",
-  "password": "perroGato123"
+  "email": "kevyn.ramirezg@uqvirtual.edu.co",
+  "password": "sofialamejor"
 }
 
 > {% client.global.set("token", response.body.message.token); %}
@@ -47,7 +47,7 @@ Content-Type: application/json
 // solicitar codigo para cambiar la contraseña
 
 {
-  "email": "samuela.castanom@uqvirtual.edu.co"
+  "email": "kevyn.ramirezg@uqvirtual.edu.co"
 }
 
 
@@ -57,8 +57,8 @@ Content-Type: application/json
 //cambiar contraseña olvidada
 
 {
-  "code": "237475",
-  "email": "samuela.castanom@uqvirtual.edu.co",
+  "code": "966152",
+  "email": "kevyn.ramirezg@uqvirtual.edu.co",
   "newPassword": "sofialamejor"
 }
 
@@ -71,7 +71,7 @@ Content-Type: application/json
 {
   "name": "samuel",
   "surname": "andres",
-  "email": "samuela.castanom@uqvirtual.edu.co",
+  "email": "kevyn.ramirezg@uqvirtual.edu.co",
   "phone": "31934232",
   "birthDate": "2005-02-23",
   "password": "perroGato123",

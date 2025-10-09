@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final UserRepository userRepository;
 
     private static final long EXPIRATION_MINUTES = 15;
 
@@ -54,6 +56,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     }
 
     @Override
+    @Transactional
     public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws Exception {
 
         User user = userService.findByEmail(resetPasswordDTO.email());
@@ -76,52 +79,15 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         }
         String hashedPassword = passwordEncoder.encode(resetPasswordDTO.newPassword());
 
-
+        // cambiamos la contraseña, se registrá que ya se usó el codigo
         user.setPassword(hashedPassword);
+        resetCode.setUsed(true);
+        userRepository.save(user);
+        passwordResetCodeRepository.save(resetCode);
 
     }
 
-//    @Override
-//    public void validateAndResetPassword(String code, User user, String newPassword) {
-//        PasswordResetCode resetCode = passwordResetCodeRepository
-//                .findByCodeAndUser(code, user)
-//                .orElseThrow(() -> new IllegalArgumentException("Código inválido"));
-//
-//        if (resetCode.isUsed()) {
-//            throw new IllegalStateException("Este código ya fue utilizado");
-//        }
-//
-//        if (resetCode.getCreatedAt()
-//                .plusMinutes(EXPIRATION_MINUTES)
-//                .isBefore(LocalDateTime.now())) {
-//            throw new IllegalStateException("El código ha expirado");
-//        }
-//
-//        // 🔒 Cambiar contraseña (encriptada en UserService normalmente)
-//        user.setPassword(newPassword);
-//        userRepository.save(user);
-//
-//        // ✅ Marcar código como usado
-//        resetCode.setUsed(true);
-//        passwordResetCodeRepository.save(resetCode);
-//    }
-//
-//    @Override
-//    public void generateResetCode(String email) {
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ese email"));
-//
-//        // aquí generas y guardas el código
-//        PasswordResetCode resetCode = new PasswordResetCode(
-//                UUID.randomUUID().toString(),
-//                generarCodigoAleatorio(),
-//                LocalDateTime.now(),
-//                false,
-//                user
-//        );
-//
-//        passwordResetCodeRepository.save(resetCode);
-//    }
+
         private String generarCodigoAleatorio() {
         return String.valueOf((int)(Math.random() * 900000) + 100000); // 6 dígitos
         }
