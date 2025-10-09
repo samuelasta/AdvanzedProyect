@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.5'
+	id 'org.springframework.boot' version '3.5.4'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -42,7 +42,7 @@ dependencies {
 	implementation 'org.simplejavamail:simple-java-mail:8.12.6'
 	implementation 'org.simplejavamail:batch-module:8.12.6'
 	// https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail
-	implementation("org.simplejavamail:simple-java-mail:8.12.6")
+	//implementation("org.simplejavamail:simple-java-mail:8.12.6")
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	//para el servicio donde se alojarán las fotos
