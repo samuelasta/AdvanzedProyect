@@ -24,6 +24,7 @@ public record CreateUserDTO(@NotBlank(message = "Nombre requerido")
                             @NotBlank(message = "País requerido")
                             String country,
                             String photoUrl,
+
                             @NotBlank(message = "Contraseña requerida")
                             @Size(min = 6, message = "Contraseña debe tener al menos 6 caracteres")
                             String password,
