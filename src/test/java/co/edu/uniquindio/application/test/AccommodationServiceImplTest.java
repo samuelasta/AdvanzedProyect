@@ -54,7 +54,6 @@ class AccommodationServiceImplTest {
 
     @InjectMocks AccommodationServiceImpl service;
 
-    // ----------------- helpers -----------------
 
     private CreateAccommodationDTO makeCreateDTO(float lat, float lon, String title) {
         return new CreateAccommodationDTO(
