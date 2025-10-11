@@ -139,9 +139,14 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .toList();
     }
 
+    @Override
+    public List<Amenities> listAllAmenicties(String id) throws Exception {
+        return List.of();
+    }
+
 
     // devuelve la lista de todos los servicios del alojamiento
-    @Override
+    //@Override
     public List<Amenities> listAllAmenities(String id) throws Exception {
 
         Optional<Accommodation> accommodation = accommodationRepository.findById(id);
