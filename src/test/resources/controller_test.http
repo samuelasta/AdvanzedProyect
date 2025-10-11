@@ -4,7 +4,7 @@ GET https://examples.http-client.intellij.net/get
 
 
 ###
-PATCH http://localhost:8080/api/users/27322d50-8770-40e4-9e9e-0ef381835ad8
+PATCH http://localhost:8080/api/users/me
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //cambiar contraseña
@@ -15,7 +15,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-PUT http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a/host
+PUT http://localhost:8080/api/users/me/host
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //añadir descripcion y/o documentos legales
@@ -34,8 +34,8 @@ Content-Type: application/json
 // login
 
 {
-  "email": "kevyn.ramirezg@uqvirtual.edu.co",
-  "password": "sofialamejor"
+  "email": "samuela.castanom@uqvirtual.edu.co",
+  "password": "perroGato123"
 }
 
 > {% client.global.set("token", response.body.message.token); %}
@@ -47,7 +47,7 @@ Content-Type: application/json
 // solicitar codigo para cambiar la contraseña
 
 {
-  "email": "kevyn.ramirezg@uqvirtual.edu.co"
+  "email": "samuela.castanom@uqvirtual.edu.co"
 }
 
 
@@ -58,7 +58,7 @@ Content-Type: application/json
 
 {
   "code": "966152",
-  "email": "kevyn.ramirezg@uqvirtual.edu.co",
+  "email": "samuela.castanom@uqvirtual.edu.co",
   "newPassword": "sofialamejor"
 }
 
@@ -71,7 +71,7 @@ Content-Type: application/json
 {
   "name": "samuel",
   "surname": "andres",
-  "email": "kevyn.ramirezg@uqvirtual.edu.co",
+  "email": "samuela.castanom@uqvirtual.edu.co",
   "phone": "31934232",
   "birthDate": "2005-02-23",
   "password": "perroGato123",
@@ -80,13 +80,9 @@ Content-Type: application/json
   "role": "HOST"
 }
 
-###
-GET http://localhost:8080/api/users/list
-//devuelve una lista de todos los usuarios
-
 
 ###
-PUT http://localhost:8080/api/users/1e89fcc2-091b-4343-b31d-e33ea15f46ab
+PUT http://localhost:8080/api/users/me
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //editar datos del usuario
@@ -100,7 +96,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-DELETE http://localhost:8080/api/users/{id}
+DELETE http://localhost:8080/api/users/me
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //eliminar usuario
@@ -130,7 +126,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/users/34a29e7f-c062-4937-8d44-2d0a7304914a/bookings/0
+GET http://localhost:8080/api/users/me/bookings/0
 Content-Type: application/json
 // ver el listado de reservas aplicando filtros
 
@@ -171,7 +167,7 @@ Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
-  "title": "Casa en quimbaya",
+  "title": "satabaya",
   "description": "Hermosa casa frente al mar, equipada con todas las comodidades para unas vacaciones inolvidables. Incluye piscina, terraza y acceso directo a la playa.",
   "price": 150.0,
   "picsUrl": [
@@ -274,20 +270,20 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9/detail
+GET http://localhost:8080/api/accommodations/da295901-aea6-4ccf-a3c3-0b63f0e3ef14/detail
 // ver el alojamiento (GET)
 
 
 
 ###
-GET http://localhost:8080/api/users/1e89fcc2-091b-4343-b31d-e33ea15f46ab/accommodations/host/0
+GET http://localhost:8080/api/users/me/accommodations/host/0
 Authorization: Bearer {{token}}
 // lista los alojamientos del host
 
 
 
 ###
-POST http://localhost:8080/api/comments/ba671770-bd8e-45e4-a9e5-b576a121bc1a/reply/34a29e7f-c062-4937-8d44-2d0a7304914a
+POST http://localhost:8080/api/comments/ba671770-bd8e-45e4-a9e5-b576a121bc1a/reply
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //reponder un comentario
@@ -295,6 +291,22 @@ Authorization: Bearer {{token}}
 {
   "reply": "gracias"
 }
+
+
+###
+POST http://localhost:8080/api/favorites/e3261109-b354-4415-8371-972211e43d69
+Authorization: Bearer {{token}}
+// para agregar un alojamiento a favoritos
+
+
+###
+DELETE http://localhost:8080/api/favorites/da295901-aea6-4ccf-a3c3-0b63f0e3ef14
+Authorization: Bearer {{token}}
+// para eliminar un alojamiento de favoritos
+
+###
+GET http://localhost:8080/api/favorites/0
+Authorization: Bearer {{token}}
 
 
 

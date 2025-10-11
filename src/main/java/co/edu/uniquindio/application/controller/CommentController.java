@@ -20,10 +20,10 @@ public class CommentController {
     private final CurrentUserService currentUserService;
 
     //  Responder a un comentario (host). (hecho)
-    @PostMapping("/{commentId}/reply/{idUser}")//idUser temporal porque se sacará del token
-    public ResponseEntity<ResponseDTO<String>> reply(@PathVariable String idUser, @PathVariable String commentId, @Valid @RequestBody ReplyDTO replyDTO) throws Exception{
+    @PostMapping("/{commentId}/reply")//idUser temporal porque se sacará del token
+    public ResponseEntity<ResponseDTO<String>> reply(@PathVariable String commentId, @Valid @RequestBody ReplyDTO replyDTO) throws Exception{
         String userId = currentUserService.getCurrentUser();
-        replyService.create(idUser, commentId, replyDTO);
+        replyService.create(userId, commentId, replyDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "respuesta a comentario exitosa"));
     }
 }

@@ -16,17 +16,16 @@ import co.edu.uniquindio.application.model.User;
 import co.edu.uniquindio.application.model.enums.Amenities;
 import co.edu.uniquindio.application.model.enums.BookingState;
 import co.edu.uniquindio.application.model.enums.State;
-import co.edu.uniquindio.application.repositories.AccommodationRepository;
-import co.edu.uniquindio.application.repositories.BookingRepository;
-import co.edu.uniquindio.application.repositories.CommentRepository;
-import co.edu.uniquindio.application.repositories.UserRepository;
+import co.edu.uniquindio.application.repositories.*;
 import co.edu.uniquindio.application.services.AccommodationService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import co.edu.uniquindio.application.services.GeoUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,6 +48,8 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final CommentRepository commentRepository;
     private final StatsMapper statsMapper;
     private final AccommodationDetailMapper accommodationDetailMapper;
+    private final FavoriteRepository favoriteRepository;
+    private final GeoUtilsImpl geoUtilsImpl;
 
 
     @Override
@@ -71,14 +72,22 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     private boolean verifyExistence(CreateAccommodationDTO createAccommodationDTO) {
 
+        JaroWinklerSimilarity similarity = new JaroWinklerSimilarity();
+
         for (Accommodation accommodation : accommodationRepository.findByState(State.ACTIVE)) {
-            double distancia = GeoUtils.calcularDistancia(
+            double distancia = geoUtilsImpl.calcularDistancia(
                     createAccommodationDTO.latitude(), createAccommodationDTO.longitude(),
                     accommodation.getLocation().getCoordinates().getLatitude(),
                     accommodation.getLocation().getCoordinates().getLongitude()
             );
 
-            if (distancia <= 5 && accommodation.getTitle().equalsIgnoreCase(createAccommodationDTO.title())) { // 10 metros de umbral
+            double score = similarity.apply(
+                    accommodation.getTitle().toLowerCase().trim(),
+                    createAccommodationDTO.title().toLowerCase().trim()
+            );
+
+            // Umbral configurable (0.85 - 85% de similitud)
+            if (distancia <= 5 && score >= 0.85) {
                 return true;
             }
         }
@@ -100,8 +109,10 @@ public class AccommodationServiceImpl implements AccommodationService {
 
 
     //eliminar un alojamiento que no tenga reservas
+    @Transactional
     @Override
     public void delete(String id) throws Exception {
+
       Optional<Accommodation> accommodation = accommodationRepository.findById(id);
       if(accommodation.isEmpty()){
           throw new ResourceNotFoundException("No se encontró el alojamiento");
@@ -111,19 +122,14 @@ public class AccommodationServiceImpl implements AccommodationService {
       if(booking.isPresent()){
           throw new UnauthorizedException("no puedes eliminar este alojamiento, tiene reservas pendientes");
       }
+
+      // hacemos un soft delete, borramos los alojamientos de las listas de favoritos de la gente y guardamos
       accommodation.get().setState(State.INACTIVE);
+      favoriteRepository.deleteAllByAccommodationId(accommodation.get().getId());
       accommodationRepository.save(accommodation.get());
     }
 
 
-    /* ya está en bookingService pero lo dejo comentado (pendiente a revisar)
-    //Es para listar las reservas de un alojamiento? si es así deben enviar el id del alojamiento no una lista
-    @Override
-    public List<BookingDTO> listAll(ListBookingsDTO listBookingsDTO) throws Exception {
-
-
-        return List.of();
-    }*/
 
     // filtro de busqueda de los alojamientos (rango minimo - maximo precio y servicios added )
     @Override

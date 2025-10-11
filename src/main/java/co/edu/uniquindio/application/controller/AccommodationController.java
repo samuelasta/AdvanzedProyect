@@ -12,6 +12,7 @@ import co.edu.uniquindio.application.model.enums.Amenities;
 import co.edu.uniquindio.application.services.AccommodationService;
 import co.edu.uniquindio.application.services.BookingService;
 import co.edu.uniquindio.application.services.CommentService;
+import co.edu.uniquindio.application.services.CurrentUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ public class AccommodationController {
     private final AccommodationService accommodationService;
     private final CommentService commentService;
     private final BookingService bookingService;
+    private final CurrentUserService currentUserService;
 
 
     //ver la lista de alojamientos disponibles (aplicando filtros), hecho
@@ -41,7 +43,7 @@ public class AccommodationController {
     //crear el alojamiento (hecho)
     @PostMapping
     public ResponseEntity<ResponseDTO<String>> create( @Valid @RequestBody CreateAccommodationDTO createAccommodationDTO) throws Exception {
-        String id = getCurrentUserId();
+        String id = currentUserService.getCurrentUser();
         accommodationService.create(id, createAccommodationDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "alojamiento creado "));
     }
@@ -77,7 +79,7 @@ public class AccommodationController {
     //crear un comentario, acá porque el comentario pertenece al alojamiento (hecho)
     @PostMapping("/{bookingId}/comments")
     public ResponseEntity<ResponseDTO<String>> createComment(@PathVariable String bookingId, @Valid @RequestBody CreateCommentDTO createCommentDTO) throws Exception {
-        String userId = getCurrentUserId();
+        String userId = currentUserService.getCurrentUser();
         commentService.createComment(bookingId, userId, createCommentDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, "comentario creado exitosamente"));
     }
@@ -104,14 +106,4 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationDetailDTO));
     }
 
-
-    //para sacar el id del token
-    private String getCurrentUserId() {
-        org.springframework.security.core.userdetails.User user =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder
-                        .getContext().getAuthentication().getPrincipal();
-        System.out.println(user.getUsername());
-        System.out.println(user.getAuthorities());
-        return user.getUsername(); // este es el id que se metió en el token
-    }
 }
