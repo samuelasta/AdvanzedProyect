@@ -1,37 +1,28 @@
 package co.edu.uniquindio.application.test;
 
-import co.edu.uniquindio.application.dto.bookingDTO.CreateBookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.BookingDTO;
-import co.edu.uniquindio.application.model.enums.State;
+import co.edu.uniquindio.application.dto.bookingDTO.CreateBookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.SearchBookingDTO;
-import co.edu.uniquindio.application.exceptions.BadRequestException;
-import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
-import co.edu.uniquindio.application.exceptions.UnauthorizedException;
-import co.edu.uniquindio.application.exceptions.ValueConflictException;
+import co.edu.uniquindio.application.exceptions.*;
 import co.edu.uniquindio.application.mappers.BookingMapper;
-import co.edu.uniquindio.application.model.Accommodation;
-import co.edu.uniquindio.application.model.Booking;
-import co.edu.uniquindio.application.model.User;
+import co.edu.uniquindio.application.model.*;
 import co.edu.uniquindio.application.model.enums.BookingState;
-import co.edu.uniquindio.application.repositories.AccommodationRepository;
-import co.edu.uniquindio.application.repositories.BookingRepository;
+import co.edu.uniquindio.application.repositories.*;
 import co.edu.uniquindio.application.services.impl.BookingServiceImpl;
+import co.edu.uniquindio.application.services.impl.CurrentUserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -40,185 +31,215 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {
 
-    @Mock BookingMapper bookingMapper;
-    @Mock BookingRepository bookingRepository;
-    @Mock AccommodationRepository accommodationRepository;
+    @Mock private BookingMapper bookingMapper;
+    @Mock private BookingRepository bookingRepository;
+    @Mock private AccommodationRepository accommodationRepository;
+    @Mock private UserRepository userRepository;
+    @Mock private CurrentUserServiceImpl currentUserService;
 
-    @InjectMocks BookingServiceImpl bookingService;
+    @InjectMocks
+    private BookingServiceImpl bookingService;
 
-    private String accommodationId;
+    private Accommodation accommodation;
+    private User user;
+    private Booking booking;
 
     @BeforeEach
-    void init() {
-        accommodationId = UUID.randomUUID().toString();
+    void setUp() {
+        accommodation = new Accommodation();
+        accommodation.setId("acc1");
+
+        user = new User();
+        user.setId("user1");
+
+        booking = new Booking();
+        booking.setId("b1");
+        booking.setUser(user);
+        booking.setAccommodation(accommodation);
+        booking.setBookingState(BookingState.PENDING);
     }
 
-    private CreateBookingDTO makeCreateDto(LocalDateTime in, LocalDateTime out, int guests){
-        // tu record CreateBookingDTO(in, out, guests)
-        return new CreateBookingDTO(in, out, guests);
+    // ---------------- CREATE ----------------
+
+    @Test
+    void create_WhenValid_ShouldSaveBooking() throws Exception {
+        LocalDateTime checkIn = LocalDateTime.now().plusDays(2);
+        LocalDateTime checkOut = LocalDateTime.now().plusDays(4);
+        CreateBookingDTO dto = new CreateBookingDTO(checkIn, checkOut, 2);
+
+        when(bookingRepository.existsOverlappingBooking(anyString(), any(), any())).thenReturn(false);
+        when(accommodationRepository.findById("acc1")).thenReturn(Optional.of(accommodation));
+        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
+
+        Booking mockBooking = new Booking();
+        when(bookingMapper.toEntity(dto, accommodation, user)).thenReturn(mockBooking);
+
+        bookingService.create("acc1", "user1", dto);
+
+        verify(bookingRepository).save(mockBooking);
     }
 
-    private Accommodation makeAccommodationWithOwner(){
-        Accommodation a = new Accommodation();
-        a.setId(accommodationId);
-        User owner = new User();
-        owner.setId(UUID.randomUUID().toString());
-        a.setUser(owner);
-        return a;
+    @Test
+    void create_WhenCheckInInPast_ShouldThrowBadRequest() {
+        CreateBookingDTO dto = new CreateBookingDTO(LocalDateTime.now().minusDays(1),
+                LocalDateTime.now(), 2);
+        assertThrows(BadRequestException.class, () -> bookingService.create("acc1", "user1", dto));
     }
 
-    private Booking makeBooking(LocalDateTime in, BookingState state){
+    @Test
+    void create_WhenCheckInAfterCheckOut_ShouldThrowBadRequest() {
+        LocalDateTime checkIn = LocalDateTime.now().plusDays(5);
+        LocalDateTime checkOut = LocalDateTime.now().plusDays(3);
+        CreateBookingDTO dto = new CreateBookingDTO(checkIn, checkOut, 2);
+        assertThrows(BadRequestException.class, () -> bookingService.create("acc1", "user1", dto));
+    }
+
+    @Test
+    void create_WhenDatesOverlap_ShouldThrowValueConflict() {
+        LocalDateTime checkIn = LocalDateTime.now().plusDays(2);
+        LocalDateTime checkOut = LocalDateTime.now().plusDays(5);
+        CreateBookingDTO dto = new CreateBookingDTO(checkIn, checkOut, 2);
+        when(bookingRepository.existsOverlappingBooking(anyString(), any(), any())).thenReturn(true);
+
+        assertThrows(ValueConflictException.class, () -> bookingService.create("acc1", "user1", dto));
+    }
+
+    @Test
+    void create_WhenAccommodationNotFound_ShouldThrowNotFound() {
+        LocalDateTime checkIn = LocalDateTime.now().plusDays(2);
+        LocalDateTime checkOut = LocalDateTime.now().plusDays(5);
+        CreateBookingDTO dto = new CreateBookingDTO(checkIn, checkOut, 2);
+        when(bookingRepository.existsOverlappingBooking(anyString(), any(), any())).thenReturn(false);
+        when(accommodationRepository.findById("acc1")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> bookingService.create("acc1", "user1", dto));
+    }
+
+    @Test
+    void create_WhenUserNotFound_ShouldThrowNotFound() {
+        LocalDateTime checkIn = LocalDateTime.now().plusDays(2);
+        LocalDateTime checkOut = LocalDateTime.now().plusDays(5);
+        CreateBookingDTO dto = new CreateBookingDTO(checkIn, checkOut, 2);
+        when(bookingRepository.existsOverlappingBooking(anyString(), any(), any())).thenReturn(false);
+        when(accommodationRepository.findById("acc1")).thenReturn(Optional.of(accommodation));
+        when(userRepository.findById("user1")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> bookingService.create("acc1", "user1", dto));
+    }
+
+    // ---------------- DELETE ----------------
+
+    @Test
+    void delete_WhenValidPendingAndBefore48Hours_ShouldCancelBooking() throws Exception {
+        booking.setBookingState(BookingState.PENDING);
+        booking.setCheckIn(LocalDateTime.now().plusDays(3));
+
+        when(bookingRepository.findById("b1")).thenReturn(Optional.of(booking));
+        when(currentUserService.getCurrentUser()).thenReturn("user1");
+
+        bookingService.delete("b1");
+
+        assertEquals(BookingState.CANCELED, booking.getBookingState());
+        verify(bookingRepository).save(booking);
+    }
+
+    @Test
+    void delete_WhenBookingNotFound_ShouldThrowNotFound() {
+        when(bookingRepository.findById("b1")).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> bookingService.delete("b1"));
+    }
+
+    @Test
+    void delete_WhenUserDoesNotOwnBooking_ShouldThrowForbidden() {
+        booking.setUser(new User());
+        booking.getUser().setId("otherUser");
+
+        when(bookingRepository.findById("b1")).thenReturn(Optional.of(booking));
+        when(currentUserService.getCurrentUser()).thenReturn("user1");
+
+        assertThrows(ForbiddenException.class, () -> bookingService.delete("b1"));
+    }
+
+    @Test
+    void delete_WhenWithin48Hours_ShouldThrowValueConflict() {
+        booking.setCheckIn(LocalDateTime.now().plusHours(24));
+        booking.setBookingState(BookingState.PENDING);
+
+        when(bookingRepository.findById("b1")).thenReturn(Optional.of(booking));
+        when(currentUserService.getCurrentUser()).thenReturn("user1");
+
+        assertThrows(ValueConflictException.class, () -> bookingService.delete("b1"));
+    }
+
+    @Test
+    void delete_WhenBookingNotPending_ShouldThrowUnauthorized() {
+        booking.setBookingState(BookingState.COMPLETED);
+
+        when(bookingRepository.findById("b1")).thenReturn(Optional.of(booking));
+        when(currentUserService.getCurrentUser()).thenReturn("user1");
+
+        assertThrows(UnauthorizedException.class, () -> bookingService.delete("b1"));
+    }
+
+    // ---------------- LIST BOOKINGS ----------------
+
+    @Test
+    void listBookings_WhenAccommodationValid_ShouldReturnList() throws Exception {
+        Accommodation acc = new Accommodation();
+        acc.setId("acc1");
+
+        when(accommodationRepository.findById("acc1")).thenReturn(Optional.of(acc));
         Booking b = new Booking();
-        b.setId(UUID.randomUUID().toString());
-        b.setAccommodation(makeAccommodationWithOwner());
-        b.setUser(b.getAccommodation().getUser());
-        b.setBookingState(state);
-        b.setCheckIn(in);
-        b.setCheckOut(in.plusDays(1));
-        b.setGuest_number(2);
-        b.setCreatedAt(LocalDateTime.now());
-        return b;
-    }
+        Page<Booking> page = new PageImpl<>(List.of(b));
 
-    // ---------- create()
+        when(bookingRepository.findBookingsByAccommodationWithFilters(eq("acc1"), any(), any(Pageable.class)))
+                .thenReturn(page);
+        when(bookingMapper.toBookingDTO(b)).thenReturn(new BookingDTO(BookingState.PENDING, null,
+                LocalDate.now(), LocalDate.now().plusDays(2), 2));
 
-    @Test
-    @DisplayName("create(): checkIn en pasado -> BadRequest")
-    void createFailsWhenCheckInPast() {
-        CreateBookingDTO dto = makeCreateDto(LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 2);
-        assertThrows(BadRequestException.class, () -> bookingService.create(accommodationId, dto));
-    }
+        List<BookingDTO> result = bookingService.listBookings("acc1", 0,
+                new SearchBookingDTO(null, null, null, null));
 
-    @Test
-    @DisplayName("create(): checkIn > checkOut -> BadRequest")
-    void createFailsWhenCheckInAfterCheckOut() {
-        LocalDateTime in = LocalDateTime.now().plusDays(3);
-        CreateBookingDTO dto = makeCreateDto(in, in.minusHours(1), 2);
-        assertThrows(BadRequestException.class, () -> bookingService.create(accommodationId, dto));
-    }
-
-    @Test
-    @DisplayName("create(): fechas traslapadas -> ValueConflict")
-    void createFailsWhenOverlapping() throws Exception {
-        LocalDateTime in = LocalDateTime.now().plusDays(2);
-        LocalDateTime out = in.plusDays(2);
-        when(bookingRepository.existsOverlappingBooking(eq(accommodationId), any(), any()))
-                .thenReturn(true);
-
-        CreateBookingDTO dto = makeCreateDto(in, out, 2);
-        assertThrows(ValueConflictException.class, () -> bookingService.create(accommodationId, dto));
-    }
-
-    @Test
-    @DisplayName("create(): alojamiento inexistente -> NotFound")
-    void createFailsWhenAccommodationMissing() {
-        LocalDateTime in = LocalDateTime.now().plusDays(2);
-        LocalDateTime out = in.plusDays(1);
-        when(bookingRepository.existsOverlappingBooking(anyString(), any(), any())).thenReturn(false);
-        when(accommodationRepository.findById(accommodationId)).thenReturn(Optional.empty());
-
-        CreateBookingDTO dto = makeCreateDto(in, out, 2);
-        assertThrows(ResourceNotFoundException.class, () -> bookingService.create(accommodationId, dto));
-    }
-
-    @Test
-    @DisplayName("create(): ok -> mapea y guarda")
-    void createSuccessSavesBooking() throws Exception {
-        LocalDateTime in = LocalDateTime.now().plusDays(2);
-        LocalDateTime out = in.plusDays(1);
-        when(bookingRepository.existsOverlappingBooking(anyString(), any(), any())).thenReturn(false);
-        Accommodation acc = makeAccommodationWithOwner();
-        when(accommodationRepository.findById(accommodationId)).thenReturn(Optional.of(acc));
-
-        Booking mapped = makeBooking(in, BookingState.PENDING);
-        when(bookingMapper.toEntity(any(), eq(acc), eq(acc.getUser()))).thenReturn(mapped);
-
-        CreateBookingDTO dto = makeCreateDto(in, out, 2);
-        bookingService.create(accommodationId, dto);
-
-        ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
-        verify(bookingRepository).save(captor.capture());
-        assertEquals(mapped.getId(), captor.getValue().getId());
-    }
-
-    // ---------- delete()
-
-    @Test
-    @DisplayName("delete(): reserva inexistente -> NotFound")
-    void deleteFailsWhenBookingMissing() {
-        when(bookingRepository.findById("x")).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> bookingService.delete("x"));
-    }
-
-    @Test
-    @DisplayName("delete(): estado ≠ PENDING -> Unauthorized")
-    void deleteFailsWhenNotPending() {
-        Booking b = makeBooking(LocalDateTime.now().plusDays(3), BookingState.COMPLETED);
-        when(bookingRepository.findById(b.getId())).thenReturn(Optional.of(b));
-        assertThrows(UnauthorizedException.class, () -> bookingService.delete(b.getId()));
-    }
-
-    @Test
-    @DisplayName("delete(): < 48h -> ValueConflict")
-    void deleteFailsWhenLessThan48h() {
-        Booking b = makeBooking(LocalDateTime.now().plusHours(47), BookingState.PENDING);
-        when(bookingRepository.findById(b.getId())).thenReturn(Optional.of(b));
-        assertThrows(ValueConflictException.class, () -> bookingService.delete(b.getId()));
-    }
-
-    @Test
-    @DisplayName("delete(): ≥ 48h -> CANCELED y guarda")
-    void deleteSuccessWhen48hOrMore() throws Exception {
-        Booking b = makeBooking(LocalDateTime.now().plusHours(49), BookingState.PENDING);
-        when(bookingRepository.findById(b.getId())).thenReturn(Optional.of(b));
-
-        bookingService.delete(b.getId());
-
-        assertEquals(BookingState.CANCELED, b.getBookingState());
-        verify(bookingRepository).save(b);
-    }
-
-    // ---------- listBookings()
-
-    @Test
-    @DisplayName("listBookings(): guests <= 0 -> BadRequest")
-    void listBookingsFailsWhenInvalidGuests() {
-        SearchBookingDTO filters = new SearchBookingDTO(null, null, null, 0);
-        when(accommodationRepository.findById(accommodationId)).thenReturn(Optional.of(makeAccommodationWithOwner()));
-        assertThrows(BadRequestException.class, () -> bookingService.listBookings(accommodationId, 0, filters));
-    }
-
-    @Test
-    @DisplayName("listBookings(): alojamiento inexistente -> NotFound")
-    void listBookingsFailsWhenAccommodationMissing() {
-        SearchBookingDTO filters = new SearchBookingDTO(null, null, null, null);
-        when(accommodationRepository.findById(accommodationId)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> bookingService.listBookings(accommodationId, 0, filters));
-    }
-
-    @Test
-    @DisplayName("listBookings(): ok -> mapea y devuelve")
-    void listBookingsReturnsDtos() throws Exception {
-        SearchBookingDTO filters = new SearchBookingDTO(null, null, null, null);
-        when(accommodationRepository.findById(accommodationId)).thenReturn(Optional.of(makeAccommodationWithOwner()));
-
-        Booking booking = makeBooking(LocalDateTime.now().plusDays(10), BookingState.PENDING);
-        when(bookingRepository.findBookingsByAccommodationWithFilters(eq(accommodationId), eq(filters), any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(booking)));
-
-        when(bookingMapper.toBookingDTO(any(Booking.class))).thenReturn(
-                new BookingDTO(
-                        "Reserva prueba",              // title
-                        null,                          // State (puede ser null)
-                        null,                          // UserDTO
-                        booking.getCheckIn().toLocalDate(),
-                        booking.getCheckOut().toLocalDate(),
-                        booking.getGuest_number()
-                )
-        );
-
-        var result = bookingService.listBookings(accommodationId, 0, filters);
         assertEquals(1, result.size());
-        verify(bookingMapper, times(1)).toBookingDTO(any());
+    }
+
+    @Test
+    void listBookings_WhenAccommodationNotFound_ShouldThrow() {
+        when(accommodationRepository.findById("acc1")).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class,
+                () -> bookingService.listBookings("acc1", 0, new SearchBookingDTO(null, null, null, null)));
+    }
+
+    @Test
+    void listBookings_WhenGuestNumberInvalid_ShouldThrowBadRequest() {
+        SearchBookingDTO dto = new SearchBookingDTO(null, null, null, 0);
+        assertThrows(BadRequestException.class,
+                () -> bookingService.listBookings("acc1", 0, dto));
+    }
+
+    // ---------------- LIST BOOKINGS USER ----------------
+
+    @Test
+    void listBookingsUser_WhenUserValid_ShouldReturnList() throws Exception {
+        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
+        Booking b = new Booking();
+        Page<Booking> page = new PageImpl<>(List.of(b));
+
+        when(bookingRepository.findBookingsByUserWithFilters(eq("user1"), any(), any(Pageable.class)))
+                .thenReturn(page);
+        when(bookingMapper.toBookingDTO(b)).thenReturn(new BookingDTO(BookingState.PENDING, null,
+                LocalDate.now(), LocalDate.now().plusDays(2), 2));
+
+        List<BookingDTO> result = bookingService.listBookingsUser("user1", 0,
+                new SearchBookingDTO(null, null, null, null));
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void listBookingsUser_WhenUserNotFound_ShouldThrow() {
+        when(userRepository.findById("user1")).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class,
+                () -> bookingService.listBookingsUser("user1", 0, new SearchBookingDTO(null, null, null, null)));
     }
 }

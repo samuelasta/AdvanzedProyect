@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -27,12 +28,15 @@ class BookingControllerWebTest {
 
     @Autowired private MockMvc mvc;
 
-    @MockBean private BookingService bookingService;
+    @MockitoBean
+    private BookingService bookingService;
 
     @Test
     void create_returns201() throws Exception {
-        // tu BookingService.create tiene 2 parámetros: (id, CreateBookingDTO)
-        Mockito.doNothing().when(bookingService).create(eq("acc-1"), any(CreateBookingDTO.class));
+        Mockito.doNothing()
+                .when(bookingService)
+                .create(eq("acc-1"), eq("user-1"), any(CreateBookingDTO.class));
+
 
         String body = """
           {"check_in":"%s","check_out":"%s","guest_number":2}
