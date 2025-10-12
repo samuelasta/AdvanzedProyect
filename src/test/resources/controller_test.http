@@ -10,7 +10,7 @@ Authorization: Bearer {{token}}
 //cambiar contraseña
 
 {
-  "old_password": "perroGato123",
+  "old_password": "sofialamejor",
   "new_password": "3435555555"
 }
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 {
   "email": "samuela.castanom@uqvirtual.edu.co",
-  "password": "perroGato123"
+  "password": "3435555555"
 }
 
 > {% client.global.set("token", response.body.message.token); %}
@@ -57,7 +57,7 @@ Content-Type: application/json
 //cambiar contraseña olvidada
 
 {
-  "code": "966152",
+  "code": "101625",
   "email": "samuela.castanom@uqvirtual.edu.co",
   "newPassword": "sofialamejor"
 }
@@ -71,7 +71,7 @@ Content-Type: application/json
 {
   "name": "samuel",
   "surname": "andres",
-  "email": "samuela.castanom@uqvirtual.edu.co",
+  "email": "karen@gmail.com",
   "phone": "31934232",
   "birthDate": "2005-02-23",
   "password": "perroGato123",
@@ -102,25 +102,25 @@ Authorization: Bearer {{token}}
 //eliminar usuario
 
 {
-  "password": "234565"
+  "password": "perroGato123"
 }
 
 
 ###
-GET http://localhost:8080/api/users/1e89fcc2-091b-4343-b31d-e33ea15f46ab
+GET http://localhost:8080/api/users/90071d98-5ba0-4022-868a-3692851e4b15
 Authorization: Bearer {{token}}
 // obtener el usuario (ver su perfil)
 
 
 ###
-POST http://localhost:8080/api/bookings/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9
+POST http://localhost:8080/api/bookings/9c5536da-2e6c-4291-83ec-fe00324016b2
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //crear una reserva
 
 {
-  "checkIn": "2025-11-29T14:00:00",
-  "checkOut": "2025-11-30T11:30:00",
+  "checkIn": "2026-11-29T14:00:00",
+  "checkOut": "2026-11-30T11:30:00",
   "guest_number": 2
 }
 
@@ -128,18 +128,19 @@ Authorization: Bearer {{token}}
 ###
 GET http://localhost:8080/api/users/me/bookings/0
 Content-Type: application/json
+Authorization: Bearer {{token}}
 // ver el listado de reservas aplicando filtros
 
 {
-  "state": "COMPLETED",
-  "checkIn": "2025-09-14T14:00:00",
-  "checkOut": "2025-09-15T11:30:00",
-  "guest_number": 2
+  "state": "CANCELED",
+  "checkIn": null,
+  "checkOut": null,
+  "guest_number": null
 }
 
 
 ###
-DELETE http://localhost:8080/api/bookings/6d93c2c4-975a-4540-b722-4c68c40fd59b
+DELETE http://localhost:8080/api/bookings/7f2ee6e0-da76-40a2-9b50-565c91bc5b58
 Authorization: Bearer {{token}}
 //eliminar cancelar reserva
 
@@ -150,13 +151,13 @@ Content-Type: application/json
 // ver la lista de alojamientos disponibles (aplicando filtros y paginación)
 
 {
-  "city": "Armenia",
-  "checkIn": "2025-10-15T15:00:00",
-  "checkOut": "2025-10-20T11:00:00",
-  "guest_number": 3,
-  "minimum": 80000.0,
-  "maximum": 250000.0,
-  "list": ["WIFI", "KITCHEN"]
+  "city": null,
+  "checkIn": null,
+  "checkOut": null,
+  "guest_number": null,
+  "minimum": null,
+  "maximum": null,
+  "list": null
 }
 
 
@@ -167,30 +168,31 @@ Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
-  "title": "satabaya",
-  "description": "Hermosa casa frente al mar, equipada con todas las comodidades para unas vacaciones inolvidables. Incluye piscina, terraza y acceso directo a la playa.",
-  "price": 150.0,
+  "title": "Loft Boutique Bogotá",
+  "description": "Moderno loft en Chapinero con diseño minimalista, cerca de restaurantes y vida nocturna. Ideal para parejas o viajeros de negocios.",
+  "price": 180.0,
   "picsUrl": [
-    "https://example.com/foto1.jpg",
-    "https://example.com/foto2.jpg"
+    "https://example.com/loft-bogota1.jpg",
+    "https://example.com/loft-bogota2.jpg"
   ],
-  "accommodationType": "HOUSE",
-  "capacity": 6,
+  "accommodationType": "APARTMENT",
+  "capacity": 2,
   "country": "Colombia",
-  "department": "Atlántico",
-  "city": "Barranquilla",
-  "neighborhood": "Prado",
-  "street": "Calle 84 #45-32",
-  "postalCode": "AB12CD34",
-  "amenities": [
-    "WIFI"
-  ],
-  "latitude": 11.9685,
-  "longitude": -76.7813
+  "department": "Cundinamarca",
+  "city": "Bogotá",
+  "neighborhood": "Chapinero",
+  "street": "Carrera 7 #65-20",
+  "postalCode": "110231",
+  "amenities": ["WIFI", "FREEZER", "PETS_ALLOWED", "WORKSPACE"],
+  "latitude": 4.6486,
+  "longitude": -74.0639
 }
 
+
+
+
 ###
-PUT http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d
+PUT http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0fc
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //actualizar, editar alojamiento
@@ -217,23 +219,23 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE http://localhost:8080/api/accommodations/2b5a6d6d-1c42-4dc4-8208-09000ef22b97
+DELETE http://localhost:8080/api/accommodations/d0ba471b-64ff-45b9-a09c-dc6693347c1c
 Authorization: Bearer {{token}}
 // eliminar un alojamiento (cambiar su estado)
 
 
 ###
-GET http://localhost:8080/api/accommodations/f8f6866e-10b4-4a06-91ff-1fa2eafb99d3/amenities
+GET http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0fc/amenities
 // lista de todos los servicios del alojamiento
 
 
 ###
-GET http://localhost:8080/api/accommodations/adee0a6e-e335-42b3-986b-c4628d98420d/comments/1
+GET http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0fc/comments/0
 // lista de los comentarios del alojamiento
 
 
 ###
-POST http://localhost:8080/api/accommodations/238c42c0-b003-4b4e-ab0f-113314514d1b/comments
+POST http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0fc/comments
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // crear un comentario a un alojamiento (reserva stado == finalizada)
@@ -245,12 +247,12 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9/bookings/0
+GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022acf/bookings/0
 Content-Type: application/json
 // ver el listado de reservas que tiene el alojamiento
 
 {
-  "state": null,
+  "state": "PENDING",
   "checkIn": null,
   "checkOut": null,
   "guest_number": null
@@ -258,7 +260,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/api/accommodations/9ad3e5f3-22a4-4b76-87c1-3e177b6236c9/stats
+GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022acf/stats
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // ver estadisticas del alojamiento
@@ -270,7 +272,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/da295901-aea6-4ccf-a3c3-0b63f0e3ef14/detail
+GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022acf/detail
 // ver el alojamiento (GET)
 
 
@@ -283,7 +285,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST http://localhost:8080/api/comments/ba671770-bd8e-45e4-a9e5-b576a121bc1a/reply
+POST http://localhost:8080/api/comments/3a61e0b4-7a23-4d7d-b53d-85aa527a455f/reply
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //reponder un comentario
@@ -294,13 +296,13 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST http://localhost:8080/api/favorites/e3261109-b354-4415-8371-972211e43d69
+POST http://localhost:8080/api/favorites/0b20d021-8fbe-4dd2-afef-09dc483ff0fc
 Authorization: Bearer {{token}}
 // para agregar un alojamiento a favoritos
 
 
 ###
-DELETE http://localhost:8080/api/favorites/da295901-aea6-4ccf-a3c3-0b63f0e3ef14
+DELETE http://localhost:8080/api/favorites/0b20d021-8fbe-4dd2-afef-09dc483ff0fc
 Authorization: Bearer {{token}}
 // para eliminar un alojamiento de favoritos
 
