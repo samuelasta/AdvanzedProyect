@@ -126,6 +126,7 @@ public class UserServiceImpl implements UserService {
 
         User user = optionalUser.get();
         user.setState(State.INACTIVE);
+
         userRepository.save(user);
     }
 
