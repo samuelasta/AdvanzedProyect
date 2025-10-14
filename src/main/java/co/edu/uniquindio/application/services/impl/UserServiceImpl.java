@@ -143,6 +143,10 @@ public class UserServiceImpl implements UserService {
 
         User user = optionalUser.get();
 
+        if(user.getState() == State.INACTIVE){
+            throw new ResourceNotFoundException("Usuario no encontrado");
+        }
+
         // Verificar si la contraseña es correcta usando el PasswordEncoder
         if(!passwordEncoder.matches(loginDTO.password(), user.getPassword())){
             throw new ResourceNotFoundException("El usuario no existe");
