@@ -59,6 +59,10 @@ public class BookingServiceImpl implements BookingService {
         Accommodation accommodation = accommodationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el alojamiento"));
 
+        if(accommodation.getState() == State.INACTIVE){
+            throw new ResourceNotFoundException("No existe el alojamiento");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario"));
 
