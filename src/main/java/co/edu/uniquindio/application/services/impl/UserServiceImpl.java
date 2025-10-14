@@ -187,4 +187,5 @@ public class UserServiceImpl implements UserService {
         var passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
+    
 }

@@ -42,8 +42,6 @@ public class JWTFilter extends OncePerRequestFilter{
             String username = payload.getPayload().getSubject();
 
 
-
-
             // Si el usuario no está autenticado, crear un nuevo objeto de autenticación
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
