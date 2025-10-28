@@ -74,11 +74,11 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.save(booking);
 
         // notificamos al host y al huesped
-        emailService.sendBookingMailHost(new SendEmailDTO("Felicidades, tu alojamiento acaba de ser reservado",
+        emailService.sendMail(new SendEmailDTO("Felicidades, tu alojamiento acaba de ser reservado",
                 "tu alojamiento "+accommodation.getTitle()+ " acaba de ser reservado desde: "+booking.getCheckIn()+
                         " hasta: "+booking.getCheckOut()+ " por "+booking.getUser().getName() , accommodation.getUser().getEmail() ));
 
-        emailService.sendBookingMailGuest(new SendEmailDTO("Felicidades, acabas de realizar una reserva ",
+        emailService.sendMail(new SendEmailDTO("Felicidades, acabas de realizar una reserva ",
                 "Recerva confirmada con fecha desde: "+ booking.getCheckIn()+ " hasta: "+ booking.getCheckOut()
                 +" en el alojamiento: "+ booking.getAccommodation().getTitle()+ " ubicado en: " + booking.getAccommodation().getLocation().getCity()
                 , booking.getUser().getEmail()));
@@ -87,6 +87,7 @@ public class BookingServiceImpl implements BookingService {
     // para cancelar una reserva
     @Override
     public void delete(String id) throws Exception {
+
         Optional<Booking> booking = bookingRepository.findById(id);
         if (booking.isEmpty()) {
             throw new ResourceNotFoundException("No existe esta reserva");

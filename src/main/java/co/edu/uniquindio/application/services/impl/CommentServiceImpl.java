@@ -2,6 +2,7 @@ package co.edu.uniquindio.application.services.impl;
 
 import co.edu.uniquindio.application.dto.commentDTO.CommentDTO;
 import co.edu.uniquindio.application.dto.commentDTO.CreateCommentDTO;
+import co.edu.uniquindio.application.dto.externalServiceDTO.SendEmailDTO;
 import co.edu.uniquindio.application.exceptions.ForbiddenException;
 import co.edu.uniquindio.application.exceptions.ResourceNotFoundException;
 import co.edu.uniquindio.application.mappers.CommentMapper;
@@ -16,6 +17,7 @@ import co.edu.uniquindio.application.repositories.BookingRepository;
 import co.edu.uniquindio.application.repositories.CommentRepository;
 import co.edu.uniquindio.application.repositories.UserRepository;
 import co.edu.uniquindio.application.services.CommentService;
+import co.edu.uniquindio.application.services.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +39,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
+    private final EmailService emailService;
 
     //devuelve todos los comentarios de los alojamientos
     @Override
@@ -95,6 +98,16 @@ public class CommentServiceImpl implements CommentService {
 
         accommodationRepository.save(booking.getAccommodation());
 
+        // notificamos al host y a quien comenta
+        emailService.sendMail(new SendEmailDTO("Nueva reseña en tu alojamiento", booking.getAccommodation().getUser().getName()+
+                " acabas de recibir una nueva reseña en tu alojamiento: "+ booking.getAccommodation().getTitle()+ " ubicado en: "+
+                booking.getAccommodation().getLocation().getCity()+ " de parte de: "+ comment.getUser().getName(),
+                booking.getAccommodation().getUser().getEmail()));
+
+        emailService.sendMail(new SendEmailDTO(" Reseña creada exitosamente",
+                "Acabas de realizar una reseña en el alojamiento: "+ comment.getAccommodation().getTitle()+ " de: "+
+                 comment.getAccommodation().getUser().getName(), comment.getUser().getEmail()));
         }
+
 
 }

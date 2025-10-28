@@ -36,42 +36,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    @Override
-    public void sendBookingMailHost(SendEmailDTO sendEmailDTO) throws Exception {
 
-        Email email = EmailBuilder.startingBlank()
-                .from("no_reply@bookings.com")
-                .to(sendEmailDTO.recipient())
-                .withSubject(sendEmailDTO.subject())
-                .withPlainText(sendEmailDTO.body())
-                .buildEmail();
-        try(Mailer mailer = MailerBuilder
-                .withSMTPServer("smtp.gmail.com", 587, "nataliaavanzadaprogramacion@gmail.com", "bzeakckafcqoyrgi")
-                .withTransportStrategy(TransportStrategy.SMTP_TLS)
-                .withDebugLogging(true)
-                .buildMailer()) {
-            mailer.sendMail(email);
-        }
     }
 
-    @Override
-    public void sendBookingMailGuest(SendEmailDTO sendEmailDTO) throws Exception {
-
-        Email email = EmailBuilder.startingBlank()
-                .from("no_reply@bookings.com")
-                .to(sendEmailDTO.recipient())
-                .withSubject(sendEmailDTO.subject())
-                .withPlainText(sendEmailDTO.body())
-                .buildEmail();
-        try(Mailer mailer = MailerBuilder
-                .withSMTPServer("smtp.gmail.com", 587, "nataliaavanzadaprogramacion@gmail.com", "bzeakckafcqoyrgi")
-                .withTransportStrategy(TransportStrategy.SMTP_TLS)
-                .withDebugLogging(true)
-                .buildMailer()) {
-            mailer.sendMail(email);
-        }
-    }
-
-
-}
 

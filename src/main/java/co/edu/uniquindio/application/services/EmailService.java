@@ -6,7 +6,5 @@ import co.edu.uniquindio.application.model.User;
 
 public interface EmailService {
     void sendMail(SendEmailDTO sendEmailDTO) throws Exception;
-    void sendBookingMailHost(SendEmailDTO sendEmailDTO) throws Exception;
-    void sendBookingMailGuest(SendEmailDTO sendEmailDTO) throws Exception;
 
 }
