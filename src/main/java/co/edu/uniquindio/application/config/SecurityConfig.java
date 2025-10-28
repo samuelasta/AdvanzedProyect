@@ -53,7 +53,7 @@ public class SecurityConfig {
                                         "/ws-chat/**",        // endpoint WebSocket
                                         "/app/**"             // destino STOMP del cliente
                                 ).permitAll()
-                                .requestMatchers("api/favorites/**").hasAnyRole("USER", "HOST")
+                                .requestMatchers("/api/favorites/**").hasAnyRole("USER", "HOST")
                         .anyRequest().authenticated()
                         //.requestMatchers("/api/admin/**").hasRole("ADMIN")
                       //  .requestMatchers("/api/bookings/**").hasAnyRole("USER", "HOST")

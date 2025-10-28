@@ -14,6 +14,7 @@ import java.util.*;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ResponseDTO<String>> noResourceFoundExceptionHandler(NoResourceFoundException ex){
         return ResponseEntity.status(404).body( new ResponseDTO<>(true, "El recurso solicitado no existe") );

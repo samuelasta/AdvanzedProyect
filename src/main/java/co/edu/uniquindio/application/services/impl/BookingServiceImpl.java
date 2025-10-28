@@ -3,6 +3,7 @@ package co.edu.uniquindio.application.services.impl;
 import co.edu.uniquindio.application.dto.bookingDTO.BookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.CreateBookingDTO;
 import co.edu.uniquindio.application.dto.bookingDTO.SearchBookingDTO;
+import co.edu.uniquindio.application.dto.externalServiceDTO.SendEmailDTO;
 import co.edu.uniquindio.application.exceptions.*;
 import co.edu.uniquindio.application.mappers.BookingMapper;
 import co.edu.uniquindio.application.model.Accommodation;
@@ -35,11 +36,12 @@ public class BookingServiceImpl implements BookingService {
     private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
     private final CurrentUserServiceImpl currentUserService;
+    private final EmailServiceImpl emailService;
 
     @Override
     public void create(String id, String userId, CreateBookingDTO createBookingDTO) throws Exception{
 
-        // vreifica que el checkIn no esté en pasado
+        // verifica que el checkIn no esté en pasado
        if(createBookingDTO.checkIn().isBefore(LocalDateTime.now())){
            throw new BadRequestException("el checkIn es invalido");
        }
@@ -71,8 +73,17 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingMapper.toEntity(createBookingDTO, accommodation, user);
         bookingRepository.save(booking);
 
-    }
+        // notificamos al host y al huesped
+        emailService.sendBookingMailHost(new SendEmailDTO("Felicidades, tu alojamiento acaba de ser reservado",
+                "tu alojamiento "+accommodation.getTitle()+ " acaba de ser reservado desde: "+booking.getCheckIn()+
+                        " hasta: "+booking.getCheckOut()+ " por "+booking.getUser().getName() , accommodation.getUser().getEmail() ));
 
+        emailService.sendBookingMailGuest(new SendEmailDTO("Felicidades, acabas de realizar una reserva ",
+                "Recerva confirmada con fecha desde: "+ booking.getCheckIn()+ " hasta: "+ booking.getCheckOut()
+                +" en el alojamiento: "+ booking.getAccommodation().getTitle()+ " ubicado en: " + booking.getAccommodation().getLocation().getCity()
+                , booking.getUser().getEmail()));
+
+    }
     // para cancelar una reserva
     @Override
     public void delete(String id) throws Exception {
