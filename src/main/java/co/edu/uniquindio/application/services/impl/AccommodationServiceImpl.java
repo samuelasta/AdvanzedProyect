@@ -18,6 +18,7 @@ import co.edu.uniquindio.application.model.enums.BookingState;
 import co.edu.uniquindio.application.model.enums.State;
 import co.edu.uniquindio.application.repositories.*;
 import co.edu.uniquindio.application.services.AccommodationService;
+import co.edu.uniquindio.application.services.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationDetailMapper accommodationDetailMapper;
     private final FavoriteRepository favoriteRepository;
     private final GeoUtilsImpl geoUtilsImpl;
+    private final CurrentUserService currentUserService;
 
 
     @Override
@@ -118,7 +120,7 @@ public class AccommodationServiceImpl implements AccommodationService {
           throw new ResourceNotFoundException("No se encontró el alojamiento");
       }
       //me trae todas las reservas del alojamiento cuyo estado sea pendiente
-      Optional<Booking> booking = bookingRepository.findByAccommodationIdAndBookingState(id, BookingState.PENDING);
+      Optional<Booking> booking = bookingRepository.findByAccommodationIdAndBookingStateOrderByCheckInDesc(id, BookingState.PENDING);
       if(booking.isPresent()){
           throw new UnauthorizedException("no puedes eliminar este alojamiento, tiene reservas pendientes");
       }
@@ -184,6 +186,19 @@ public class AccommodationServiceImpl implements AccommodationService {
     //Corregido (pendiente), se debe crear una consulta que dado el id del host, se traiga sus alojamientos.
     @Override
     public List<AccommodationDTO> listAllAccommodationsHost(String id, int page) throws Exception {
+
+        // validar que el usuario que se busca, sea el que hizo la solicitud
+        Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new ResourceNotFoundException("No se encuentra al usuario");
+        }
+
+        // obtenemos el current user
+        String currentUserId = currentUserService.getCurrentUser();
+        if(!currentUserId.equals(user.get().getId())){
+            throw new UnauthorizedException("no tienes permiso para esto");
+        }
+
         Pageable pageable = PageRequest.of(page, 10);
         Page<Accommodation> accommodations = accommodationRepository.getAccommodations(id, pageable);
 

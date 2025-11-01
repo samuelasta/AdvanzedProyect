@@ -47,6 +47,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/users/me/bookings/**").hasAnyRole("USER", "HOST")
                                 .requestMatchers(HttpMethod.GET, "/api/users/*/bookings/**").hasAnyRole("USER", "HOST")
                                 .requestMatchers(HttpMethod.POST, "/api/users/me/bookings/**").hasAnyRole("USER", "HOST")
+                                .requestMatchers(HttpMethod.DELETE, "api/bookings/**").hasAnyRole("USER", "HOST")
 
                                 .requestMatchers(
                                         "/api/auth/**",       // login, registro

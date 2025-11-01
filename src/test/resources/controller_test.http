@@ -34,8 +34,8 @@ Content-Type: application/json
 // login
 
 {
-  "email": "samuela.castanom@uqvirtual.edu.co",
-  "password": "3435555555"
+  "email": "karen@gmail.com",
+  "password": "perroGato123"
 }
 
 > {% client.global.set("token", response.body.message.token); %}
@@ -119,8 +119,8 @@ Authorization: Bearer {{token}}
 //crear una reserva
 
 {
-  "checkIn": "2026-11-29T14:00:00",
-  "checkOut": "2026-11-30T11:30:00",
+  "checkIn": "2026-10-29T14:00:00",
+  "checkOut": "2026-10-30T11:30:00",
   "guest_number": 2
 }
 
@@ -140,7 +140,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-DELETE http://localhost:8080/api/bookings/7f2ee6e0-da76-40a2-9b50-565c91bc5b58
+DELETE http://localhost:8080/api/bookings/86e236e4-16a4-47a8-93ed-1785a25c9eb0
 Authorization: Bearer {{token}}
 //eliminar cancelar reserva
 
@@ -187,8 +187,6 @@ Authorization: Bearer {{token}}
   "latitude": 4.6486,
   "longitude": -74.0639
 }
-
-
 
 
 ###

@@ -41,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
     private final BookingRepository bookingRepository;
     private final EmailService emailService;
 
-    //devuelve todos los comentarios de los alojamientos
+    //devuelve todos los comentarios de los alojamientos //
     @Override
     public List<CommentDTO> listComments(String id, int page) throws Exception {
 
