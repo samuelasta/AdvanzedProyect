@@ -63,8 +63,8 @@ dependencies {
     // para la similitud de texto
     implementation 'org.apache.commons:commons-text:1.10.0'
 
-    // dependendia de mysql
-    implementation 'mysql:mysql-connector-java:8.0.33'
+    // dependendia de Postgresql
+    runtimeOnly 'org.postgresql:postgresql:42.7.8'
 
 }
 
