@@ -151,7 +151,7 @@ Content-Type: application/json
 // ver la lista de alojamientos disponibles (aplicando filtros y paginación)
 
 {
-  "city": null,
+  "city": "Bogotá",
   "checkIn": null,
   "checkOut": null,
   "guest_number": null,
@@ -276,7 +276,7 @@ GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022ac
 
 
 ###
-GET http://localhost:8080/api/users/me/accommodations/host/0
+GET http://localhost:8080/api/users/me/accommodations/host/1
 Authorization: Bearer {{token}}
 // lista los alojamientos del host
 
