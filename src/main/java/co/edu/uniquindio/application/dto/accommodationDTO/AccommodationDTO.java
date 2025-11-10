@@ -9,6 +9,8 @@ public record AccommodationDTO(String id,
                                double price,
                                String photo_url,
                                double average_rating,
-                               String city
+                               String city,
+                               float latitude,
+                               float longitude
                                ) {
 }
