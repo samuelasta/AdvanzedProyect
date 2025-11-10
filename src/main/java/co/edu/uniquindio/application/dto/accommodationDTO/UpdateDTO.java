@@ -22,7 +22,8 @@ public record UpdateDTO(@Size(min = 5, max = 25, message = "El título debe tene
                         @NotBlank String postalCode,
                         @NotEmpty List<String> pics_url,
                         @NotEmpty List<Amenities> amenities,
-                        @NotNull AccommodationType accommodationType
+                        @NotNull AccommodationType accommodationType,
+                        @NotNull float latitude,  @NotNull float longitude
 
                         ) {
 }
