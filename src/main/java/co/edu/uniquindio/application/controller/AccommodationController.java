@@ -20,7 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/accommodations")
@@ -104,6 +106,12 @@ public class AccommodationController {
     public ResponseEntity<ResponseDTO<AccommodationDetailDTO>> get(@PathVariable String id) throws Exception {
         AccommodationDetailDTO accommodationDetailDTO = accommodationService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationDetailDTO));
+    }
+
+    @GetMapping("/amenities")
+    public ResponseEntity<ResponseDTO<List<Amenities>>> avaliableAccommodations(){
+        List<Amenities> amenities = Arrays.asList(Amenities.values());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, amenities));
     }
 
 }
