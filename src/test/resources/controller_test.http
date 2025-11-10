@@ -29,7 +29,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST http://localhost:8080/api/auth/login
+POST https://advanzedproyect-production.up.railway.app/api/auth/login
 Content-Type: application/json
 // login
 
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/api/auth
+POST https://advanzedproyect-production.up.railway.app/api/auth
 Content-Type: application/json
 //registrarse
 
