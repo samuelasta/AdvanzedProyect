@@ -14,6 +14,8 @@ public interface ShowAccommodationMapper {
     @Mapping(target = "photo_url", expression = "java(accommodation.getPics_url() != null && !accommodation.getPics_url().isEmpty() ? accommodation.getPics_url().get(0) : null)")
     @Mapping(target = "city", source = "accommodation.location.city")
     @Mapping(target = "average_rating", source = "averageRatings")
+    @Mapping(source = "location.coordinates.latitude", target = "latitude")
+    @Mapping(source = "location.coordinates.longitude", target = "longitude")
     AccommodationDTO toAccommodationDTO(Accommodation accommodation);
 
 
