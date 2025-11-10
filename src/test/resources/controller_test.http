@@ -27,7 +27,7 @@ Authorization: Bearer {{token}}
     "https://cdn.example.com/docs/id_reverso.pdf"
   ]
 }
-
+// POST https: //advanzedproyect-production.up.railway.app/api/auth/login
 ###
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/api/auth
+POST https://advanzedproyect-production.up.railway.app/api/auth
 Content-Type: application/json
 //registrarse
 
@@ -213,7 +213,9 @@ Authorization: Bearer {{token}}
   "amenities": [
     "WIFI"
   ],
-  "accommodationType": "HOUSE"
+  "accommodationType": "HOUSE",
+  "latitude": 4.6486,
+  "longitude": -74.0639
 }
 
 ###
@@ -308,7 +310,8 @@ Authorization: Bearer {{token}}
 GET http://localhost:8080/api/favorites/0
 Authorization: Bearer {{token}}
 
-
+###
+GET http://localhost:8080/api/accommodations/amenities
 
 
 
