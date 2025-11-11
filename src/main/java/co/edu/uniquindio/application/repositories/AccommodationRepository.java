@@ -17,8 +17,8 @@ import java.util.Optional;
 @Repository
 public interface AccommodationRepository extends JpaRepository<Accommodation, String> {
 
-    @Query("select p from Accommodation p where p.user.id = :idUser")
-    Page<Accommodation> getAccommodations(String idUser, Pageable pageable);
+    @Query("select p from Accommodation p where p.user.id = :idUser AND p.state <> co.edu.uniquindio.application.model.enums.State.INACTIVE")
+    Page<Accommodation> getAccommodations(@Param("idUser") String idUser, Pageable pageable);
 
     List<Accommodation> findByState(State state);
 

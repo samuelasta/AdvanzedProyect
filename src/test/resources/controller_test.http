@@ -278,7 +278,7 @@ GET http://localhost:8080/api/accommodations/4ec51841-228b-4c53-a766-20ec532994e
 
 
 ###
-GET http://localhost:8080/api/users/me/accommodations/host/1
+GET http://localhost:8080/api/users/me/accommodations/host/0
 Authorization: Bearer {{token}}
 // lista los alojamientos del host
 
