@@ -146,12 +146,12 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/0
+POST http://localhost:8080/api/accommodations/0
 Content-Type: application/json
 // ver la lista de alojamientos disponibles (aplicando filtros y paginación)
 
 {
-  "city": "Bogotá",
+  "city": null,
   "checkIn": null,
   "checkOut": null,
   "guest_number": null,
@@ -168,29 +168,29 @@ Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
-  "title": "Loft Boutique Bogotá",
-  "description": "Moderno loft en Chapinero con diseño minimalista, cerca de restaurantes y vida nocturna. Ideal para parejas o viajeros de negocios.",
-  "price": 180.0,
+  "title": "Casa Colonial Salento",
+  "description": "Casa tradicional con patio interno, vistas al paisaje cafetero, ideal para familias y grupos pequeños.",
+  "price": 120.0,
   "picsUrl": [
-    "https://example.com/loft-bogota1.jpg",
-    "https://example.com/loft-bogota2.jpg"
+    "https://example.com/casa-salento1.jpg",
+    "https://example.com/casa-salento2.jpg"
   ],
-  "accommodationType": "APARTMENT",
-  "capacity": 2,
+  "accommodationType": "HOUSE",
+  "capacity": 6,
   "country": "Colombia",
-  "department": "Cundinamarca",
-  "city": "Bogotá",
-  "neighborhood": "Chapinero",
-  "street": "Carrera 7 #65-20",
-  "postalCode": "110231",
-  "amenities": ["WIFI", "FREEZER", "PETS_ALLOWED", "WORKSPACE"],
-  "latitude": 4.6486,
-  "longitude": -74.0639
+  "department": "Quindío",
+  "city": "Salento",
+  "neighborhood": "Centro",
+  "street": "Calle Real #10-05",
+  "postalCode": "631001",
+  "amenities": ["wifi", "cocina", "televisión", "calefacción"],
+  "latitude": 4.5840,
+  "longitude": -75.6306
 }
 
 
 ###
-PUT http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0fc
+PUT http://localhost:8080/api/accommodations/7e9fa2ea-3b7e-491d-99de-a98ada6fcd0b
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //actualizar, editar alojamiento
@@ -211,7 +211,7 @@ Authorization: Bearer {{token}}
     "https://example.com/img2.jpg"
   ],
   "amenities": [
-    "WIFI"
+    "wifi"
   ],
   "accommodationType": "HOUSE",
   "latitude": 4.6486,
@@ -272,7 +272,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022acf/detail
+GET http://localhost:8080/api/accommodations/4ec51841-228b-4c53-a766-20ec532994ed/detail
 // ver el alojamiento (GET)
 
 
@@ -312,6 +312,10 @@ Authorization: Bearer {{token}}
 
 ###
 GET http://localhost:8080/api/accommodations/amenities
+
+
+###
+GET http://localhost:8080/api/accommodations/update/a9cb7801-90a6-4721-b1d6-a39a183ee9cb
 
 
 

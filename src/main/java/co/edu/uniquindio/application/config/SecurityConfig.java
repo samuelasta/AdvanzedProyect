@@ -39,7 +39,9 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(HttpMethod.GET, "/api/accommodations/**").permitAll() //listar o .... gets
-                        .requestMatchers("/api/auth/**").permitAll() //login y registro
+                                .requestMatchers(HttpMethod.POST, "/api/accommodations/*").permitAll()
+
+                                .requestMatchers("/api/auth/**").permitAll() //login y registro
                         .requestMatchers(HttpMethod.POST, "/api/accommodations/**").hasRole("HOST")
                                 .requestMatchers("/api/bookings/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/users/*/bookings/**").hasAnyRole("USER", "HOST")
