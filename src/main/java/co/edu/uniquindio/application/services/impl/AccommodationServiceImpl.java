@@ -52,6 +52,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final FavoriteRepository favoriteRepository;
     private final GeoUtilsImpl geoUtilsImpl;
     private final CurrentUserService currentUserService;
+    private final ForUpdateMapper forUpdateMapper;
 
 
     @Override
@@ -214,5 +215,15 @@ public class AccommodationServiceImpl implements AccommodationService {
        }
 
         return accommodationDetailMapper.toAccommodationDetailDTO(accommodation.get());
+    }
+
+    @Override
+    public GetForUpdateDTO getForUpdate(String id) {
+        Optional<Accommodation> accommodation = accommodationRepository.findById(id);
+        if(accommodation.isEmpty()){
+            throw new ResourceNotFoundException("no se encontró el alojamiento");
+        }
+
+        return forUpdateMapper.toUpdateDTO(accommodation.get());
     }
 }
