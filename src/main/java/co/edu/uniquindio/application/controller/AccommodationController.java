@@ -114,4 +114,9 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, amenities));
     }
 
+    @GetMapping("/update/{id}")
+    public ResponseEntity<ResponseDTO<GetForUpdateDTO>> getAccommodationUpdate(@PathVariable String id) throws Exception {
+        GetForUpdateDTO accommodation = accommodationService.getForUpdate(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodation));
+    }
 }

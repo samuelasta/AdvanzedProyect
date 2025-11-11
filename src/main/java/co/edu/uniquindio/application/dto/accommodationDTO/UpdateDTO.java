@@ -7,7 +7,8 @@ import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
-public record UpdateDTO(@Size(min = 5, max = 25, message = "El título debe tener entre 5 y 25 caracteres")
+public record UpdateDTO(
+                        @Size(min = 5, max = 25, message = "El título debe tener entre 5 y 25 caracteres")
                         String title,
                         @Size(min = 20, max = 500, message = "La descripción debe tener entre 20 y 500 caracteres")
                         String description,

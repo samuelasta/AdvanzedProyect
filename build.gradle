@@ -30,7 +30,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	// para encriptar la contraseña
 
 	// de los mappers
@@ -43,7 +42,6 @@ dependencies {
 	implementation 'org.simplejavamail:batch-module:8.12.6'
 	// https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail
 	//implementation("org.simplejavamail:simple-java-mail:8.12.6")
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	//para el servicio donde se alojarán las fotos
 	implementation 'com.cloudinary:cloudinary-http5:2.3.2'
@@ -58,17 +56,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	//Para las pruebas
-	testImplementation 'org.mockito:mockito-core:5.11.0'
-	testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
 
     // para la similitud de texto
     implementation 'org.apache.commons:commons-text:1.10.0'
 
+    // dependendia de Postgresql
+    implementation 'org.postgresql:postgresql:42.7.8'
+
 }
 
 
-tasks.named('test') {
-	useJUnitPlatform()
-	// 👇 Esto elimina el warning de Mockito al cargar el agente dinámicamente
-	jvmArgs += ["-XX:+EnableDynamicAgentLoading"]
-}

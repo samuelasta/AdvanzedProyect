@@ -1,6 +1,7 @@
 package co.edu.uniquindio.application.mappers;
 
 import co.edu.uniquindio.application.dto.accommodationDTO.CreateAccommodationDTO;
+import co.edu.uniquindio.application.dto.accommodationDTO.GetForUpdateDTO;
 import co.edu.uniquindio.application.dto.accommodationDTO.UpdateDTO;
 import co.edu.uniquindio.application.dto.usersDTOs.UpdateUserDto;
 import co.edu.uniquindio.application.model.Accommodation;
@@ -33,7 +34,6 @@ public interface AccommodationMapper {
     //@Mapping(target = "user", source = "user")
 
     Accommodation toEntity(CreateAccommodationDTO createAccommodationDTO);
-
 
     CreateAccommodationDTO toCreateAccommodationDTO(Accommodation accommodation);
 

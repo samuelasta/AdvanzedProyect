@@ -272,7 +272,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022acf/detail
+GET http://localhost:8080/api/accommodations/4ec51841-228b-4c53-a766-20ec532994ed/detail
 // ver el alojamiento (GET)
 
 
@@ -313,7 +313,8 @@ Authorization: Bearer {{token}}
 ###
 GET http://localhost:8080/api/accommodations/amenities
 
-
+###
+GET http://localhost:8080/api/accommodations/update/4ec51841-228b-4c53-a766-20ec532994ed
 
 
 

@@ -70,7 +70,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
 
     //promedio de ocupación del alojamiento (occupancyRate)
     @Query("""
-    SELECT COALESCE(SUM(DATEDIFF(b.checkOut, b.checkIn)), 0)
+    SELECT COALESCE(SUM(b.checkOut - b.checkIn), 0)
     FROM Booking b
     WHERE b.accommodation.id = :accommodationId
       AND b.bookingState = co.edu.uniquindio.application.model.enums.BookingState.COMPLETED
