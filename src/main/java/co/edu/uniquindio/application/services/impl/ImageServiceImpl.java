@@ -20,16 +20,21 @@ public class ImageServiceImpl implements ImageService {
     public ImageServiceImpl(){
         Map<String, String> config = new HashMap<>();
         config.put("cloud_name", "dje3qr8tq");
-        config.put("api_key", "693381465632364");
-        config.put("api_secret", "5cICFV1EvZ-E8FPCAyNSh5WGUt0");
+        config.put("api_key", "332376379759845");
+        config.put("api_secret", "9PrisZPQsInOcPbiJ9hPUJogJXM");
         cloudinary = new Cloudinary(config);
     }
 
     @Override
     public Map upload(MultipartFile image) throws Exception {
         File file = convert(image);
+        System.out.println("intentando");
+
         // Reemplazar "folder" si quiero guardar las imagenes en otra carpeta de cloudinary
-        return cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", "AdvanzedProyect"));
+        Map result = cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", "AdvanzedProyect"));
+        System.out.println("Upload exitoso: " + result);
+
+        return result;
     }
 
     @Override
