@@ -21,7 +21,7 @@ public record UpdateDTO(
                         String street,
                         @Pattern(regexp = "^[0-9A-Za-z]{4,10}$", message = "El código postal no es válido")
                         @NotBlank String postalCode,
-                        @NotEmpty List<String> pics_url,
+                        List<String> pics_url,
                         @NotEmpty List<Amenities> amenities,
                         @NotNull AccommodationType accommodationType,
                         @NotNull float latitude,  @NotNull float longitude
