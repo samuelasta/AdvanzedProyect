@@ -95,7 +95,7 @@ public class AccommodationController {
 
 
     // mostrar estadisticas del alojamiento con rango de fechas (hecho)
-    @GetMapping("/{id}/stats")
+    @PostMapping("/{id}/stats")
     public ResponseEntity<ResponseDTO<AccommodationStatsDTO>> stats(@PathVariable String id, @RequestBody StatsDateDTO statsDateDTO) throws Exception {
         AccommodationStatsDTO accommodationStatsDTO = accommodationService.stats(id, statsDateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, accommodationStatsDTO));
