@@ -34,8 +34,8 @@ Content-Type: application/json
 // login
 
 {
-  "email": "karen@gmail.com",
-  "password": "perroGato123"
+  "email": "pruebas@gmail.com",
+  "password": "holasoysamu4"
 }
 
 > {% client.global.set("token", response.body.message.token); %}
@@ -168,8 +168,8 @@ Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
-  "title": "Rancho cerro",
-  "description": "Casa rancho con patio externo.",
+  "title": "Chalet rural quimbaya",
+  "description": "Chalet rural en quimbaya",
   "price": 30000.000,
   "picsUrl": [
     "https://res.cloudinary.com/dje3qr8tq/image/upload/v1762931690/AdvanzedProyect/d0kxtleoskraiz3fijwg.png",
@@ -184,8 +184,8 @@ Authorization: Bearer {{token}}
   "street": "Calle Real #10-05",
   "postalCode": "631001",
   "amenities": ["wifi", "cocina", "televisión", "calefacción"],
-  "latitude": 20.5840,
-  "longitude": 205.6306
+  "latitude": 30.5840,
+  "longitude": 5.6306
 }
 
 
@@ -272,7 +272,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/d1ffceac-aab8-4536-8fd6-ba91dd3959bb/detail
+GET http://localhost:8080/api/accommodations/31097c13-110e-4a39-a832-0dc5da7896a8/detail
 // ver el alojamiento (GET)
 
 
