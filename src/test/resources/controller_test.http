@@ -57,14 +57,14 @@ Content-Type: application/json
 //cambiar contraseña olvidada
 
 {
-  "code": "101625",
+  "code": "561080",
   "email": "samuela.castanom@uqvirtual.edu.co",
   "newPassword": "sofialamejor"
 }
 
 
 ###
-POST https://advanzedproyect-production.up.railway.app/api/auth
+POST https://localhost:8080/api/auth
 Content-Type: application/json
 //registrarse
 
@@ -113,14 +113,14 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST http://localhost:8080/api/bookings/9c5536da-2e6c-4291-83ec-fe00324016b2
+POST http://localhost:8080/api/bookings/4ec51841-228b-4c53-a766-20ec532994ed
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //crear una reserva
 
 {
-  "checkIn": "2026-10-29T14:00:00",
-  "checkOut": "2026-10-30T11:30:00",
+  "checkIn": "2027-10-29T13:00:00",
+  "checkOut": "2027-10-30T12:00:00",
   "guest_number": 2
 }
 
@@ -168,15 +168,15 @@ Authorization: Bearer {{token}}
 // Crear un alojamiento
 
 {
-  "title": "Casa Colonial Salento",
-  "description": "Casa tradicional con patio interno, vistas al paisaje cafetero, ideal para familias y grupos pequeños.",
-  "price": 120.0,
+  "title": "Rancho cerro",
+  "description": "Casa rancho con patio externo.",
+  "price": 30000.000,
   "picsUrl": [
-    "https://example.com/casa-salento1.jpg",
+    "https://res.cloudinary.com/dje3qr8tq/image/upload/v1762931690/AdvanzedProyect/d0kxtleoskraiz3fijwg.png",
     "https://example.com/casa-salento2.jpg"
   ],
-  "accommodationType": "HOUSE",
-  "capacity": 6,
+      "accommodationType": "APARTMENT",
+  "capacity": 4,
   "country": "Colombia",
   "department": "Quindío",
   "city": "Salento",
@@ -184,13 +184,13 @@ Authorization: Bearer {{token}}
   "street": "Calle Real #10-05",
   "postalCode": "631001",
   "amenities": ["wifi", "cocina", "televisión", "calefacción"],
-  "latitude": 4.5840,
-  "longitude": -75.6306
+  "latitude": 20.5840,
+  "longitude": 205.6306
 }
 
 
 ###
-PUT http://localhost:8080/api/accommodations/7e9fa2ea-3b7e-491d-99de-a98ada6fcd0b
+PUT http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022acf
 Content-Type: application/json
 Authorization: Bearer {{token}}
 //actualizar, editar alojamiento
@@ -235,7 +235,7 @@ GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022ac
 
 
 ###
-POST http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0fc/comments
+POST http://localhost:8080/api/accommodations/4a9308f7-9b37-4c64-959d-6bf755fb41eb/comments
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // crear un comentario a un alojamiento (reserva stado == finalizada)
@@ -272,7 +272,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/accommodations/4ec51841-228b-4c53-a766-20ec532994ed/detail
+GET http://localhost:8080/api/accommodations/d1ffceac-aab8-4536-8fd6-ba91dd3959bb/detail
 // ver el alojamiento (GET)
 
 
@@ -309,10 +309,10 @@ Authorization: Bearer {{token}}
 ###
 GET http://localhost:8080/api/favorites/0
 Authorization: Bearer {{token}}
+// para obtener mis alojamientos favoritos
 
 ###
 GET http://localhost:8080/api/accommodations/amenities
-
 
 ###
 GET http://localhost:8080/api/accommodations/update/a9cb7801-90a6-4721-b1d6-a39a183ee9cb

@@ -30,6 +30,7 @@ public interface AccommodationMapper {
     @Mapping(target = "averageRatings", constant = "0")
     @Mapping(target = "comments", expression = "java(new java.util.ArrayList<>())")
     @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "pics_url", source = "picsUrl")
     //@Mapping(target = "user", source = "user")
 
     Accommodation toEntity(CreateAccommodationDTO createAccommodationDTO);
