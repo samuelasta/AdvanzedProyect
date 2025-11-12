@@ -126,13 +126,13 @@ Authorization: Bearer {{token}}
 
 
 ###
-GET http://localhost:8080/api/users/me/bookings/0
+POST http://localhost:8080/api/users/me/bookings/0
 Content-Type: application/json
 Authorization: Bearer {{token}}
 // ver el listado de reservas aplicando filtros
 
 {
-  "state": "CANCELED",
+  "state": null,
   "checkIn": null,
   "checkOut": null,
   "guest_number": null
@@ -230,7 +230,7 @@ GET http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0f
 
 
 ###
-GET http://localhost:8080/api/accommodations/0b20d021-8fbe-4dd2-afef-09dc483ff0fc/comments/0
+GET http://localhost:8080/api/accommodations/8497b013-7395-46cd-b828-e336f4022acf/comments/0
 // lista de los comentarios del alojamiento
 
 
