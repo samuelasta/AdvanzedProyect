@@ -70,7 +70,7 @@ public class UserController {
     }
 
     //ver listado de reservas del cliente (filtros y paginación)
-    @GetMapping("/me/bookings/{page}")
+    @PostMapping("/me/bookings/{page}")
     public ResponseEntity<ResponseDTO<List<BookingDTO>>> booking_list(@PathVariable int page, @Valid @RequestBody SearchBookingDTO searchBookingDTO) throws Exception {
         String id = currentUserService.getCurrentUser();
         List<BookingDTO> list = bookingService.listBookingsUser(id, page, searchBookingDTO);

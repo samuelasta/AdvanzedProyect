@@ -87,7 +87,7 @@ public class AccommodationController {
     }
 
     //mostrar todas las reservas del alojamiento aplicando filtros (hecho)
-    @GetMapping("/{id}/bookings/{page}")
+    @PostMapping("/{id}/bookings/{page}")
     public ResponseEntity<ResponseDTO<List<BookingDTO>>> listBookings(@PathVariable String id, @PathVariable int page, @Valid @RequestBody SearchBookingDTO searchBookingDTO) throws Exception {
         List<BookingDTO> list = bookingService.listBookings(id, page, searchBookingDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
