@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import java.time.LocalDate;
 
 public record BookingDTO(
+                         String id,
                          BookingState bookingState,
                          UserDTO user,
                          LocalDate checkIn,
