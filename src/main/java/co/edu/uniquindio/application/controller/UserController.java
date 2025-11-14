@@ -85,5 +85,12 @@ public class UserController {
         List<AccommodationDTO> list = accommodationService.listAllAccommodationsHost(id, page);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>(false, list));
     }
+    // Obtener datos del usuario autenticado actual
+    @GetMapping("/me")
+    public ResponseEntity<ResponseDTO<UserDTO>> getCurrentUser() throws Exception {
+        String id = currentUserService.getCurrentUser();
+        UserDTO userDTO = userService.get(id);
+        return ResponseEntity.ok(new ResponseDTO<>(false, userDTO));
+    }
 
 }

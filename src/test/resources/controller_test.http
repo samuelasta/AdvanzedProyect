@@ -34,8 +34,8 @@ Content-Type: application/json
 // login
 
 {
-  "email": "pruebas@gmail.com",
-  "password": "holasoysamu4"
+  "email": "andres.perez@gmail.com",
+  "password": "1234567"
 }
 
 > {% client.global.set("token", response.body.message.token); %}
@@ -60,6 +60,15 @@ Content-Type: application/json
   "code": "561080",
   "email": "samuela.castanom@uqvirtual.edu.co",
   "newPassword": "sofialamejor"
+}
+###
+POST http://localhost:8080/api/auth/password-recovery
+Content-Type: application/json
+
+{
+"code": "561080",
+"email": "samuela.castanom@uqvirtual.edu.co",
+"newPassword": "sofialamejor"
 }
 
 

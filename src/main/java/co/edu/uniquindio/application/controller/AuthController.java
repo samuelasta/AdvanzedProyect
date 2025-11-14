@@ -43,6 +43,12 @@ public class AuthController {
         passwordResetService.requestPasswordReset(dto);
         return ResponseEntity.ok("Se ha enviado un código de recuperación a tu email");
     }
+    @PostMapping("/password-recovery")  // ← Nueva ruta diferente
+    public ResponseEntity<ResponseDTO<String>> recoverPassword(@Valid @RequestBody ResetPasswordDTO dto) throws Exception{
+        passwordResetService.resetPassword(dto);
+        return ResponseEntity.ok(new ResponseDTO<>(false, "Contraseña cambiada exitosamente"));
+    }
+
 
     @PatchMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDTO dto) throws Exception{
